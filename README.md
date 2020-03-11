@@ -15,7 +15,7 @@ See pds-engineering doc produced by mvn site, to be published
 # Update, release
 
 
-Update the `pom.xml` with versions of services (registry, harvest) validated.
+Update the `pom.xml` with the version of the package (e.g. 1.0.0) and versions of services (registry, harvest) validated.
 
 Create a tag and publish it on github:
 
