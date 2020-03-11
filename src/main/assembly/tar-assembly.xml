@@ -46,13 +46,11 @@
     <fileSet>
       <directory>target/harvest-${harvest.version}</directory>
       <outputDirectory>harvest-${harvest.version}</outputDirectory>
-      <fileMode>664</fileMode>
       <lineEnding>keep</lineEnding>
     </fileSet>
     <fileSet>
       <directory>target/registry-${registry.version}</directory>
       <outputDirectory>registry-${registry.version}</outputDirectory>
-      <fileMode>664</fileMode>
       <lineEnding>keep</lineEnding>
     </fileSet>
     <fileSet>
