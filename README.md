@@ -1,7 +1,5 @@
 # pds-app-registry
 
-registry application 
-
 This application enables a PDS node to register all its data products for long term preservation and sharing with the rest of the PDS system.
 
 It is composed of 2 services:
@@ -12,7 +10,7 @@ The purpose of this repository is to integrate together these services and packa
 
 ## Install
 
-See <pds-engineering doc produced by mvn site>
+See pds-engineering doc produced by mvn site, to be published
 
 # Update, release
 
