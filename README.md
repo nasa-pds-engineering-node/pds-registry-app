@@ -30,3 +30,5 @@ Prepare the package:
     mvn site     ## prepare the documentation
     mvn package  ## generate the package
     mvn github-release:github-release  ## publish the package on github
+
+    

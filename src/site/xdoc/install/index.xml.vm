@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Copyright 2019, California Institute of Technology ("Caltech").
+  U.S. Government sponsorship acknowledged.
+  
+  All rights reserved.
+  
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions are met:
+  
+  * Redistributions of source code must retain the above copyright notice,
+  this list of conditions and the following disclaimer.
+  * Redistributions must reproduce the above copyright notice, this list of
+  conditions and the following disclaimer in the documentation and/or other
+  materials provided with the distribution.
+  * Neither the name of Caltech nor its operating division, the Jet Propulsion
+  Laboratory, nor the names of its contributors may be used to endorse or
+  promote products derived from this software without specific prior written
+  permission.
+  
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<document>
+  <properties>
+    <title>Installation</title>
+    <author email="Hyun.H.Lee@jpl.nasa.gov">Hyun Lee</author>
+    <author email="Jordan.Padams@jpl.nasa.gov">Jordan Padams</author>
+    <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
+  </properties>
+
+  <body>
+    <section name="Installation">
+      <p>This document describes how to install the Registry Application software contained in the <i>${project.artifactId}</i> package.
+      </p>
+      
+      <p>The following topics can be found in this section:</p>
+
+      <ul>
+        <li><a href="#System Requirements">System Requirements</a></li>
+        <li><a href="#Download and unpack the package">Download and unpack the Package</a></li>
+        <li><a href="#Install the registry server">Install the registry server</a></li>
+        <li><a href="#Install harvester">Install harvester</a></li>
+      </ul>
+    </section>
+
+    <hr />
+    <section name="System Requirements">
+      <p>This section details the system requirements for installing and operating the Registry application.
+      </p>
+
+      <subsection name="Java Runtime Environment">
+        <p>The Registry was developed using Java and will run on any platform with a supported Java Runtime Environment (JRE). The software was specifically compiled for and tested in Java version 1.8 (64-bit). The following commands test the local Java installation in a UNIX-based environment:
+        </p>
+
+		<p>NOTE: This software only works with 64-bit Java installation.</p>
+
+        <source>
+% which java
+/usr/bin/java
+
+% java -version
+java version "1.8.0_101"
+Java(TM) SE Runtime Environment (build 1.8.0_101-b13)
+Java HotSpot(TM) 64-Bit Server VM (build 25.101-b13, mixed mode)
+        </source>
+
+        <p>The first command above checks whether the <i>java</i> executable is in the environment's path and the second command reports the version. If Java is not installed or the version is not at least 1.8, Java will need to be downloaded and installed in the current environment. Consult the local system administrator for installation of this software. For the do-it-yourself crowd, the Java software can be downloaded from the <a href="http://www.oracle.com/technetwork/java/javase/downloads/" target="_blank">Oracle Java Download</a> page. The suggested software package is the Java Standard Edition (SE) 8, either the JDK or the JRE package. The JDK package is not necessary to run the software but could be useful if development and compilation of Java software will also occur in the current environment.
+        </p>
+      </subsection>
+      
+      <subsection name="Memory Requirements">
+      	<p>The Registry requires >2GB memory available in order to perform normal operations</p>
+      </subsection>
+    </section>
+    
+    <hr/>
+    <section name="Download and unpack the package">
+      <p>Download the <i>${project.artifactId}</i> package from Github (<a href="https://github.com/NASA-PDS-Incubator/${project.artifactId}/releases/download/${project.version}/${project.artifactId}-${project.version}-bin.tar.gz" target="_blank">TAR.GZ</a> 
+      <a href="https://github.com/NASA-PDS-Incubator/${project.artifactId}/releases/download/${project.version}/${project.artifactId}-${project.version}-bin.tar.gz" target="_blank">ZIP</a>). The binary distribution is available in identical zip or tar/gzip packages. The installation directory may vary from environment to environment but in UNIX-based environments it is typical to install software packages in the <i>/home/pds</i> directory and in Windows-based environments it is typical to install software packages in the <i>C:\Program Files</i> directory. Unpack the selected binary distribution file with one of the following commands:
+      </p>
+
+      <source>
+% unzip ${project.artifactId}-${project.version}-bin.zip
+or
+% tar -xzvf ${project.artifactId}-${project.version}-bin.tar.gz
+      </source>
+
+      <p>Note: Depending on the platform, the native version of <i>tar</i> may produce an error when attempting to unpack the distribution file because many of the file paths are greater than 100 characters. If available, the GNU version of tar will resolve this problem. If that is not available or cannot be installed, the zipped package will work just fine in a UNIX environment.
+      </p>
+
+      <p>The commands above result in the creation of the <i>${project.artifactId}-${project.version}</i> directory with the following directory structure:
+      </p>
+
+      <ul>
+        <li><b>registry-$context.get("registry.version")/</b><br />
+          <p>This directory contains tools which initiate the registry collections in solr</p>
+        </li>
+          <li><b>harvest-$context.get("harvest.version")/</b><br />
+          <p>This directory contains harvest tool package.</p>
+        </li>
+        <li><b>test/</b><br />
+          <p>This directory contains reference test datasets useful to validate the deployment.</p>
+        </li>
+        <li><b>LICENSE</b><br/>
+          <p>The Apache License, Version 2.0
+          </p>
+        </li>
+        <li><b>README.txt</b><br/>
+          <p>A README file with some high level information on the project and how to view more detailed documentation.
+          </p>
+        </li>
+        <li><b>VERSION.txt</b><br/>
+          <p>A VERSION file contains the version of the project.
+          </p>
+        </li>
+      </ul>
+    </section>
+    
+    <hr/>
+    <section name="Install the registry server">
+      <p>the registry resources are located in sub-directory <i>registry-$context.get("registry.version")</i>. The environment variable REGISTRY should be declared and point to this subdirectory.</p>
+      
+      <p>For example do</p>
+      <source>
+export REGISTRY=&lt;wherever you deployed the package&gt;/registry-$context.get("registry.version")
+      </source>
+      
+      <p>
+      Then follow instructions on <a href="https://nasa-pds-incubator.github.io/registry/install/index.html#Install_Solr_and_Registry_-_Standalone">https://nasa-pds-incubator.github.io/registry/install/index.html#Install_Solr_and_Registry_-_Standalone</a>.
+      </p>
+      <p>
+      <b>Note:</b> if you want to use docker container to deploy the registry, you can jump to <a href="https://nasa-pds-incubator.github.io/registry/install/index.html#Install_Solr_and_Registry_-_Docker">https://nasa-pds-incubator.github.io/registry/install/index.html#Install_Solr_and_Registry_-_Docker</a> 
+      </p>
+    </section>
+      
+    <hr/>
+    <section name="Install harvester">
+      <p>The harvest tools are located in subdirectory <i>harvest-$context.get("harvest.version")</i></p>
+      
+      <p>You just need to add the binaries provided to your path:</p>
+      
+      <p>unix environment</p>
+      <source>
+export PATH=&lt;wherever you deployed the package&gt;/harvest-$context.get("harvest.version")/bin
+      </source>
+      
+      <p>or with windows</p>
+      <source>
+set PATH=C:\&lt;wherever you deployed the package&gt;\harvest-$context.get("harvest.version")\bin;%PATH%
+      </source>
+
+	<p>You can test and operate your registry application by following guidelines on <a href="../operate/index.html">operations</a></p>
+      
+    </section>
+
+    
+
+  </body>
+</document>
