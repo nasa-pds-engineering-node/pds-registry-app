@@ -9,7 +9,7 @@
       <servers>
 	<server>
 	 <id>github-oauth</id>
-	 <passphrase>47462db9bf00dcadb1a21932d93f5c9833f84b32</passphrase>
+	 <passphrase>${env.GITHUB_TOKEN}</passphrase>
 	</server>
       </servers>
       <mirrors/>
