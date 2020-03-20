@@ -23,7 +23,9 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
-    - name: Publish to GitHub Release
-      run: mvn github-release:github-release --settings settings.xml
-      env:
-        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+    - name: Publish new snapshot release
+      run: |
+        sudo apt-get install libxml2-dev libxslt-dev python-dev
+	pip install pds-github-util
+	snapshot-release --token ${{ secret.GITHUB_TOKEN }}
+	
