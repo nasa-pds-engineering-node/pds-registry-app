@@ -24,6 +24,6 @@ jobs:
       run: mvn -B package --file pom.xml
 
     - name: Publish to GitHub Release
-      run: mvn github-release:github-release -s $GITHUB_WORKSPACE/settings.xml
+      run: mvn github-release:github-release --settings settings.xml
       env:
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
