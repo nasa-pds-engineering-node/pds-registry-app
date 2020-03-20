@@ -28,4 +28,3 @@ jobs:
         sudo apt-get install libxml2-dev libxslt-dev python-dev
 	pip install pds-github-util
 	snapshot-release --token ${{ secret.GITHUB_TOKEN }}
-	
