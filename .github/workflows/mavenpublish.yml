@@ -37,5 +37,5 @@ jobs:
 
     - name: Publish new snapshot release
       run: |
-         pip install pds-github-util
+         pip install pds-github-util:0.0.2
          snapshot-release --token ${{ secrets.GITHUB_TOKEN }}
