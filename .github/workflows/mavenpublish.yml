@@ -3,7 +3,9 @@
 
 name: Maven Package
 
-on: push
+on:
+   schedule:
+      - cron: '0 7 * * *'
 
 
 jobs:
