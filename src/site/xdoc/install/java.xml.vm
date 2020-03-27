@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document>
+
+<properties>
+  <title>Java</title>
+</properties>
+
+<body>
+
+<section name="Java Runtime Environment">
+
+<p>
+Both Apache Solr and PDS Registry tools require Java Runtime Environment to run. 
+Recommended version of Java is 11.
+</p>
+
+<p>
+To test if Java is already installed on your system, run the following command from a command prompt:
+</p>
+<source>
+java -version
+</source>
+
+<p>
+If Java is already installed, you will see a message similar to this:
+</p>
+<source>
+openjdk version "11.0.5" 2019-10-15
+OpenJDK Runtime Environment 18.9 (build 11.0.5+10)
+OpenJDK 64-Bit Server VM 18.9 (build 11.0.5+10, mixed mode)
+</source>
+
+<p>
+It is recommended to have JDK 11 installed. JDK/JRE 8 (1.8) might work, 
+but development and testing of PDS Registry and other tools is mostly done with JDK 11.
+</p>
+
+<p>There are several distributions of Java:
+<ul>
+<li>Open JDK (Free). Can be downloaded from different sites, for example, 
+<a href="https://adoptopenjdk.net/" target="_blank">adoptopenjdk.net</a>. 
+Most Linux distributions have Open JDK in their standard repositories.</li>
+<li>Oracle JDK (Commercial). Can be downloaded from 
+<a href="https://www.oracle.com/java/technologies/javase-jdk11-downloads.html" target="_blank">www.oracle.com</a>. 
+You must register and accept a license to download.</li>
+</ul>
+</p>
+
+<p>
+If you want to keep several versions of JDK (e.g., 8 and 11), you can download .zip or .tar.gz archives instead of .msi or .pkg files 
+and manually unzip them. Then you can set JAVA_HOME environment variable to choose which version of JDK to run. 
+</p>
+
+</section>
+
+<section name="Next steps">
+<p>Java is now available in your environment, you should now deploy the <a href="solr.html">Solr</a> server.</p>
+</section>
+
+</body>
+
+</document>

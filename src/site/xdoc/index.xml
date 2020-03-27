@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2019, California Institute of Technology ("Caltech").
+  U.S. Government sponsorship acknowledged.
+  
+  All rights reserved.
+  
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions are met:
+  
+  * Redistributions of source code must retain the above copyright notice,
+  this list of conditions and the following disclaimer.
+  * Redistributions must reproduce the above copyright notice, this list of
+  conditions and the following disclaimer in the documentation and/or other
+  materials provided with the distribution.
+  * Neither the name of Caltech nor its operating division, the Jet Propulsion
+  Laboratory, nor the names of its contributors may be used to endorse or
+  promote products derived from this software without specific prior written
+  permission.
+  
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<document>
+
+<properties>
+  <title>About Registry</title>
+</properties>
+
+<body>
+
+<section name="About PDS Registry">
+<p>
+PDS Registry provides functionality for tracking, searching, auditing, locating, and maintaining artifacts within the system. 
+These artifacts can range from data files and label files, schemas, dictionary definitions for objects and elements, services, etc. 
+The core functionality for this component is satisfied by <a href="https://lucene.apache.org/solr/">Apache Solr</a>.
+</p>
+
+<p>
+For Build 9b (June 2019), the Registry and Search components of the PDS4 system received a major upgrade 
+and significant re-design to greater leverage the power of Apache Solr. 
+We are continuing to improve our documentation, but please do not hesitate to send questions, comments, 
+change requests and bug reports to the <a href="mailto:pds_operator@jpl.nasa.gov">PDS Operator</a> 
+at pds_operator@jpl.nasa.gov and we would be happy to help work through any issues you are having.
+</p>
+</section>
+
+<section name="PDS Registry and Related Software">
+<p>
+<ul>
+  <li><b>Java</b> is required to run Solr, Harvest, Registry Manager and other tools.</li>
+  <li>Registry data is stored in <b>Apache Solr</b>.</li>
+  <li><b>Registry Manager</b> command-line tool is designed to load, delete and export registry data. 
+It can also create and delete registry collection in Solr.</li>
+  <li><b>Harvest</b> is a tool to crawl and extract metadata from PDS4 files.
+Extracted metadata is stored in an "intermediate" XML file which can be loaded into Solr 
+by Registry Manager or Solr post tool.</li>
+</ul>
+</p>
+
+<p>
+The high level architecture of PDS Registry and its main components is shown below.
+</p>
+<img src="images/registry-harvest.jpg" width="35%" />
+
+</section>
+
+</body>
+
+</document>

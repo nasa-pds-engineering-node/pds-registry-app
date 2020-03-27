@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document>
+<properties>
+  <title>Apache Solr</title>
+</properties>
+
+<body>
+<section name="Apache Solr">
+
+<p>
+PDS Registry requires <a href="https://lucene.apache.org/solr/" target="_blank">Apache Solr</a>.
+Solr has to be installed and started in cloud mode before running PDS Registry.
+
+PDS Regsitry has been tested with Solr version $context.get("solr.version").
+</p>
+
+<p>
+Solr can run in two modes: 
+<ul>
+  <li>Standalone</li> 
+  <li>SolrCloud</li>
+</ul>
+</p>
+
+<p>
+SolrCloud is the only mode supported by Registry tools.
+</p>
+
+<!-- ======================================================== -->
+
+<subsection name="SolrCloud Overview">
+<p>
+SolrCloud is a cluster of Solr servers that provides fault tolerance and high availability.
+It uses Apache ZooKeeper for cluster configuration and coordination.
+Number of nodes you need, usually depends on amount of data, number of queries, fault tolerance and high availability requirements.
+</p>
+
+<h4>Multinode Cluster</h4>
+<p>
+Below is a simplified diagram of a production setup with 3 node ZooKeeper cluster 
+and multinode Solr cluster. Both ZooKeeper and Solr clusters can be expanded by adding more nodes.
+This setup provides fault tolerance and high availability.
+</p>
+<img src="../images/solr-cluster.jpg" width="35%" />
+
+<h4>Single Node Cluster with Embedded ZooKeeper</h4>
+<p>
+This is the simplest configuration of SolrCloud. A single instance of ZooKeeper and Solr server are running in the same JVM.
+This setup does not provide any fault tolerance or high availability, and could not be expanded.
+This configuration is recommended for development or testing and can be easily installed on a laptop or desktop.
+</p>
+<img src="../images/solr-cluster-1a.jpg" width="25%" />
+
+<h4>Single Node Cluster with Separate ZooKeeper</h4>
+<p>
+This configuration has single node ZooKeeper and single node Solr server running in different JVMs.
+This setup can be easily expanded by addning more ZooKeeper or Solr nodes.
+</p>
+
+<img src="../images/solr-cluster-1b.jpg" width="30%" />
+</subsection>
+
+<!-- ======================================================= -->
+
+<subsection name="Installation">
+
+<h4>Single Node Cluster with Embedded ZooKeeper</h4>
+<p>
+Download ZIP or TGZ archive from <a href="http://archive.apache.org/dist/lucene/solr/8.4.1">http://archive.apache.org ($context.get("solr.version"))</a>
+and unzip it to any directory, for example, <i>/opt/solr-8.4.1</i>. We will call this direcotry <i>SOLR_HOME</i>.
+Go to <i>SOLR_HOME/bin</i> and run <i>solr.cmd</i> on Windows or <i>solr</i> on Unix or Mac. 
+Pass <b>start</b> and <b>-cloud</b> parameters to start Solr in cloud mode.
+</p>
+
+<source>
+solr start -cloud
+</source>
+
+<p>
+To check that Solr server started in cloud mode, open Solr Admin UI in a web browser: <i>http://localhost:8983/solr/</i>.
+You should see a page similar to this.
+</p>
+<p>
+<img src="../images/solr-adm1.jpg" width="90%" />
+</p>
+
+<p>
+Check that <i>Cloud</i> menu item is available on the left. Click it. You should see a page similar to this.
+</p>
+<p>
+<img src="../images/solr-adm2.jpg" width="85%" />
+</p>
+
+<h4>Docker / Podman</h4>
+<p>
+You can run Solr in Docker or Podman. Use the official Solr image from DockerHub (solr:8.4).
+Map both ZooKeeper (9983) and Solr (8983) ports. 
+You would need access to ZooKeeper to upload PDS registry collection configset.
+Do not forget to pass <b>-cloud</b> parameter to start Solr in cloud mode.
+</p>
+<p>
+The following example is for CentOS 8 / RHEL 8 which usually have Podman preinstalled (available in AppStream).
+If your system has Docker, use <i>docker</i> command with the same parameters.
+</p>
+<source>
+podman run -p 8983:8983 -p 9983:9983 -d --name solr -t solr:8.4 -cloud
+</source>
+
+</subsection>
+
+<section name="Solr in your network">
+
+<p>The Solr component of the registry is critical as it hosts the PDS records. It MUST NOT be exposed to non trusted parties (e.g. outside your organization network).
+Contact your system administrators if necessary.
+</p>
+
+</section>
+
+<!-- ======================================================= -->
+
+
+</section>
+<section name="Next steps">
+<p>You Solr server is ready, you should now deploy the <a href="tools.html">tools</a> to harvest metadata and manage your registry.</p>
+</section>
+
+</body>
+</document>
