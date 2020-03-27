@@ -57,7 +57,7 @@
     </p>
     <subsection name="harvest">
 	    <p>To run this command we need a <b>configuration</b> file to reference the data source. </p>
-	    <p>Edit the example file provided in <i>harvest-$context.get("harvest.version")/conf/harvest/examples/harvest-policy-master.xml</i></p>
+	    <p>Edit the example file provided in <i>harvest-$context.get("harvest.version")/conf/examples/minimal.xml</i></p>
 	    <p>Update the following section with the path of the test dataset in the package, you may use your own dataset, that is even better:</p>
 	    
 	    <source>
@@ -73,14 +73,14 @@ Specify the top level directory / bundle for Harvest to crawl for products to re
 </directories>
 ]]>
 	    </source>
-	    <p>See details on the harvest configuration on <a href="https://pds-engineering.jpl.nasa.gov/development/pds4/current/harvest/operate-pds4/index.html#Minimal_Config">https://pds-engineering.jpl.nasa.gov/development/pds4/current/harvest/operate-pds4/index.html#Minimal_Config</a></p>
+	    <p>See details on the harvest configuration on <a href="../operate/harvest.html">operate harvest</a></p>
 	    
 	    <p>We now need an <b>output directory</b> where the registry records will be created, for example, on unix, <i>~/tmp</i></p>
 	    
 	    
 	    <p>At last, <b>run</b> the harvest command</p>
 	    <source>
-harvest -c &lt;path to the package&gt;/harvest-$context.get("harvest.version")/conf/harvest/examples/harvest-policy-master.xml -o ~/tmp
+harvest -c &lt;path to the package&gt;/harvest-$context.get("harvest.version")/conf/examples/minimal.xml -o ~/tmp
 	    </source>
     
 	</subsection>
@@ -88,7 +88,7 @@ harvest -c &lt;path to the package&gt;/harvest-$context.get("harvest.version")/c
 	<subsection name="registry-mgr">
 		<p>To push the newly created registry record to the server, simply run (~/tmp is the path where the input records created in the previous step are):</p>
 		<source>
-registry-mgr ~/tmp
+registry-manager load-data -filePath ~/tmp
 		</source>
 	</subsection>
 	
@@ -104,15 +104,10 @@ registry-mgr ~/tmp
         
     </section>
     <hr />
-    <section name="Advanced operations">
     
-    <p>Registry operations are documented on <a href="https://nasa-pds-incubator.github.io/registry/operate/index.html">https://nasa-pds-incubator.github.io/registry/operate/index.html</a></p>
+    <section name="Next steps">
+		<p>Your registry application works. You can now <a href="../operate/index.html">operate</a> your registry with your own datasets</p>
+	</section>
     
-    <p>Harvest pds3 labels as described on <a href="https://nasa-pds-incubator.github.io/harvest/operate-pds3/index.html">https://nasa-pds-incubator.github.io/harvest/operate-pds3/index.html</a></p>
-    
-    <p>Harvest pds4 labels as described on <a href="https://nasa-pds-incubator.github.io/harvest/operate-pds4/index.html">https://nasa-pds-incubator.github.io/harvest/operate-pds4ß/index.html</a></p>
-
-    
-    </section>
   </body>
 </document>

@@ -25,8 +25,9 @@ Create a tag and publish it on github:
 Prepare the package:
 
     mvn compile  ## get the sub-packages
+    mvn linkcheck:linkcheck  ## check the link in the maven site and create a report, this requires jdk1.8 to work, later version fail.
     mvn site     ## prepare the documentation
     mvn package  ## generate the package
-    mvn github-release:github-release  ## publish the package on github
+    mvn github-release:github-release  ## publish the package on github  # TO BE DONE REPLACE WITH CONMAN or GITHUB ACTION
 
     

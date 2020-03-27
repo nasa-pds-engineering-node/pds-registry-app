@@ -49,8 +49,8 @@
       <lineEnding>keep</lineEnding>
     </fileSet>
     <fileSet>
-      <directory>target/registry-${registry.version}</directory>
-      <outputDirectory>registry-${registry.version}</outputDirectory>
+      <directory>target/registry-manager-${registry.version}</directory>
+      <outputDirectory>registry-manager-${registry.version}</outputDirectory>
       <lineEnding>keep</lineEnding>
     </fileSet>
     <fileSet>

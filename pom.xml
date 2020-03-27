@@ -37,7 +37,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
   <groupId>gov.nasa.pds</groupId>
   <artifactId>pds-app-registry</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>0.1.0</version>
   <packaging>jar</packaging>
 
   <name>Registry Application</name>
@@ -54,8 +54,9 @@ POSSIBILITY OF SUCH DAMAGE.
   </licenses>
   
   <properties>
-     <registry.version>2.2.1</registry.version>
-     <harvest.version>2.5.2</harvest.version>
+     <registry.version>3.2.0</registry.version>
+     <harvest.version>3.1.0</harvest.version>
+     <solr.version>8.4.1</solr.version>
   </properties>
 
   <developers>
@@ -119,10 +120,11 @@ POSSIBILITY OF SUCH DAMAGE.
 				<goal>wget</goal>
 			</goals>
 			<configuration>
-				<url>https://github.com/NASA-PDS-Incubator/registry/releases/download/v2.2.1/registry-${registry.version}-bin.zip</url>
+			         
+				<url>https://github.com/NASA-PDS-Incubator/registry/releases/download/v${registry.version}/registry-manager-${registry.version}-bin.zip</url>
 				<unpack>true</unpack>
 				<outputDirectory>${project.build.directory}</outputDirectory>
-				<md5>32746498125e87690597d663fad6145b</md5>
+				<!-- md5>f3e2e164407a542888d8738487100118</md5 -->
 			</configuration>
 		</execution>
 		<execution>
@@ -132,10 +134,10 @@ POSSIBILITY OF SUCH DAMAGE.
 				<goal>wget</goal>
 			</goals>
 			<configuration>
-				<url>https://pds.nasa.gov/software/pds4/harvest-${harvest.version}-bin.zip</url>
+				<url>https://github.com/NASA-PDS-Incubator/harvest/releases/download/v${harvest.version}/harvest-${harvest.version}-bin.zip</url>
 				<unpack>true</unpack>
 				<outputDirectory>${project.build.directory}</outputDirectory>
-				<md5>f1c732a27e5e190dee52f041e58a1884</md5>
+				<!--  md5>f1c732a27e5e190dee52f041e58a1884</md5-->
 			</configuration>
 		 </execution>
 		 <execution>
@@ -269,6 +271,11 @@ POSSIBILITY OF SUCH DAMAGE.
             </reports>
           </reportSet>
         </reportSets>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-linkcheck-plugin</artifactId>
+        <version>1.2</version>
       </plugin>
 	</plugins>
   </reporting>
