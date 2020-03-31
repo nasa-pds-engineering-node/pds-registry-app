@@ -66,7 +66,7 @@
 Specify the top level directory / bundle for Harvest to crawl for products to register 
 -->
 <directories>
-  <path>{absolute path to the package}/test/</path>
+  <path>{absolute path to the package}/test/dph_example_archive/</path>
   <fileFilter>
     <include>*.xml</include>
   </fileFilter>
