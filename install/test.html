@@ -107,7 +107,11 @@
 	    
 <p>To run this command we need a <b>configuration</b> file to reference the data source. </p>
 	    
+<<<<<<< HEAD
 <p>Edit the example file provided in <i>harvest-3.2.2/conf/examples/minimal.xml</i></p>
+=======
+<p>Edit the example file provided in <i>harvest-3.1.0/conf/examples/minimal.xml</i></p>
+>>>>>>> 68d12b52a1d0df1e2376c231ff41773e45c06ec7
 	    
 <p>Update the following section with the path of the test dataset in the package, you may use your own dataset, that is even better:</p>
 	    
@@ -118,7 +122,11 @@
 Specify the top level directory / bundle for Harvest to crawl for products to register 
 --&gt;
 &lt;directories&gt;
+<<<<<<< HEAD
   &lt;path&gt;{absolute path to the package}/test/dph_example_archive/&lt;/path&gt;
+=======
+  &lt;path&gt;{absolute path to the package}/test/&lt;/path&gt;
+>>>>>>> 68d12b52a1d0df1e2376c231ff41773e45c06ec7
   &lt;fileFilter&gt;
     &lt;include&gt;*.xml&lt;/include&gt;
   &lt;/fileFilter&gt;
@@ -136,7 +144,11 @@ Specify the top level directory / bundle for Harvest to crawl for products to re
 <p>At last, <b>run</b> the harvest command</p>
 	    
 <div class="source"><pre class="prettyprint">
+<<<<<<< HEAD
 harvest -c &lt;path to the package&gt;/harvest-3.2.2/conf/examples/minimal.xml -o ~/tmp
+=======
+harvest -c &lt;path to the package&gt;/harvest-3.1.0/conf/examples/minimal.xml -o ~/tmp
+>>>>>>> 68d12b52a1d0df1e2376c231ff41773e45c06ec7
 	    </pre></div>
     
 	</section>
