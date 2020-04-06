@@ -80,8 +80,8 @@ The high level architecture of PDS Registry and its main components is shown bel
         code updates:</p>
       
       <ul>
-        <li>Issue Tracker: <a href="https://github.com/NASA-PDS-Incubator/pds-app-registry/issues">https://github.com/NASA-PDS-Incubator/validate/issues</a></li>
-        <li>Source Code: <a href="https://github.com/NASA-PDS-Incubator/pds-app-registry/">https://github.com/NASA-PDS-Incubator/validate</a></li>
+        <li>Issue Tracker: <a href="https://github.com/NASA-PDS-Incubator/pds-app-registry/issues">https://github.com/NASA-PDS-Incubator/pds-app-registry/issues</a></li>
+        <li>Source Code: <a href="https://github.com/NASA-PDS-Incubator/pds-app-registry/">https://github.com/NASA-PDS-Incubator/pds-app-registry</a></li>
       </ul>
       
       <p>Any other additional feedback, please contact us at <a href="mailto:pds_operator@jpl.nasa.gov">pds_operator@jpl.nasa.gov</a>.
