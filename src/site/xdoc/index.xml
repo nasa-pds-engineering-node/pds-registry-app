@@ -75,20 +75,21 @@ The high level architecture of PDS Registry and its main components is shown bel
 
 </section>
 
-<section name="Contribute">
-      <p><b><i>Found a bug?</i></b> Or <b><i>want a new feature?</i></b> would love your feedback and contributions. Here are some links to our public Github repository for submitting issues, contributing documentation, or
-        code updates:</p>
-      
-      <ul>
-        <li>Issue Tracker: <a href="https://github.com/NASA-PDS-Incubator/pds-app-registry/issues">https://github.com/NASA-PDS-Incubator/pds-app-registry/issues</a></li>
-        <li>Source Code: <a href="https://github.com/NASA-PDS-Incubator/pds-app-registry/">https://github.com/NASA-PDS-Incubator/pds-app-registry</a></li>
-      </ul>
-      
-      <p>Any other additional feedback, please contact us at <a href="mailto:pds_operator@jpl.nasa.gov">pds_operator@jpl.nasa.gov</a>.
-      </p>
-      
-      <p></p>
-    </section>
+  <hr />
+  <section name="Support">
+    <p><b><i>Found a bug?</i></b> Or <b><i>want a new feature?</i></b> We would love your feedback and contributions. Here are some links to our public Github repository for source code and submitting issues:</p>
+    
+    <ul>
+      <li>Issue Tracker: <a href="https://github.com/NASA-PDS-Incubator/pds-app-registry/issues">https://github.com/NASA-PDS-Incubator/pds-app-registry/issues</a></li>
+      <li>Source Code: <a href="https://github.com/NASA-PDS-Incubator/pds-app-registry/">https://github.com/NASA-PDS-Incubator/pds-app-registry</a></li>
+    </ul>
+    
+    <p>Need help with installation or operation of the software, or any other additional feedback, please contact us at 
+      <a href="mailto:pds_operator@jpl.nasa.gov">pds_operator@jpl.nasa.gov</a>.
+    </p>
+    
+    <p></p>
+  </section>
 
 </body>
 
