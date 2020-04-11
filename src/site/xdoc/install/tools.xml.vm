@@ -34,10 +34,7 @@
 
 <document>
   <properties>
-    <title>Installation</title>
-    <author email="Hyun.H.Lee@jpl.nasa.gov">Hyun Lee</author>
-    <author email="Jordan.Padams@jpl.nasa.gov">Jordan Padams</author>
-    <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
+    <title>Tools</title>
   </properties>
 
   <body>
@@ -50,6 +47,7 @@
       <ul>
         <li><a href="#Download and unpack the package">Download and unpack the Package</a></li>
         <li><a href="#Configure your environment">Configure your environment</a></li>
+        <li><a href="#Next Steps">Next Steps</a></li>
       </ul>
     </section>
     
@@ -102,22 +100,22 @@ or
       
       <p>The harvest tools are located in subdirectory <i>harvest-$context.get("harvest.version")</i></p>
       
-      <p>You just need to add the binaries provided to your path:</p>
+      <p>Now add the following to your PATH:</p>
       
-      <p>unix environment</p>
+      <p>For a UNIX environment, add the following to your .bash_profile (NOTE: May differ for other Unix shells)</p>
       <source>
-export PATH=&lt;wherever you deployed the package&gt;/harvest-$context.get("harvest.version")/bin:&lt;wherever you deployed the package&gt;/registry-$context.get("registry.version")/bin
+export PATH=/path/to/harvest-$context.get("harvest.version")/bin:/path/to/registry-$context.get("registry.version")/bin
       </source>
       
-      <p>or with windows</p>
+      <p>For a Windows environment:</p>
       <source>
-set PATH=C:\&lt;wherever you deployed the package&gt;\harvest-$context.get("harvest.version")\bin;C:\&lt;wherever you deployed the package&gt;\registry-$context.get("registry.version")\bin;%PATH%
+set PATH=C:\\path\to\harvest-$context.get("harvest.version")\bin;C:\\path\to\registry-$context.get("registry.version")\bin;%PATH%
       </source>
       
       
     </section>
 
-    <section name="Next steps">
+    <section name="Next Steps">
       <p>The registry application requirements (java, Solr) are ready. The registry tools are deployed. You can now <a href="initialize.html">initialize</a> your registry.</p>
 	</section>
     
