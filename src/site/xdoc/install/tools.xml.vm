@@ -100,16 +100,16 @@ or
       
       <p>The harvest tools are located in subdirectory <i>harvest-$context.get("harvest.version")</i></p>
       
-      <p>Now add the following to your PATH:</p>
+      <p>To enable these tools, add the following to your PATH:</p>
       
-      <p>For a UNIX environment, add the following to your .bash_profile (NOTE: May differ for other Unix shells)</p>
+      <p>For a UNIX environment, add the following to your .bash_profile (NOTE: May differ for other Unix shells). Replace $(pwd) as needed for the location of your software.</p>
       <source>
-export PATH=/path/to/harvest-$context.get("harvest.version")/bin:/path/to/registry-$context.get("registry.version")/bin
+export PATH=${PATH}:/path/to/${project.artifactId}-${project.version}/harvest-$context.get("harvest.version")/bin:/path/to/${project.artifactId}-${project.version}/registry-manager-$context.get("registry.version")/bin
       </source>
       
       <p>For a Windows environment:</p>
       <source>
-set PATH=C:\\path\to\harvest-$context.get("harvest.version")\bin;C:\\path\to\registry-$context.get("registry.version")\bin;%PATH%
+set PATH=%PATH%;C:\path\to\${project.artifactId}-${project.version}\harvest-$context.get("harvest.version")\bin;C:\path\to\${project.artifactId}-${project.version}\registry-manager-$context.get("registry.version")\bin;%PATH%
       </source>
       
       
