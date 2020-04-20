@@ -130,6 +130,7 @@ POSSIBILITY OF SUCH DAMAGE.
                 <descriptor>src/main/assembly/tar-assembly.xml</descriptor>
                 <descriptor>src/main/assembly/zip-assembly.xml</descriptor>
               </descriptors>
+              <tarLongFileMode>posix</tarLongFileMode>
             </configuration>
           </execution>
         </executions>
