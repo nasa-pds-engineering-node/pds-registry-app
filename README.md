@@ -1,5 +1,7 @@
 # pds-app-registry
 
+![Maven Package](https://github.com/NASA-PDS-Incubator/pds-app-registry/workflows/Maven%20Package/badge.svg)
+
 This application enables a PDS node to register all its data products for long term preservation and sharing with the rest of the PDS system.
 
 It is composed of 2 services:

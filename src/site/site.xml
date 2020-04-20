@@ -49,39 +49,40 @@
 
   <version/>
 
-<body>
-  <links>
-    <item name="Registry App Github Repo" href="https://github.com/NASA-PDS-Incubator/pds-app-registry" />
-  </links>
-
-<menu name="Software Documentation">
-  <item name="About PDS Registry Application" href="index.html"/>
-  <item name="Installation" href="install/index.html">
-    <item name="Java" href="install/java.html"/>
-    <item name="Solr" href="install/solr.html"/>
-    <item name="Tools (manager, harvest)" href="install/tools.html"/>
-    <item name="Initialize the registry" href="install/initialize.html"/>
-    <item name="Test your deployment" href="install/test.html"/>
+  <body>
+    <links>
+      <item name="Registry App Github Repo" href="https://github.com/NASA-PDS-Incubator/pds-app-registry" />
+    </links>
+  
+    <menu name="Software Documentation">
+      <item name="About PDS Registry Application" href="index.html"/>
+      <item name="Installation" href="install/index.html">
+        <item name="Java" href="install/java.html"/>
+        <item name="Solr" href="install/solr.html"/>
+        <item name="Tools (manager, harvest)" href="install/tools.html"/>
+        <item name="Initialize the registry" href="install/initialize.html"/>
+        <item name="Test your deployment" href="install/test.html"/>
+        
+      </item>
+      <item name="Operation" href="operate/index.html">
+        <item name="Harvest" href="operate/harvest.html"/>
+        <item name="Registry Manager" href="operate/reg-manager.html"/>
+        <item name="Registry Collection" href="operate/reg-collection.html"/>
+        <item name="Solr Tools" href="operate/solr-tools.html"/>
+      </item>
+      <item name="Support" href="index.html#Support" />
+    </menu>
     
-  </item>
-  <item name="Operation" href="operate/index.html">
-    <item name="Harvest" href="operate/harvest.html"/>
-    <item name="Registry Manager" href="operate/reg-manager.html"/>
-    <item name="Registry Collection" href="operate/reg-collection.html"/>
-    <item name="Solr Tools" href="operate/solr-tools.html"/>
-  </item>
-</menu>
-
-<menu name="Downloads">
-  <item name="Current Release (tar.gz)" href="https://github.com/NASA-PDS-Incubator/${project.artifactId}/releases/download/${project.version}/${project.artifactId}-${project.version}-bin.tar.gz"/>
-  <item name="Current Release (zip)" href="https://github.com/NASA-PDS-Incubator/${project.artifactId}/releases/download/${project.version}/${project.artifactId}-${project.version}-bin.zip"/>
-  <item name="Past Releases" href="https://pds-engineering.jpl.nasa.gov/content/pds4-software"/>
-</menu>
-
+    <menu name="Downloads">
+      <item name="Current Release (tar.gz)" href="https://github.com/NASA-PDS-Incubator/${project.artifactId}/releases/download/${project.version}/${project.artifactId}-${project.version}-bin.tar.gz"/>
+      <item name="Current Release (zip)" href="https://github.com/NASA-PDS-Incubator/${project.artifactId}/releases/download/${project.version}/${project.artifactId}-${project.version}-bin.zip"/>
+      <item name="Past Releases" href="https://pds-engineering.jpl.nasa.gov/content/pds4-software"/>
+    </menu>
+  
     <menu name="Change Log">
       <item name="TBD" href="" />
     </menu>
-
+  
     <menu ref="reports"/>
   </body>
 </project>

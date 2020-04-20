@@ -7,24 +7,38 @@
 
 <body>
 <section name="Apache Solr">
+  
+  <ul>
+    <li><a href="#SolrCloud_Overview">SolrCloud Overview</a></li>
+    <ul>
+      <li><a href="#Multinode_Cluster">Multinode Cluster</a></li>
+      <li><a href="#Single_Node_Cluster_with_Embedded_ZooKeeper">Single Node Cluster with Embedded ZooKeeper</a></li>
+      <li><a href="#Single_Node_Cluster_with_Separate_ZooKeeper">Single Node Cluster with Separate ZooKeeper</a></li>
+    </ul>
+    <li><a href="#Installation">Installation</a></li>
+    <ul>
+      <li><a href="#Single_Node_Cluster_with_Embedded_ZooKeeper">Single Node Cluster with Embedded ZooKeeper</a></li>
+      <li><a href="#Using_Docker">Using Docker</a></li>
+    </ul>
+    <li><a href="#Security">Security</a></li>
+    <li><a href="#Setup_HTTP_Proxy_for_Solr_Admin_UI">Setup HTTP Proxy for Solr Admin UI</a></li>
+    <li><a href="#Next_Steps">Next Steps</a></li>
+    <li><a href="#Common Errors">Common Errors</a></li>
+  </ul>
 
 <p>
 PDS Registry requires <a href="https://lucene.apache.org/solr/" target="_blank">Apache Solr</a>.
 Solr has to be installed and started in cloud mode before running PDS Registry.
 
-PDS Regsitry has been tested with Solr version $context.get("solr.version").
+PDS Registry has been tested with Solr version $context.get("solr.version").
 </p>
 
 <p>
 Solr can run in two modes: 
 <ul>
-  <li>Standalone</li> 
-  <li>SolrCloud</li>
+  <li><b>SolrCloud - this is the only mode support by the PDS EN Registry tools</b></li>
+  <li>Standalone - this can be used for your own Solr testing purposes.</li> 
 </ul>
-</p>
-
-<p>
-SolrCloud is the only mode supported by Registry tools.
 </p>
 
 <!-- ======================================================== -->
@@ -66,33 +80,64 @@ This setup can be easily expanded by addning more ZooKeeper or Solr nodes.
 <subsection name="Installation">
 
 <h4>Single Node Cluster with Embedded ZooKeeper</h4>
-<p>
-Download ZIP or TGZ archive from <a href="http://archive.apache.org/dist/lucene/solr/8.4.1">http://archive.apache.org ($context.get("solr.version"))</a>
-and unzip it to any directory, for example, <i>/opt/solr-8.4.1</i>. We will call this direcotry <i>SOLR_HOME</i>.
-Go to <i>SOLR_HOME/bin</i> and run <i>solr.cmd</i> on Windows or <i>solr</i> on Unix or Mac. 
-Pass <b>start</b> and <b>-cloud</b> parameters to start Solr in cloud mode.
-</p>
+<ul>
+  <li>Download the Solr ${context.get('solr.version')} <a href="http://archive.apache.org/dist/lucene/solr/${context.get('solr.version')}/solr-${context.get('solr.version')}.zip">ZIP</a> or <a href="http://archive.apache.org/dist/lucene/solr/${context.get('solr.version')}/solr-${context.get('solr.version')}.tgz">TAR</a> package.</li>
+  <li>Unzip it to any directory, for example, <i>/opt/solr-8.4.1</i>. We will call this directory <i>SOLR_HOME</i> throughout the rest of this documentation.</li>
+  <li>Go to <i>SOLR_HOME/bin</i> and run <i>solr.cmd</i> on Windows or <i>solr</i> on Unix or Mac.</li> 
+  <li>Pass <b>start</b> and <b>-cloud</b> parameters to start Solr in cloud mode.
+    <source>
+# Unix or Mac
+./solr start -cloud
 
-<source>
-solr start -cloud
-</source>
+# Windows
+solr.cmd start -cloud
+    </source>
+  </li>
+  <li>Check that Solr server started in cloud mode. Depending upon where you are installing this software, there are 2 ways to test it started successfully:
+    <ul>
+      <li>Open the Solr Admin UI:
+        <ul>
+          <li>From a native machine or through XWindows: <a href="http://localhost:8983/solr/">http://localhost:8983/solr/</a> or <a href="http://127.0.0.1:8983/solr/">http://127.0.0.1:8983/solr/</a></li>
+          <li>From a remote server / host machine: http://my.hostname.com:8983/solr/. NOTE: Depending on how your machine ports are secured, you may need SA assistance to get this port opened or <a href="#Setup_HTTP_Proxy_for_Solr_Admin_UI">see below for information on setting up an Apache proxy.</a></li>
+        </ul>
+        <p>
+          <br />You should see a page similar to this.
+        </p>
+        <p>
+          <img src="../images/solr-adm1.jpg" width="90%" />
+        </p>
+        
+        <p>
+          Check that <i>Cloud</i> menu item is available on the left. Click it. You should see a page similar to this.
+        </p>
+        <p>
+          <img src="../images/solr-adm2.jpg" width="85%" />
+        </p>
+      </li>
+      <li>If experiencing issues accessing the Admin UI, try the following to verify the server started as expected:
+        <source>
+$ ./solr status
 
-<p>
-To check that Solr server started in cloud mode, open Solr Admin UI in a web browser: <i>http://localhost:8983/solr/</i>.
-You should see a page similar to this.
-</p>
-<p>
-<img src="../images/solr-adm1.jpg" width="90%" />
-</p>
+Found 1 Solr nodes:
 
-<p>
-Check that <i>Cloud</i> menu item is available on the left. Click it. You should see a page similar to this.
-</p>
-<p>
-<img src="../images/solr-adm2.jpg" width="85%" />
-</p>
+Solr process 55672 running on port 8983
+{
+"solr_home":"/opt/solr-8.4.1/server/solr",
+"version":"8.4.1 832bf13dd9187095831caf69783179d41059d013 - ishan - 2020-01-10 13:40:28",
+"startTime":"2020-04-11T01:48:15.071Z",
+"uptime":"0 days, 0 hours, 2 minutes, 23 seconds",
+"memory":"91.7 MB (%17.9) of 512 MB",
+"cloud":{
+"ZooKeeper":"localhost:9983",
+"liveNodes":"1",
+"collections":"0"}}
+        </source>
+      </li>
+    </ul>
+  </li>
+</ul>
 
-<h4>Docker / Podman</h4>
+<h4>Using Docker</h4>
 <p>
 You can run Solr in Docker or Podman. Use the official Solr image from DockerHub (solr:8.4).
 Map both ZooKeeper (9983) and Solr (8983) ports. 
@@ -109,21 +154,50 @@ podman run -p 8983:8983 -p 9983:9983 -d --name solr -t solr:8.4 -cloud
 
 </subsection>
 
-<section name="Solr in your network">
+<section name="Security">
 
-<p>The Solr component of the registry is critical as it hosts the PDS records. It MUST NOT be exposed to non trusted parties (e.g. outside your organization network).
-Contact your system administrators if necessary.
+<p>Currently, we are working on defining a more comprehensive Security component for the Registry. In the meantime, it is recommended this service 
+  be installed on servers that allow internal access only.
 </p>
 
+</section>
+  
+<section name="Setup HTTP Proxy for Solr Admin UI">
+  <p>To view the Solr Admin UI on a remote server, you will need to have your System Administrator setup a proxy similar to the following:
+  <source>
+ProxyPass /solr/ http://localhost:8983/solr/
+ProxyPassReverse /solr/ http://localhost:8983/solr/
+ProxyPass /solr http://localhost:8983/solr
+ProxyPassReverse /solr http://localhost:8983/solr
+&lt;Location /solr&gt;
+  &lt;Limit PUT POST DELETE&gt;
+    Order Deny,Allow
+    Deny from All
+    Allow from 127.0.0.1
+  &lt;/Limit&gt;
+&lt;/Location&gt;
+  </source>
+  </p>
 </section>
 
 <!-- ======================================================= -->
 
 
 </section>
-<section name="Next steps">
-<p>You Solr server is ready, you should now deploy the <a href="tools.html">tools</a> to harvest metadata and manage your registry.</p>
+<section name="Next Steps">
+<p>Your Solr server is ready, you should now deploy the <a href="tools.html">tools</a> to harvest metadata and manage your registry.</p>
 </section>
+  
+  <section name="Having trouble?">
+    <p>If you are having trouble getting Solr to start up and/or access the Admin UI, there are a few potential debugging mechanisms:
+    </p>
+    
+    <ul>
+      <li>Make sure the 8983 port is open or proxy is setup - this is necessary to access the repo</li>
+      <li>Try replacing localhost with the hostname of your machine - depending on your server setup, localhost may not be accessible</li>
+      <li>Check if anything else is running on that port - make sure you don't have another Solr instance running or a Docker instance up. If so, shutdown or remove the docker image.</li>
+    </ul>
+  </section>
 
 </body>
 </document>
