@@ -41,7 +41,7 @@ jobs:
       run: |
          pip install pds-github-util
          git fetch --prune --unshallow --tags
-         git tag -l | grep 'SNAPSHOT' | xargs -t git push --delete origin
+         git tag -l | grep 'SNAPSHOT' | xargs -t -I arg sh -c 'git tag -d arg;git push --delete origin arg;'
          maven-snapshot-release --token ${{ secrets.GITHUB_TOKEN }}
     # the changelog will be available on https://nasa-pds.github.io/<your repo>/CHANGELOG
     - uses: actions/checkout@v2
@@ -50,7 +50,6 @@ jobs:
     - name: Create changelog
       run: |
         sudo gem install github_changelog_generator
-        git fetch --prune --unshallow --tags
         github_changelog_generator --user NASA-PDS --project pds-registry-app  --token ${{ secrets.GITHUB_TOKEN }} --configure-sections '{"improvements":{"prefix":"**Improvements:**","labels":["enhancement"]},"defects":{"prefix":"**Defects:**","labels":["bug"]},"deprecations":{"prefix":"**Deprecations:**","labels":["deprecation"]}}' --no-pull-requests
     - name: Commit CHANGELOG.md file
       run: |
