@@ -1,16 +1,6 @@
 # Changelog
 
-## [Unreleased](https://github.com/NASA-PDS/pds-registry-app/tree/HEAD)
-
-[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/0.2.0-SNAPSHOT...HEAD)
-
-**Defects:**
-
-- Unable to build application due to file size limit [\#21](https://github.com/NASA-PDS/pds-registry-app/issues/21)
-- registry installation's documentation may be insufficient [\#5](https://github.com/NASA-PDS/pds-registry-app/issues/5)
-- pds-app-registry doesn't build on Windows [\#3](https://github.com/NASA-PDS/pds-registry-app/issues/3)
-
-## [0.2.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/0.2.0-SNAPSHOT) (2020-03-31)
+## [0.2.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/0.2.0-SNAPSHOT) (2020-05-02)
 
 [Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/0.1.0...0.2.0-SNAPSHOT)
 
@@ -20,6 +10,9 @@
 
 **Defects:**
 
+- Unable to build application due to file size limit [\#21](https://github.com/NASA-PDS/pds-registry-app/issues/21)
+- registry installation's documentation may be insufficient [\#5](https://github.com/NASA-PDS/pds-registry-app/issues/5)
+- pds-app-registry doesn't build on Windows [\#3](https://github.com/NASA-PDS/pds-registry-app/issues/3)
 - Harvest does not work with registry manager [\#2](https://github.com/NASA-PDS/pds-registry-app/issues/2)
 
 ## [0.1.0](https://github.com/NASA-PDS/pds-registry-app/tree/0.1.0) (2020-03-31)
