@@ -43,7 +43,7 @@ jobs:
     - name: Publish new snapshot release
       run: |
          pip install pds-github-util
-         git tag -l | grep 'SNAPSHOT' | xargs git push --delete origin
+         git tag -l | grep 'SNAPSHOT' | xargs echo
          maven-snapshot-release --token ${{ secrets.GITHUB_TOKEN }}
     # the changelog will be available on https://nasa-pds.github.io/<your repo>/CHANGELOG
     - uses: actions/checkout@v2
