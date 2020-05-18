@@ -2,24 +2,29 @@
 
 <document>
 <properties>
-  <title>Registry Collection</title>
+  <title>Registry Customization</title>
 </properties>
 
 <body>
 
-<section name="Registry Collection Overview">
+<section name="Registry Customization">
+
+<!-- ========================================================== -->
+
+<subsection name="Default Configuration Overview">
 <p>
-PDS Registry stores its data in Apache Solr collection called "registry".
+By default, PDS Registry stores its data in Apache Solr collection called "registry".
 Registry Manager comes with default "configset", consisting of two files, <i>managed-schema</i> 
-and <i>solrconfig.xml</i>, located in <i>REGISTRY_MANAGER_HOME/solr/collections/registry</i> folder.
-<i>REGISTRY_MANAGER_HOME</i> is a directory where you installed Registry Manager, for example
+and <i>solrconfig.xml</i>, located in <i>REGISTRY_HOME/solr/collections/registry</i> folder.
+<i>REGISTRY_HOME</i> is a directory where you installed Registry Manager, for example
 <i>/home/pds/registry</i>.
 </p>
+
 <p>
 Default <i>managed-schema</i> file defines few common fields such as lid, vid, lidvid, title, 
 product_class, internal refrences and basic file information, such as file name, type, size, and MD5 hash.
-Those are the fields extracted from PDS4 product labels by Harvest by default.
 </p>
+
 <p>
 Lidvid is a primary key. If you load the same Harvest-generated "intermediate" data file multiple times,
 existing Solr documents will be replaced with new documents with the same lidvid. 
@@ -28,29 +33,62 @@ existing Solr documents will be replaced with new documents with the same lidvid
 &lt;uniqueKey&gt;lidvid&lt;/uniqueKey&gt;
 </source>
 </p>
+
 <p>
-When you load data, unknown (undefined) fields are ignored
+When you load data, unknown (undefined) fields are ignored.
 <source>
 &lt;dynamicField name="*" type="ignored" /&gt;
 &lt;fieldType name="ignored" stored="false" indexed="false" multiValued="true" class="solr.StrField" /&gt;
 </source>
 </p>
-</section>
+</subsection>
 
 <!-- ========================================================== -->
-<section name="Adding More Fields">
+
+<subsection name="Customization Overview">
+<h4>Adding More Fields</h4>
+<p>
+Default configuration defines few common fields such as lid, vid, lidvid, title, product_class, 
+internal refrences and basic file information, such as file name, type, size, and MD5 hash.
+To add more fields, you have to change Solr schema. 
+Solr supports both static (changing configuration files) and dynamic (calling API) schema configuration.
+</p>
+
+<h4>Using Multiple Collections</h4>
+<p>
+You could store original PDS labels (in a BLOB field) and some basic metadata in the "registry" collection.
+In addition to that you could have "search" collection with more fields and only the latest version of the label.
+</p>
+
+<h4>Full Text Search Customization</h4>
+<p>
+To optimize full text search, you may want to customize Solr index and query-time analyzers (filters, tokenizers),
+define Solr copy fields or configure Harvest to merge multiple fields during harvesting.
+</p>
+</subsection>
+
+<!-- ========================================================== -->
+
+<subsection name="Adding More Fields">
 
 <p>
 Detailed information about Solr fields and schema design is available at 
 <a href="https://lucene.apache.org/solr/guide/8_4/documents-fields-and-schema-design.html" target="_blank">Solr website</a>.
 </p>
 
+<h4>Manually editing managed-schema file</h4>
+
 <p>
-You can define new fields in <i>managed-schema</i> file of the registry configset.
-The following XML fragment will add <i>start_date_time</i> and <i>stop_date_time</i> fields to the registry collection.
+Either edit <i>managed-schema</i> file in <i>REGISTRY_HOME/solr/collections/registry</i> folder or copy
+all files from <i>REGISTRY_HOME/solr/collections/registry</i> to another folder and edit <i>managed-schema</i> file there.
+</p>
+
+<p>
+For example, copy the following XML to <i>managed-schema</i> file to add 
+<i>start_date_time</i> and <i>stop_date_time</i> fields to the registry collection.
 <source>
-&lt;field name="start_date_time" type="pdate" indexed="true" stored="true" multiValued="false"/&gt;
-&lt;field name="stop_date_time" type="pdate" indexed="true" stored="true" multiValued="false"/&gt;
+&lt;field name="start_date_time" type="pdate" indexed="true" stored="true" multiValued="true"/&gt;
+&lt;field name="stop_date_time" type="pdate" indexed="true" stored="true" multiValued="true"/&gt;
 </source>
 </p>
 
@@ -76,8 +114,10 @@ registry-manager create-registry -configDir /tmp/reg
 </source>
 </p>
 
+<h4>Adding fields dynamically</h4>
 <p>
-You can also add and delete fields dynamically by calling Solr Schema API. For example,
+You can add and delete fields dynamically by calling Solr Schema API. 
+For example, to add <i>start_date_time</i> field call this API:
 <source>
 curl http://localhost:8983/solr/registry/schema -X POST -H 'content-type:application/json' --data-binary '{
   "add-field": {
@@ -85,17 +125,14 @@ curl http://localhost:8983/solr/registry/schema -X POST -H 'content-type:applica
      "type":"pdate",
      "indexed":true,
      "stored":true,
-     "multiValued":false
+     "multiValued":true
   }
 }'
 </source>
 </p>
-<p>
-When you add fields dynamically, you can keep your existing data, but old documents will not have new fields.
-</p>
-<p>
-It is recommended to edit <i>managed-schema</i> file to simplify deployment and to keep track of your changes.
-</p>
+
+</subsection>
+
 </section>
 
 </body>
