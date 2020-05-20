@@ -21,8 +21,32 @@ and <i>solrconfig.xml</i>, located in <i>REGISTRY_HOME/solr/collections/registry
 </p>
 
 <p>
-Default <i>managed-schema</i> file defines few common fields such as lid, vid, lidvid, title, 
-product_class, internal refrences and basic file information, such as file name, type, size, and MD5 hash.
+Default <i>managed-schema</i> file defines few common fields such as 
+<ul>
+<li>lid</li>
+<li>vid</li>
+<li>lidvid</li>
+<li>title</li>
+<li>product_class</li>
+<li>internal refrences</li>
+</ul> 
+</p>
+
+<p>
+and basic file information, such as 
+<ul>
+<li>file name</li>
+<li>file type</li>
+<li>file size</li>
+<li>MD5 hash</li>
+</ul>
+</p>
+
+<p>
+Also, there is a binary field to store the whole label as a BLOB.
+<source>
+&lt;field name="_file_blob" type="binary" indexed="false" stored="true" required="false" multiValued="false" /&gt;
+</source>
 </p>
 
 <p>
@@ -76,6 +100,8 @@ Detailed information about Solr fields and schema design is available at
 <a href="https://lucene.apache.org/solr/guide/8_4/documents-fields-and-schema-design.html" target="_blank">Solr website</a>.
 </p>
 
+<!-- ============= -->
+
 <h4>Manually editing managed-schema file</h4>
 
 <p>
@@ -114,6 +140,8 @@ registry-manager create-registry -configDir /tmp/reg
 </source>
 </p>
 
+<!-- ============= -->
+
 <h4>Adding fields dynamically</h4>
 <p>
 You can add and delete fields dynamically by calling Solr Schema API. 
@@ -130,6 +158,128 @@ curl http://localhost:8983/solr/registry/schema -X POST -H 'content-type:applica
 }'
 </source>
 </p>
+
+<!-- ============= -->
+
+<h4>Generating Solr fields from PDS4 data dictionaries</h4>
+<p>
+Registry manager can generate Solr field definitions from one or more PDS4 data dictionaries.
+Only data dictionaries in JSON format are supported.
+Latest versions of PDS4 data dictionaries in different formates are available at 
+<a href="https://pds.nasa.gov/datastandards/dictionaries/" target="_blank">PDS website</a>.
+</p>
+
+<p>
+Let's extract autoexposure fields from imaging data dictionary, <i>PDS4_IMG_1D00_1700.JSON</i>.
+</p>
+
+<p>
+First, create a configuration file and save it in <i>/tmp/example.xml</i>.
+<source>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+
+&lt;schemaGen&gt;
+
+  &lt;dataDictionary baseDir="/tmp/schema"&gt;
+    &lt;file&gt;PDS4_IMG_1D00_1700.JSON&lt;/file&gt;
+  &lt;/dataDictionary&gt;
+
+  &lt;classFilters&gt;
+    &lt;include&gt;img.Autoexposure&lt;/include&gt;
+  &lt;/classFilters&gt;
+
+&lt;/schemaGen&gt;
+</source>
+</p>
+
+<p>
+The file has several sections. Data dictionary sections lists all dictionary files to be processed.
+This section is required and should contain one or more data dictionary files.
+In this example, imaging data dictionary <i>PDS4_IMG_1D00_1700.JSON</i> is located in <i>/tmp/schema</i> folder.
+If you want to use different folder or file, adjust your configuration file accordingly.
+</p>
+
+<p>
+Class filter section is optional. Without this section, all classes and its attributes from data dictionary will be
+processed. You can limit number of classes by providing either include or exclude filters, but not both.
+In this example only <i>img.Autoexposure</i> class and its attributes will be processed.
+Note that class name includes <i>img</i> namespace.
+</p>
+
+<p>
+Now we can run <i>generate-solr-schema</i> registry manager command to generate Solr field definitions.
+<source>
+registry-manager generate-solr-schema -config /tmp/example.xml
+</source>
+</p>
+
+<p>
+By default, generated field definitions are saved in <i>/tmp/registry/solr-fields.xml</i> file. 
+You can change default output directory by providing <i>-outDir</i> parameter. For example,
+<source>
+registry-manager generate-solr-schema -config /tmp/example.xml -outDir /home/pds4/schema
+</source>
+</p>
+
+<p>
+The generated file looks as follows.
+<source>
+&lt;fields&gt;
+&lt;field name="img.Autoexposure.img.auto_exposure_data_cut" type="pint" indexed="true" stored="true" multiValued="true" required="false" /&gt;
+&lt;field name="img.Autoexposure.img.active_flag" type="boolean" indexed="true" stored="true" multiValued="true" required="false" /&gt;
+&lt;field name="img.Autoexposure.img.auto_exposure_percent" type="pdouble" indexed="true" stored="true" multiValued="true" required="false" /&gt;
+&lt;field name="img.Autoexposure.img.processing_venue" type="string" indexed="true" stored="true" multiValued="true" required="false" /&gt;
+&lt;field name="img.Autoexposure.img.auto_exposure_pixel_fraction" type="pdouble" indexed="true" stored="true" multiValued="true" required="false" /&gt;
+&lt;field name="img.Autoexposure.img.processing_algorithm" type="string" indexed="true" stored="true" multiValued="true" required="false" /&gt;
+&lt;field name="img.Autoexposure.img.max_auto_exposure_iteration_count" type="pint" indexed="true" stored="true" multiValued="true" required="false" /&gt;
+&lt;field name="img.Autoexposure.img.sequence_number" type="string" indexed="true" stored="true" multiValued="true" required="false" /&gt;
+&lt;/fields&gt;
+</source>
+</p>
+
+<p>
+The following naming convention is used for generated Solr fields:
+<source>
+&lt;namespace&gt;.&lt;class name&gt;.&lt;namespace&gt;.&lt;attribute name&gt;
+</source>
+</p>
+
+<p>
+You might have noticed few warnings when running registry manager.
+<source>
+[WARN] No PDS to Solr data type mapping for 'pds.ASCII_Integer'. Will use 'pint'
+[WARN] No PDS to Solr data type mapping for 'pds.ASCII_Boolean'. Will use 'boolean'
+[WARN] No PDS to Solr data type mapping for 'pds.ASCII_Real'. Will use 'pdouble'
+[WARN] No PDS to Solr data type mapping for 'pds.ASCII_Short_String_Collapsed'. Will use 'string'
+</source>
+</p>
+
+<p>
+Attributes in data dictionary files have PDS data types, such as <i>pds.ASCII_Integer</i>.
+Registry manager will try to convert PDS data types to Solr data types automatically.
+You can also provide your own mappings.
+</p>
+
+<p>
+Add the following section in the configuration file (<i>/tmp/example.xml</i>):
+<source>
+  &lt;dataTypes baseDir="/tmp/schema"&gt;
+    &lt;file&gt;data-types.cfg&lt;/file&gt;
+  &lt;/dataTypes&gt;
+</source>
+</p>
+
+<p>
+And another file, <i>/tmp/schema/data-types.cfg</i> with mappings.
+<source>
+pds.ASCII_Integer = pint
+pds.ASCII_Boolean = boolean
+pds.ASCII_Real = pdouble
+pds.ASCII_Short_String_Collapsed = string
+</source>
+</p>
+
+<h5>Custom Generators</h5>
 
 </subsection>
 
