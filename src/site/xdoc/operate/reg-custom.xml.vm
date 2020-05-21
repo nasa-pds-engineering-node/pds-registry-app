@@ -167,6 +167,8 @@ Registry manager can generate Solr field definitions from one or more PDS4 data 
 Only data dictionaries in JSON format are supported.
 Latest versions of PDS4 data dictionaries in different formates are available at 
 <a href="https://pds.nasa.gov/datastandards/dictionaries/" target="_blank">PDS website</a>.
+Generated Solr field definitions are stored in an XML file and have to be manually copied to
+<i>managed-schema</i> file.
 </p>
 
 <p>
@@ -280,9 +282,101 @@ pds.ASCII_Short_String_Collapsed = string
 </p>
 
 <h5>Custom Generators</h5>
+<p>
+Instead of automatically generating Solr fields from data dictionary class attributes, you can define
+custom generators per data dictionary class. For example, if you use this configuration file (/tmp/example.xml) 
+<source>
+&lt;schemaGen&gt;
+  &lt;dataDictionary baseDir="/tmp/schema"&gt;
+    &lt;file&gt;PDS4_PDS_JSON_1D00.JSON&lt;/file&gt;
+  &lt;/dataDictionary&gt;
+  &lt;classFilters&gt;
+    &lt;include&gt;pds.Observing_System_Component&lt;/include&gt;
+  &lt;/classFilters&gt;
+&lt;/schemaGen&gt;
+</source>
+</p>
+
+<p>
+The following fields will be generated:
+<source>
+&lt;field name="pds.Observing_System_Component.pds.name" type="string" indexed="true" stored="true" multiValued="true" required="false" /&gt;
+&lt;field name="pds.Observing_System_Component.pds.type" type="string" indexed="true" stored="true" multiValued="true" required="false" /&gt;
+&lt;field name="pds.Observing_System_Component.pds.description" type="text_general" indexed="true" stored="true" multiValued="true" required="false" /&gt;
+</source>
+</p>
+
+<p>
+Let's add the following section to the main configuration file (<i>/tmp/example.xml</i>)
+<source>
+&lt;customGenerators baseDir="/tmp/schema"&gt;
+  &lt;class name="pds.Observing_System_Component" file="Observing_System_Component.cfg" /&gt;
+&lt;/customGenerators&gt;
+</source>
+</p>
+
+<p>
+and another custom generator file, <i>/tmp/schema/Observing_System_Component.cfg</i>
+<source>
+instrument_name = string
+spacecraft_name = string
+</source>
+</p>
+
+<p>
+The format of this file is very simle:
+<source>
+&lt;Solr field name&gt; = &lt;Solr data type&gt;
+</source>
+</p>
+
+<p>
+Now if you run Solr schema generator (the same command we ran before)
+<source>
+registry-manager generate-solr-schema -config /tmp/example.xml
+</source>
+</p>
+
+<p>
+The following custom fields will be generated:
+<source>
+&lt;field name="instrument_name" type="string" indexed="true" stored="true" multiValued="true" required="false" /&gt;
+&lt;field name="spacecraft_name" type="string" indexed="true" stored="true" multiValued="true" required="false" /&gt;
+</source>
+</p>
+
+<!-- ============= -->
+
+<h4>Updating Solr schema from PDS4 data dictionaries</h4>
+<p>
+In previous section you've learned how to generate Solr field definitions from PDS4 data dictionaries.
+We used <i>generate-solr-schema</i> command of the Registry Manager tool to save generated field definitions
+in <i>solr-fields.xml</i> file.
+</p>
+
+<p>
+There is another Registry Manager command, <i>update-solr-schema</i>, which updates Solr schema by calling Solr schema API.
+It uses the same configuration file as <i>generate-solr-schema</i> command described in previous section.
+By default, it updates <i>registry</i> Solr collection of local Solr instance <i>http://localhost:8983/solr</i>.
+Both Solr URL and collection name are configurable. 
+Solr collection must exist, before <i>update-solr-schema</i> command is called.
+</p>
+
+<p>
+First, create Solr collection
+<source>
+registry-manager create-registry
+</source>
+</p>
+
+<p>
+Then, run <i>update-solr-schema</i> command. Pass a configuration file listing one or more data dictionaries.
+<source>
+registry-manager update-solr-schema -config /tmp/example.xml
+</source>
+</p>
 
 </subsection>
-
 </section>
 
 </body>
