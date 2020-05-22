@@ -1,12 +1,12 @@
-# pds-app-registry
+# pds-registry-app
 
-![Maven Package](https://github.com/NASA-PDS-Incubator/pds-app-registry/workflows/Maven%20Package/badge.svg)
+![Maven Package](https://github.com/NASA-PDS/pds-registry-app/workflows/Maven%20Package/badge.svg)
 
 This application enables a PDS node to register all its data products for long term preservation and sharing with the rest of the PDS system.
 
 It is composed of 2 services:
- - registry (the database server) : for details see https://github.com/NASA-PDS-Incubator/harvest
- - harvest (tools to get/prepare metadata for the registry) : for details see https://github.com/NASA-PDS-Incubator/registry
+ - registry (the database server) : for details see https://github.com/NASA-PDS/harvest
+ - harvest (tools to get/prepare metadata for the registry) : for details see https://github.com/NASA-PDS/registry
  
 The purpose of this repository is to integrate together these services and package them conveniently for the users.
 
