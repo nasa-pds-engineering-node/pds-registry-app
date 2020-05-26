@@ -319,9 +319,45 @@ If <i>keep</i> attribute is <i>false</i>, then only lid reference is saved.
 <subsection name="Extract Fields by XPath">
 
 <p>
+To extract fields by XPath, you have to create one or more mapping files and list them 
+in Harvest configuration file as shown below.
+<source>
+&lt;harvest&gt;
+...
+  &lt;xpathMaps baseDir="/home/pds/harvest/conf"&gt;
+    &lt;xpathMap filePath="common.xml" /&gt;
+    &lt;xpathMap rootElement="Product_Observational" filePath="observational.xml" /&gt;
+  &lt;/xpathMaps&gt;
+&lt;/harvest&gt;
+</source>
+</p>
+
+<p>
+In the example above there are two <i>xpathMap</i> entries. Each entry must have <i>filePath</i> attribute 
+pointing to a mapping file. A path can be either absolute or relative to the <i>baseDir</i> attribute 
+of the <i>xpathMaps</i> tag. The <i>baseDir</i> attribute is optional. The same example with absolute paths
+is shown below.
+<source>
+  &lt;xpathMaps&gt;
+    &lt;xpathMap filePath="/home/pds/harvest/conf/common.xml" /&gt;
+    &lt;xpathMap rootElement="Product_Observational" filePath="/home/pds/harvest/conf/observational.xml" /&gt;
+  &lt;/xpathMaps&gt;
+</source>
+</p>
+
+<p>
+An <i>xpathMap</i> entry can have optional <i>rootElement</i> attribute. 
+Without this attribute, XPaths queries defined in a mapping file (<i>common.xml</i>),
+will run against every XML document processed by Harvest.
+With <i>rootElement</i> attribute, only XMLs with that root element will be processed.
+</p>
+
+<h4>Mapping Files</h4>
+
+<p>
+A mapping file has one or more entries which map an output field name to an XPath query.
 For example, to extract <i>start_date_time</i> and <i>stop_date_time</i> from observational products,
-you have to define an XPath to field name map. First, create an XML file shown below and save it as
-<i>/home/pds/harvest/conf/observational.xml</i>. You can use another file name or directory if you want.
+you can use the following file.
 
 <source>
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
@@ -334,56 +370,24 @@ you have to define an XPath to field name map. First, create an XML file shown b
 </p>
 
 <p>
-These XPaths will be used to extract start and stop date values which will be saved in the intermediate XML file as
-<i>start_date_time</i> and <i>stop_date_time</i> fields.
-</p>
-
-<p>
-Next, add the following section to the Harvest configuration file.
-
+You can use optional <i>dataType="date"</i> attribute to convert valid PDS dates to 
+ISO-8601 "instant" format required by Apache Solr (e.g., "2013-10-24T00:49:37.457Z").
 <source>
-&lt;harvest&gt;
-...
-  &lt;xpathMaps baseDir="/home/pds/harvest/conf"&gt;
-    &lt;xpathMap rootElement="Product_Observational" filePath="observational.xml" /&gt;
-  &lt;/xpathMaps&gt;
-&lt;/harvest&gt;
+&lt;xpaths&gt;
+  &lt;xpath fieldName="start_date_time" dataType="date"&gt;/Product_Observational/Observation_Area/Time_Coordinates/start_date_time&lt;/xpath&gt;
+  &lt;xpath fieldName="stop_date_time" dataType="date"&gt;/Product_Observational/Observation_Area/Time_Coordinates/stop_date_time&lt;/xpath&gt;
+&lt;/xpaths&gt;
 </source>
 </p>
 
+<h4>XML Name Spaces</h4>
 <p>
-Now, if you run Harvest, Solr documents for observational products will contain start and stop dates.
-<source>
-&lt;doc&gt;
-  &lt;field name="lid"&gt;urn:nasa:pds:ladee_ldex:data_derived:derived_ldex_ltden_pds_derived_tab&lt;/field&gt;
-  &lt;field name="vid"&gt;1.2&lt;/field&gt;
-...
-  &lt;field name="start_date_time"&gt;2013-10-25T00:00:00Z&lt;/field&gt;
-  &lt;field name="stop_date_time"&gt;2014-04-18T04:30:00Z&lt;/field&gt;
-&lt;/doc&gt;
-</source>
+
 </p>
 
 <p>
-Note that baseDir attribute is optional. You can also provide full path in filePath attribute
-as shown below
-
-<source>
-  &lt;xpathMaps&gt;
-    &lt;xpathMap rootElement="Product_Observational" filePath="/home/pds/harvest/conf/observational.xml" /&gt;
-  &lt;/xpathMaps&gt;
-</source>
 </p>
 
-<p>
-The rootElement attribute is also optional. In the above example, the XPath queries will run 
-against observational products only. If you remove rootElement attribute, then the same XPath queries 
-will run against all products, such as Product_Collection, Product_Document, etc.
-</p>
-
-<p>
-Finally, you can have multiple &lt;xpathMap&gt; entries, even for the same rootElement.
-</p>
 
 </subsection>
 
