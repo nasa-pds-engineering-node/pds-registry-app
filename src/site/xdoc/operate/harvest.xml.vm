@@ -316,10 +316,10 @@ If <i>keep</i> attribute is <i>false</i>, then only lid reference is saved.
 
 <!-- ====================================== -->
 
-<subsection name="Extract Fields by XPath">
+<subsection name="Extract Metadata by XPath">
 
 <p>
-To extract fields by XPath, you have to create one or more mapping files and list them 
+To extract metadata by XPath, you have to create one or more mapping files and list them 
 in Harvest configuration file as shown below.
 <source>
 &lt;harvest&gt;
@@ -358,6 +358,7 @@ With <i>rootElement</i> attribute, only XMLs with that root element will be proc
 A mapping file has one or more entries which map an output field name to an XPath query.
 For example, to extract <i>start_date_time</i> and <i>stop_date_time</i> from observational products,
 you can use the following file.
+</p>
 
 <source>
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
@@ -367,29 +368,94 @@ you can use the following file.
   &lt;xpath fieldName="stop_date_time"&gt;/Product_Observational/Observation_Area/Time_Coordinates/stop_date_time&lt;/xpath&gt;
 &lt;/xpaths&gt;
 </source>
-</p>
 
 <p>
 You can use optional <i>dataType="date"</i> attribute to convert valid PDS dates to 
 ISO-8601 "instant" format required by Apache Solr (e.g., "2013-10-24T00:49:37.457Z").
+</p>
+
 <source>
 &lt;xpaths&gt;
   &lt;xpath fieldName="start_date_time" dataType="date"&gt;/Product_Observational/Observation_Area/Time_Coordinates/start_date_time&lt;/xpath&gt;
   &lt;xpath fieldName="stop_date_time" dataType="date"&gt;/Product_Observational/Observation_Area/Time_Coordinates/stop_date_time&lt;/xpath&gt;
 &lt;/xpaths&gt;
 </source>
-</p>
 
 <h4>XML Name Spaces</h4>
 <p>
+Harvest ignores namespaces when extracting metadata by XPath.
+Below is a fragment of LADEE UVS product label which uses "ladee" namespace for mission area fields.
+</p>
 
+<source>
+  &lt;Observation_Area&gt;
+    &lt;Mission_Area&gt;
+      &lt;ladee:latitude&gt;17.2367925372247&lt;/ladee:latitude&gt;
+      &lt;ladee:longitude&gt;194.054477731391&lt;/ladee:longitude&gt; 
+      ...
+</source>
+
+<p>
+To extract latitude and longitude you can use the following XPaths without namespaces.
+</p>
+
+<source>
+&lt;xpaths&gt;
+  &lt;xpath fieldName="latitude"&gt;//Mission_Area/latitude&lt;/xpath&gt;
+  &lt;xpath fieldName="longitude"&gt;//Mission_Area/longitude&lt;/xpath&gt;
+&lt;/xpaths&gt;
+</source>
+
+</subsection>
+
+<!-- ====================================== -->
+
+<subsection name="Extract Metadata by Data Dictionary Class / Extract All Fields">
+
+<p>
+Harvest can automatically flatten out XML files and generate field names using the following naming convention:
+</p>
+<source>
+&lt;namespace&gt;.&lt;class name&gt;.&lt;namespace&gt;.&lt;attribute name&gt;
+</source>
+
+<p>
+For example
+</p>
+<source>
+  &lt;field name="pds.Investigation_Area.pds.name"&gt;LADEE&lt;/field&gt;
+  &lt;field name="pds.Investigation_Area.pds.type"&gt;Mission&lt;/field&gt;
+  &lt;field name="pds.Mission_Area.ladee.activity_number"&gt;16&lt;/field&gt;
+  &lt;field name="pds.Mission_Area.ladee.activity_type"&gt;Occultation&lt;/field&gt;
+  &lt;field name="pds.Mission_Area.ladee.altitude"&gt;245.731087458064&lt;/field&gt;
+</source>
+
+<p>
+The same naming convention is used by PDS4 data dictionaries in JSON format, available at 
+<a href="https://pds.nasa.gov/datastandards/dictionaries/" target="_blank">PDS website</a>.
 </p>
 
 <p>
+To extract all fields, add the following section in Harvest configuration file.
 </p>
+<source>
+  &lt;autogenFields /&gt;
+</source>
 
+<p>
+To extract a subset of fields, add <i>classFilter</i> section which can have a list of 
+either include or exclude filters (but not both). The following example will extract all fields from mission area.
+</p>
+<source>
+  &lt;autogenFields&gt;
+    &lt;classFilter&gt;
+      &lt;include&gt;pds.Mission_Area&lt;/include&gt;
+    &lt;/classFilter&gt;
+  &lt;/autogenFields&gt;
+</source>
 
 </subsection>
+
 
 </section>
 
