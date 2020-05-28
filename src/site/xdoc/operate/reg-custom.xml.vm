@@ -72,25 +72,23 @@ When you load data, unknown (undefined) fields are ignored.
 <subsection name="Customization Overview">
 <h4>Adding More Fields</h4>
 <p>
-Default configuration defines few common fields such as lid, vid, lidvid, title, product_class, 
-internal refrences and basic file information, such as file name, type, size, and MD5 hash.
-To add more fields, you have to change Solr schema. 
+Default configuration defines just a few common fields. To add more fields, you have to change Solr schema. 
 Solr supports both static (changing configuration files) and dynamic (calling API) schema configuration.
 </p>
 
 <h4>Using Multiple Collections</h4>
 <p>
 You could store original PDS labels (in a BLOB field) and some basic metadata in the "registry" collection.
-In addition to that you could have "search" collection with more fields and only the latest version of the label.
+In addition to that you could have "search" collection with more fields and only the latest version of the labels.
 </p>
 
 <h4>Full Text Search Customization</h4>
 <p>
 To optimize full text search, you may want to customize Solr index and query-time analyzers (filters, tokenizers),
-define Solr copy fields or configure Harvest to merge multiple fields during harvesting.
+define Solr copy fields or configure Harvest to merge multiple fields.
 </p>
 </subsection>
-
+ 	
 <!-- ========================================================== -->
 
 <subsection name="Adding More Fields">
@@ -126,7 +124,7 @@ registry-manager delete-registry
 </p>
 
 <p>
-and then recreate the collection again.
+and then recreate the collection.
 <source>
 registry-manager create-registry
 </source>
@@ -135,10 +133,17 @@ registry-manager create-registry
 <p>
 If you copied default configset from <i>REGISTRY_MANAGER_HOME/solr/collections/registry</i> to some other
 directory, for example <i>/tmp/reg</i>, pass <i>-configDir</i> flag to Registry Manager.
+</p>
 <source>
 registry-manager create-registry -configDir /tmp/reg
 </source>
+
+<p>
+You can also customize collection name and Solr / Zookeeper URL.
 </p>
+<source>
+registry-manager create-registry -configDir /tmp/reg -collection test1 -solrUrl http://myhost:8983/solr
+</source>
 
 <!-- ============= -->
 
@@ -171,12 +176,14 @@ Generated Solr field definitions are stored in an XML file and have to be manual
 <i>managed-schema</i> file.
 </p>
 
+<h5>Getting Started</h5>
+
 <p>
 Let's extract autoexposure fields from imaging data dictionary, <i>PDS4_IMG_1D00_1700.JSON</i>.
 </p>
 
 <p>
-First, create a configuration file and save it in <i>/tmp/example.xml</i>.
+First, create a configuration file and save it as <i>/tmp/example.xml</i>.
 <source>
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 
@@ -209,22 +216,22 @@ Note that class name includes <i>img</i> namespace.
 </p>
 
 <p>
-Now we can run <i>generate-solr-schema</i> registry manager command to generate Solr field definitions.
+Run <i>generate-solr-schema</i> registry manager command to generate Solr field definitions.
+</p>
 <source>
 registry-manager generate-solr-schema -config /tmp/example.xml
 </source>
-</p>
 
 <p>
 By default, generated field definitions are saved in <i>/tmp/registry/solr-fields.xml</i> file. 
 You can change default output directory by providing <i>-outDir</i> parameter. For example,
+</p>
 <source>
 registry-manager generate-solr-schema -config /tmp/example.xml -outDir /home/pds4/schema
 </source>
-</p>
 
 <p>
-The generated file looks as follows.
+Example <i>solr-fields.xml</i> file is shown below.
 <source>
 &lt;fields&gt;
 &lt;field name="img.Autoexposure.img.auto_exposure_data_cut" type="pint" indexed="true" stored="true" multiValued="true" required="false" /&gt;
@@ -245,6 +252,8 @@ The following naming convention is used for generated Solr fields:
 &lt;namespace&gt;.&lt;class name&gt;.&lt;namespace&gt;.&lt;attribute name&gt;
 </source>
 </p>
+
+<h5>Data Type Map</h5>
 
 <p>
 You might have noticed few warnings when running registry manager.
@@ -281,10 +290,21 @@ pds.ASCII_Short_String_Collapsed = string
 </source>
 </p>
 
+<p>
+The format of this file is very simle:
+</p>
+<source>
+&lt;PDS data type with namespace&gt; = &lt;Solr data type&gt;
+</source>
+
 <h5>Custom Generators</h5>
 <p>
 Instead of automatically generating Solr fields from data dictionary class attributes, you can define
-custom generators per data dictionary class. For example, if you use this configuration file (/tmp/example.xml) 
+custom generators per data dictionary class.
+</p>
+<p>
+First, let's use a configuration file without custom generators (/tmp/example.xml):
+</p>
 <source>
 &lt;schemaGen&gt;
   &lt;dataDictionary baseDir="/tmp/schema"&gt;
@@ -295,7 +315,13 @@ custom generators per data dictionary class. For example, if you use this config
   &lt;/classFilters&gt;
 &lt;/schemaGen&gt;
 </source>
+
+<p>
+If you run Solr schema generator
 </p>
+<source>
+registry-manager generate-solr-schema -config /tmp/example.xml
+</source>
 
 <p>
 The following fields will be generated:
@@ -307,7 +333,7 @@ The following fields will be generated:
 </p>
 
 <p>
-Let's add the following section to the main configuration file (<i>/tmp/example.xml</i>)
+Now, let's add the following section to the main configuration file (<i>/tmp/example.xml</i>)
 <source>
 &lt;customGenerators baseDir="/tmp/schema"&gt;
   &lt;class name="pds.Observing_System_Component" file="Observing_System_Component.cfg" /&gt;
@@ -325,17 +351,17 @@ spacecraft_name = string
 
 <p>
 The format of this file is very simle:
+</p>
 <source>
 &lt;Solr field name&gt; = &lt;Solr data type&gt;
 </source>
-</p>
 
 <p>
-Now if you run Solr schema generator (the same command we ran before)
+If you run Solr schema generator
+</p>
 <source>
 registry-manager generate-solr-schema -config /tmp/example.xml
 </source>
-</p>
 
 <p>
 The following custom fields will be generated:
@@ -348,34 +374,30 @@ The following custom fields will be generated:
 <!-- ============= -->
 
 <h4>Updating Solr schema from PDS4 data dictionaries</h4>
-<p>
-In previous section you've learned how to generate Solr field definitions from PDS4 data dictionaries.
-We used <i>generate-solr-schema</i> command of the Registry Manager tool to save generated field definitions
-in <i>solr-fields.xml</i> file.
-</p>
 
 <p>
-There is another Registry Manager command, <i>update-solr-schema</i>, which updates Solr schema by calling Solr schema API.
-It uses the same configuration file as <i>generate-solr-schema</i> command described in previous section.
-By default, it updates <i>registry</i> Solr collection of local Solr instance <i>http://localhost:8983/solr</i>.
-Both Solr URL and collection name are configurable. 
-Solr collection must exist, before <i>update-solr-schema</i> command is called.
+To updates Solr schema dynamically, by calling Solr schema API, run the following Registry Manager command:
 </p>
-
-<p>
-First, create Solr collection
-<source>
-registry-manager create-registry
-</source>
-</p>
-
-<p>
-Then, run <i>update-solr-schema</i> command. Pass a configuration file listing one or more data dictionaries.
 <source>
 registry-manager update-solr-schema -config /tmp/example.xml
 </source>
+
+<p>
+This command uses the same configuration file as <i>generate-solr-schema</i> command described in previous section.
 </p>
 
+<p>
+By default, <i>"registry"</i> collection of local Solr instance <i>http://localhost:8983/solr</i> is updated.
+Both collection name and Solr / ZooKeeper URL are configurable as shown below:
+</p>
+
+<source>
+registry-manager update-solr-schema -config /tmp/example.xml -collection test1 -solrUrl http://myhost:8983/solr
+</source>
+
+<p>
+Solr collection must exist, before calling <i>update-solr-schema</i> command.
+</p>
 </subsection>
 </section>
 
