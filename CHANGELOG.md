@@ -1,6 +1,14 @@
 # Changelog
 
-## [0.2.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/0.2.0-SNAPSHOT) (2020-05-22)
+## [Unreleased](https://github.com/NASA-PDS/pds-registry-app/tree/HEAD)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/0.2.0-SNAPSHOT...HEAD)
+
+**Improvements:**
+
+- Enhance documentation for PDS4 Attribute Search deployment and customization [\#22](https://github.com/NASA-PDS/pds-registry-app/issues/22)
+
+## [0.2.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/0.2.0-SNAPSHOT) (2020-05-29)
 
 [Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v0.1.1...0.2.0-SNAPSHOT)
 
