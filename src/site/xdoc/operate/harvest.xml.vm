@@ -33,10 +33,8 @@ usage: harvest &lt;options&gt;
 <section name="Quick Start">
 <p>
 To run Harvest you need an XML configuration file. 
-For example, to process all XML files in <i>/data/LADEE/ldex_20161118</i> folder and 
-all subfolders, create the following configuration file and save it as <i>/tmp/ladee.cfg</i>.
-</p>
-
+The configuration file has several sections which control which folders and files the Harvest tool 
+will crawl and what data to extract. Very basic configuration is shown below.
 <source>
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 
@@ -49,19 +47,22 @@ all subfolders, create the following configuration file and save it as <i>/tmp/l
   &lt;/directories&gt;
 &lt;/harvest&gt;
 </source>
+</p>
 
 <p>
-Then run Harvest
+If you save this file as <i>/tmp/ladee.cfg</i> and run Harvest
 <source>
 harvest -c /tmp/ladee.cfg
 </source>
 </p>
 
-<p>
-The tool will print some log messages and create an intermediate file, <i>solr-docs.xml</i> 
-in default output directory <i>/tmp/harvest/solr/</i>. The file contains a list of Solr documents
-in XML format whch can be loaded into Solr by Registry Manager or standard Solr tools.
-An example Solr document is shown below.
+<p> 
+all XML files in <i>/data/LADEE/ldex_20161118</i> folder and its subfolders will be processed.
+By default, Harvest extracts only few metadata fields, such as lid, vid, title, and product class.
+Extracted metadata is saved in <i>solr-docs.xml</i> file. 
+Default output directory is <i>/tmp/harvest/solr/</i>.
+The file contains a list of Solr documents in XML format whch can be loaded into Solr by Registry Manager 
+or standard Solr tools. An example Solr document is shown below.
 
 <source>
 &lt;doc&gt;
@@ -70,123 +71,149 @@ An example Solr document is shown below.
   &lt;field name="lidvid">urn:nasa:pds:ladee_ldex::1.2&lt;/field>
   &lt;field name="title">LADEE LUNAR DUST EXPERIMENT&lt;/field>
   &lt;field name="product_class">Product_Bundle&lt;/field>
-  &lt;field name="_file_name">bundle_ladee_ldex.xml&lt;/field>
-  &lt;field name="_file_type">application/xml&lt;/field>
-  &lt;field name="_file_size">5735&lt;/field>
-  &lt;field name="_file_md5">zlYAt05W/Ag6Qy4HlNYy+g==&lt;/field>
-  &lt;field name="_xml_root_element">Product_Bundle&lt;/field>
   &lt;field name="_package_id">8627271a-01f5-49ad-8ce5-69f78fd6b5f4&lt;/field>
-  &lt;field name="instrument_host_ref">urn:nasa:pds:context:instrument_host:spacecraft.ladee&lt;/field>
-  &lt;field name="instrument_ref">urn:nasa:pds:context:instrument:instrument.ldex__ladee&lt;/field>
-  &lt;field name="investigation_ref">urn:nasa:pds:context:investigation:mission.ladee&lt;/field>
-  &lt;field name="target_ref">urn:nasa:pds:context:target:dust.dust&lt;/field>
-  &lt;field name="target_ref">urn:nasa:pds:context:target:satellite.moon&lt;/field&gt;
 &lt;/doc&gt;
 </source>
 </p>
 
-<p>
-By default Harvest extracts lid, vid, title, product_class, all internal refrences and basic
-file information, such as file name, type, size, and MD5 hash.
-</p>
-
-<h4>Package ID</h4>
+<subsection name="Package ID">
 <p>
 Each Harvest run generates unique package ID, stored in <i>_package_id</i> field.
 After loading extracted metadata into Solr, all documents from a particular Harvest run can be 
 deleted by this package id.
 </p>
+</subsection>
 
 </section>
+
+
+<!-- ====================================================================== -->
+
+<section name="Input Directories and Filters">
+
+<subsection name="Crawl Products from Multiple Directories">
+<p>
+To process products from multiple directories, specify multiple &lt;path&gt; entries in Harvest configuration file:
+<source>
+&lt;harvest&gt;
+  &lt;directories&gt;
+    &lt;path&gt;/data/LADEE/ldex_20161118/data_calibrated&lt;/path&gt;
+    &lt;path&gt;/data/LADEE/ldex_20161118/data_derived&lt;/path&gt;
+...
+&lt;/harvest&gt;
+</source>
+</p>
+</subsection>
+
+<subsection name="Filtering Files">
+<p>
+This feature has limited functionality since all PDS4 product labels are XML files and
+Harvest could not process other files. Usually you would include the following file filter in most 
+Harvest configuration files:
+<source>
+&lt;harvest&gt;
+  &lt;directories&gt;
+...
+    &lt;fileFilter&gt;
+      &lt;include&gt;*.xml&lt;/include&gt;
+    &lt;/fileFilter&gt;
+  &lt;/directories&gt;
+&lt;/harvest&gt;
+</source>
+If you don't provide any filters, Harvest will try to pocess every file and for non-XML files you will see
+"Unsupported MIME type" log messages.
+</p>
+<p>
+You can use one or more &lt;include&gt; filters or one or more &lt;exclude&gt; filters, but not both.
+</p>
+
+</subsection>
+
+<subsection name="Excluding Sub-Directories">
+<p>
+For example, to exclude <i>xml_schema</i> sub-folder, add a directory filter in Harvest configuration file:
+<source>
+&lt;harvest&gt;
+  &lt;directories&gt;
+...
+    &lt;directoryFilter&gt;
+      &lt;exclude&gt;xml_schema&lt;/exclude&gt;
+    &lt;/directoryFilter&gt;
+  &lt;/directories&gt;
+&lt;/harvest&gt;
+</source>
+There is no include option for sub-directories.
+</p>
+
+</subsection>
+
+<subsection name="Filtering Products">
+<p>
+You can include or exclude products. For example, to only process documents, add following 
+product filter in Harvest configuration file:
+</p>
+<source>
+&lt;harvest&gt;
+  &lt;directories&gt;
+...
+    &lt;productFilter&gt;
+      &lt;include&gt;Product_Document&lt;/include&gt;
+    &lt;/productFilter&gt;
+  &lt;/directories&gt;
+&lt;/harvest&gt;
+</source>
+
+</subsection>
+
+</section>
+
 
 <!-- ===================================================== -->
 
 <section name="Extracting More Metadata">
+
+<subsection name="Basic File Information">
+
 <p>
-For example, to extract <i>start_date_time</i> and <i>stop_date_time</i> from observational products,
-you have to define an XPath to field name map. First, create an XML file shown below and save it as
-<i>/home/pds/harvest/conf/observational.xml</i>. You can use another file name or directory if you want.
-
+To extracts basic file information, such as file name, type, size, and MD5 hash, 
+include the following section in the configuration file.
 <source>
-&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-
-&lt;xpaths&gt;
-  &lt;xpath fieldName="start_date_time"&gt;/Product_Observational/Observation_Area/Time_Coordinates/start_date_time&lt;/xpath&gt;
-  &lt;xpath fieldName="stop_date_time"&gt;/Product_Observational/Observation_Area/Time_Coordinates/stop_date_time&lt;/xpath&gt;
-&lt;/xpaths&gt;
+&lt;fileInfo /&gt;
 </source>
 </p>
 
 <p>
-These XPaths will be used to extract start and stop date values which will be saved in the intermediate XML file as
-<i>start_date_time</i> and <i>stop_date_time</i> fields.
-</p>
-
-<p>
-Next, add the following section to the Harvest configuration file.
-
+Now if you run Harvest, the following fields will be extracted in addition to other fields discussed above.
 <source>
-&lt;harvest&gt;
-...
-  &lt;xpathMaps baseDir="/home/pds/harvest/conf"&gt;
-    &lt;xpathMap rootElement="Product_Observational" filePath="observational.xml" /&gt;
-  &lt;/xpathMaps&gt;
-&lt;/harvest&gt;
+  &lt;field name="_file_name">bundle_ladee_ldex.xml&lt;/field>
+  &lt;field name="_file_type">application/xml&lt;/field>
+  &lt;field name="_file_size">5735&lt;/field>
+  &lt;field name="_file_md5">zlYAt05W/Ag6Qy4HlNYy+g==&lt;/field>
 </source>
 </p>
+</subsection>
 
-<p>
-Now, if you run Harvest, Solr documents for observational products will contain start and stop dates.
-<source>
-&lt;doc&gt;
-  &lt;field name="lid"&gt;urn:nasa:pds:ladee_ldex:data_derived:derived_ldex_ltden_pds_derived_tab&lt;/field&gt;
-  &lt;field name="vid"&gt;1.2&lt;/field&gt;
-...
-  &lt;field name="start_date_time"&gt;2013-10-25T00:00:00Z&lt;/field&gt;
-  &lt;field name="stop_date_time"&gt;2014-04-18T04:30:00Z&lt;/field&gt;
-&lt;/doc&gt;
-</source>
-</p>
+<!-- =========== -->
 
-<p>
-Note that baseDir attribute is optional. You can also provide full path in filePath attribute
-as shown below
+<subsection name="BLOB Storage">
 
-<source>
-  &lt;xpathMaps&gt;
-    &lt;xpathMap rootElement="Product_Observational" filePath="/home/pds/harvest/conf/observational.xml" /&gt;
-  &lt;/xpathMaps&gt;
-</source>
-</p>
-
-<p>
-The rootElement attribute is also optional. In the above example, the XPath queries will run 
-against observational products only. If you remove rootElement attribute, then the same XPath queries 
-will run against all products, such as Product_Collection, Product_Document, etc.
-</p>
-
-<p>
-Finally, you can have multiple &lt;xpathMap&gt; entries, even for the same rootElement.
-</p>
-
-</section>
-
-<!-- ====================================================================== -->
-
-<section name="BLOB Storage">
 <p>
 You can store whole PDS product labels as BLOBs (Binary Large OBjects). 
-To enable this feature add the following section in Harvest configuration file.
+To enable this feature modify <i>fileInfo</i> section in Harvest configuration file.
 <source>
-&lt;blobStorage type="embedded" /&gt;
+&lt;fileInfo&gt;
+  &lt;blobStorage type="embedded" /&gt;
+&lt;/fileInfo&gt;
 </source>
 </p>
+
 <p>
-After running Harvest, <i>solr-docs.xml</i> "intermediate" file will have <i>_file_blob</i> field with zipped product label. 
+After running Harvest, <i>solr-docs.xml</i> file will have <i>_file_blob</i> field with zipped product label. 
 You can expect up to 900% compression rate for some files. 
 For example, many LADEE housekeeping labels are about 45KB. BLOB size is about 5KB.
 For smaller files, such as collection labels, compression rate is about 350% (5.5KB file is compressed to 1.6KB).
 </p>
+
 <p>
 After loading data into Solr, you can extract BLOBs by running Registry Manager tool:
 <source>
@@ -194,11 +221,12 @@ registry-manager export-file -lidvid urn:nasa:pds:ladee_ldex:data_calibrated::1.
 </source>
 </p>
 
-</section>
+</subsection>
 
-<!-- ====================================================================== -->
 
-<section name="File Reference / Access URL">
+<!-- ====================================== -->
+
+<subsection name="File Reference / Access URL">
 <p>
 To store full path of a product label file, add the following section in Harvest configuration file.
 <source>
@@ -214,6 +242,8 @@ After running Harvest, you should see <i>_file_ref</i> field added to each Solr 
 ...
 &lt;/doc&gt;
 </source>
+</p>
+<p>
 Note that on Windows, backslashes are replaced with forward slashes and disk letter is included.
 </p>
 
@@ -237,82 +267,204 @@ Now, after running Harvest, you shoul see different <i>_file_ref</i> value:
 </source>
 </p>
 
+</subsection>
+
+<!-- ====================================== -->
+
+<subsection name="Internal References">
+
+<p>
+To extract all internal references, add the following section in Harvest configuration file.
+<source>
+&lt;internalRefs prefix="ref_"&gt;
+  &lt;lidvid convertToLid="true" keep="true" /&gt;
+&lt;/internalRefs&gt;
+</source>
+</p>
+
+<p>
+Example output is shown below.
+<source>
+  &lt;field name="ref_lid_document"&gt;urn:nasa:pds:ladee_uvs:document:DPSIS&lt;/field&gt;
+  &lt;field name="ref_lid_instrument"&gt;urn:nasa:pds:context:instrument:instrument.uvs__ladee&lt;/field&gt;
+  &lt;field name="ref_lid_investigation"&gt;urn:nasa:pds:context:investigation:mission.ladee&lt;/field&gt;
+  &lt;field name="ref_lid_product"&gt;urn:nasa:pds:ladee_uvs:calibration:wavelength&lt;/field&gt;
+  &lt;field name="ref_lid_product"&gt;urn:nasa:pds:ladee_uvs:raw:0016o_0000&lt;/field&gt;
+  &lt;field name="ref_lid_target"&gt;urn:nasa:pds:context:target:satellite.moon&lt;/field&gt;
+  &lt;field name="ref_lidvid_product"&gt;urn:nasa:pds:ladee_uvs:calibration:wavelength::1.0&lt;/field&gt;
+  &lt;field name="ref_lidvid_product"&gt;urn:nasa:pds:ladee_uvs:raw:0016o_0000::1.0&lt;/field&gt;
+</source>
+</p>
+
+<p>
+The format of generated field names is as follows:
+<source>
+&lt;prefix&gt;&lt;lid or lidvid&gt;_&lt;reference type&gt;
+</source>
+</p>
+
+<p>
+Prefix is configurable. Lidvids can be converted to lids. 
+If <i>keep</i> attribute is <i>true</i> as in the example above, both original lidvid and generated lid references are saved. 
+If <i>keep</i> attribute is <i>false</i>, then only lid reference is saved.
+</p>
+
+
+</subsection>
+
+
+<!-- ====================================== -->
+
+<subsection name="Extract Metadata by XPath">
+
+<p>
+To extract metadata by XPath, you have to create one or more mapping files and list them 
+in Harvest configuration file as shown below.
+<source>
+&lt;harvest&gt;
+...
+  &lt;xpathMaps baseDir="/home/pds/harvest/conf"&gt;
+    &lt;xpathMap filePath="common.xml" /&gt;
+    &lt;xpathMap rootElement="Product_Observational" filePath="observational.xml" /&gt;
+  &lt;/xpathMaps&gt;
+&lt;/harvest&gt;
+</source>
+</p>
+
+<p>
+In the example above there are two <i>xpathMap</i> entries. Each entry must have <i>filePath</i> attribute 
+pointing to a mapping file. A path can be either absolute or relative to the <i>baseDir</i> attribute 
+of the <i>xpathMaps</i> tag. The <i>baseDir</i> attribute is optional. The same example with absolute paths
+is shown below.
+<source>
+  &lt;xpathMaps&gt;
+    &lt;xpathMap filePath="/home/pds/harvest/conf/common.xml" /&gt;
+    &lt;xpathMap rootElement="Product_Observational" filePath="/home/pds/harvest/conf/observational.xml" /&gt;
+  &lt;/xpathMaps&gt;
+</source>
+</p>
+
+<p>
+An <i>xpathMap</i> entry can have optional <i>rootElement</i> attribute. 
+Without this attribute, XPaths queries defined in a mapping file (<i>common.xml</i>),
+will run against every XML document processed by Harvest.
+With <i>rootElement</i> attribute, only XMLs with that root element will be processed.
+</p>
+
+<h4>Mapping Files</h4>
+
+<p>
+A mapping file has one or more entries which map an output field name to an XPath query.
+For example, to extract <i>start_date_time</i> and <i>stop_date_time</i> from observational products,
+you can use the following file.
+</p>
+
+<source>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+
+&lt;xpaths&gt;
+  &lt;xpath fieldName="start_date_time"&gt;/Product_Observational/Observation_Area/Time_Coordinates/start_date_time&lt;/xpath&gt;
+  &lt;xpath fieldName="stop_date_time"&gt;/Product_Observational/Observation_Area/Time_Coordinates/stop_date_time&lt;/xpath&gt;
+&lt;/xpaths&gt;
+</source>
+
+<p>
+You can use optional <i>dataType="date"</i> attribute to convert valid PDS dates to 
+ISO-8601 "instant" format required by Apache Solr (e.g., "2013-10-24T00:49:37.457Z").
+</p>
+
+<source>
+&lt;xpaths&gt;
+  &lt;xpath fieldName="start_date_time" dataType="date"&gt;/Product_Observational/Observation_Area/Time_Coordinates/start_date_time&lt;/xpath&gt;
+  &lt;xpath fieldName="stop_date_time" dataType="date"&gt;/Product_Observational/Observation_Area/Time_Coordinates/stop_date_time&lt;/xpath&gt;
+&lt;/xpaths&gt;
+</source>
+
+<h4>XML Name Spaces</h4>
+<p>
+Harvest ignores namespaces when extracting metadata by XPath.
+Below is a fragment of LADEE UVS product label which uses "ladee" namespace for mission area fields.
+</p>
+
+<source>
+  &lt;Observation_Area&gt;
+    &lt;Mission_Area&gt;
+      &lt;ladee:latitude&gt;17.2367925372247&lt;/ladee:latitude&gt;
+      &lt;ladee:longitude&gt;194.054477731391&lt;/ladee:longitude&gt; 
+      ...
+</source>
+
+<p>
+To extract latitude and longitude you can use the following XPaths without namespaces.
+</p>
+
+<source>
+&lt;xpaths&gt;
+  &lt;xpath fieldName="latitude"&gt;//Mission_Area/latitude&lt;/xpath&gt;
+  &lt;xpath fieldName="longitude"&gt;//Mission_Area/longitude&lt;/xpath&gt;
+&lt;/xpaths&gt;
+</source>
+
+</subsection>
+
+<!-- ====================================== -->
+
+<subsection name="Extract Metadata by Data Dictionary Class / Extract All Fields">
+
+<p>
+Harvest can automatically flatten out XML files and generate field names using the following naming convention:
+</p>
+<source>
+&lt;namespace&gt;.&lt;class name&gt;.&lt;namespace&gt;.&lt;attribute name&gt;
+</source>
+
+<p>
+For example
+</p>
+<source>
+  &lt;field name="pds.Investigation_Area.pds.name"&gt;LADEE&lt;/field&gt;
+  &lt;field name="pds.Investigation_Area.pds.type"&gt;Mission&lt;/field&gt;
+  &lt;field name="pds.Mission_Area.ladee.activity_number"&gt;16&lt;/field&gt;
+  &lt;field name="pds.Mission_Area.ladee.activity_type"&gt;Occultation&lt;/field&gt;
+  &lt;field name="pds.Mission_Area.ladee.altitude"&gt;245.731087458064&lt;/field&gt;
+</source>
+
+<p>
+The same naming convention is used by PDS4 data dictionaries in JSON format, available at 
+<a href="https://pds.nasa.gov/datastandards/dictionaries/" target="_blank">PDS website</a>.
+</p>
+
+<p>
+To extract all fields, add the following section in Harvest configuration file.
+</p>
+<source>
+  &lt;autogenFields /&gt;
+</source>
+
+<p>
+To extract a subset of fields, add <i>classFilter</i> section which can have a list of 
+either include or exclude filters (but not both). The following example will extract all fields from mission area.
+</p>
+<source>
+  &lt;autogenFields&gt;
+    &lt;classFilter&gt;
+      &lt;include&gt;pds.Mission_Area&lt;/include&gt;
+    &lt;/classFilter&gt;
+  &lt;/autogenFields&gt;
+</source>
+
+<h4>Date Fields</h4>
+<p>
+Harvest will try to convert all fields containing "date" string in their names to 
+ISO-8601 "instant" format required by Apache Solr (e.g., "2013-10-24T00:49:37.457Z").
+If a field value could not be converted to ISO-8601 format, a warning message will be printed 
+and original value will be saved.
+</p>
+
+</subsection>
+
+
 </section>
-
-<!-- ====================================================================== -->
-
-<section name="Directories and Filters">
-
-<h4>Crawl Products from Multiple Directories</h4>
-<p>
-To process products from multiple directories, specify multiple &lt;path&gt; entries in Harvest configuration file:
-<source>
-&lt;harvest&gt;
-  &lt;directories&gt;
-    &lt;path&gt;/data/LADEE/ldex_20161118/data_calibrated&lt;/path&gt;
-    &lt;path&gt;/data/LADEE/ldex_20161118/data_derived&lt;/path&gt;
-...
-&lt;/harvest&gt;
-</source>
-</p>
-
-<h4>Filtering Files</h4>
-<p>
-This feature has limited functionality since all PDS4 product labels are XML files and
-Harvest could not process other files. Usually you would include the following file filter in most 
-Harvest configuration files:
-<source>
-&lt;harvest&gt;
-  &lt;directories&gt;
-...
-    &lt;fileFilter&gt;
-      &lt;include&gt;*.xml&lt;/include&gt;
-    &lt;/fileFilter&gt;
-  &lt;/directories&gt;
-&lt;/harvest&gt;
-</source>
-If you don't provide any filters, Harvest will try to pocess every file and for non-XML files you will see
-"Unsupported MIME type" log messages.
-</p>
-<p>
-You can use one or more &lt;include&gt; filters or one or more &lt;exclude&gt; filters, but not 
-both &lt;include&gt; and &lt;exclude&gt; at the same time.
-</p>
-
-<h4>Excluding Sub-Directories</h4>
-<p>
-For example, to exclude <i>xml_schema</i> sub-folder, add a directory filter in Harvest configuration file:
-<source>
-&lt;harvest&gt;
-  &lt;directories&gt;
-...
-    &lt;directoryFilter&gt;
-      &lt;exclude&gt;xml_schema&lt;/exclude&gt;
-    &lt;/directoryFilter&gt;
-  &lt;/directories&gt;
-&lt;/harvest&gt;
-</source>
-There is no include option for sub-directories.
-</p>
-
-<h4>Filtering Products</h4>
-<p>
-You can include or exclude products. For example, to only process documents, add following 
-product filter in Harvest configuration file:
-</p>
-<source>
-&lt;harvest&gt;
-  &lt;directories&gt;
-...
-    &lt;productFilter&gt;
-      &lt;include&gt;Product_Document&lt;/include&gt;
-    &lt;/productFilter&gt;
-  &lt;/directories&gt;
-&lt;/harvest&gt;
-</source>
-
-</section>
-
 
 
 </body>

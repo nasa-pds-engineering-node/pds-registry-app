@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document>
+<properties>
+  <title>Registry Customization</title>
+</properties>
+
+<body>
+
+<section name="Registry Customization">
+
+<!-- ========================================================== -->
+
+<subsection name="Default Configuration Overview">
+<p>
+By default, PDS Registry stores its data in Apache Solr collection called "registry".
+Registry Manager comes with default "configset", consisting of two files, <i>managed-schema</i> 
+and <i>solrconfig.xml</i>, located in <i>REGISTRY_HOME/solr/collections/registry</i> folder.
+<i>REGISTRY_HOME</i> is a directory where you installed Registry Manager, for example
+<i>/home/pds/registry</i>.
+</p>
+
+<p>
+Default <i>managed-schema</i> file defines few common fields such as 
+<ul>
+<li>lid</li>
+<li>vid</li>
+<li>lidvid</li>
+<li>title</li>
+<li>product_class</li>
+<li>internal refrences</li>
+</ul> 
+</p>
+
+<p>
+and basic file information, such as 
+<ul>
+<li>file name</li>
+<li>file type</li>
+<li>file size</li>
+<li>MD5 hash</li>
+</ul>
+</p>
+
+<p>
+Also, there is a binary field to store the whole label as a BLOB.
+<source>
+&lt;field name="_file_blob" type="binary" indexed="false" stored="true" required="false" multiValued="false" /&gt;
+</source>
+</p>
+
+<p>
+Lidvid is a primary key. If you load the same Harvest-generated "intermediate" data file multiple times,
+existing Solr documents will be replaced with new documents with the same lidvid. 
+<source>
+&lt;field name="lidvid" type="string" indexed="true" stored="true" required="true" multiValued="false" /&gt;
+&lt;uniqueKey&gt;lidvid&lt;/uniqueKey&gt;
+</source>
+</p>
+
+<p>
+When you load data, unknown (undefined) fields are ignored.
+<source>
+&lt;dynamicField name="*" type="ignored" /&gt;
+&lt;fieldType name="ignored" stored="false" indexed="false" multiValued="true" class="solr.StrField" /&gt;
+</source>
+</p>
+</subsection>
+
+<!-- ========================================================== -->
+
+<subsection name="Customization Overview">
+<h4>Adding More Fields</h4>
+<p>
+Default configuration defines just a few common fields. To add more fields, you have to change Solr schema. 
+Solr supports both static (changing configuration files) and dynamic (calling API) schema configuration.
+</p>
+
+<h4>Using Multiple Collections</h4>
+<p>
+You could store original PDS labels (in a BLOB field) and some basic metadata in the "registry" collection.
+In addition to that you could have "search" collection with more fields and only the latest version of the labels.
+</p>
+
+<h4>Full Text Search Customization</h4>
+<p>
+To optimize full text search, you may want to customize Solr index and query-time analyzers (filters, tokenizers),
+define Solr copy fields or configure Harvest to merge multiple fields.
+</p>
+</subsection>
+ 	
+<!-- ========================================================== -->
+
+<subsection name="Adding More Fields">
+
+<p>
+Detailed information about Solr fields and schema design is available at 
+<a href="https://lucene.apache.org/solr/guide/8_4/documents-fields-and-schema-design.html" target="_blank">Solr website</a>.
+</p>
+
+<!-- ============= -->
+
+<h4>Manually editing managed-schema file</h4>
+
+<p>
+Either edit <i>managed-schema</i> file in <i>REGISTRY_HOME/solr/collections/registry</i> folder or copy
+all files from <i>REGISTRY_HOME/solr/collections/registry</i> to another folder and edit <i>managed-schema</i> file there.
+</p>
+
+<p>
+For example, copy the following XML to <i>managed-schema</i> file to add 
+<i>start_date_time</i> and <i>stop_date_time</i> fields to the registry collection.
+<source>
+&lt;field name="start_date_time" type="pdate" indexed="true" stored="true" multiValued="true"/&gt;
+&lt;field name="stop_date_time" type="pdate" indexed="true" stored="true" multiValued="true"/&gt;
+</source>
+</p>
+
+<p>
+To apply the changes you have to delete the registry collection and all its data! 
+<source>
+registry-manager delete-registry
+</source>
+</p>
+
+<p>
+and then recreate the collection.
+<source>
+registry-manager create-registry
+</source>
+</p>
+
+<p>
+If you copied default configset from <i>REGISTRY_MANAGER_HOME/solr/collections/registry</i> to some other
+directory, for example <i>/tmp/reg</i>, pass <i>-configDir</i> flag to Registry Manager.
+</p>
+<source>
+registry-manager create-registry -configDir /tmp/reg
+</source>
+
+<p>
+You can also customize collection name and Solr / Zookeeper URL.
+</p>
+<source>
+registry-manager create-registry -configDir /tmp/reg -collection test1 -solrUrl http://myhost:8983/solr
+</source>
+
+<!-- ============= -->
+
+<h4>Adding fields dynamically</h4>
+<p>
+You can add and delete fields dynamically by calling Solr Schema API. 
+For example, to add <i>start_date_time</i> field call this API:
+<source>
+curl http://localhost:8983/solr/registry/schema -X POST -H 'content-type:application/json' --data-binary '{
+  "add-field": {
+     "name":"start_date_time",
+     "type":"pdate",
+     "indexed":true,
+     "stored":true,
+     "multiValued":true
+  }
+}'
+</source>
+</p>
+
+<!-- ============= -->
+
+<h4>Generating Solr fields from PDS4 data dictionaries</h4>
+<p>
+Registry manager can generate Solr field definitions from one or more PDS4 data dictionaries.
+Only data dictionaries in JSON format are supported.
+Latest versions of PDS4 data dictionaries in different formates are available at 
+<a href="https://pds.nasa.gov/datastandards/dictionaries/" target="_blank">PDS website</a>.
+Generated Solr field definitions are stored in an XML file and have to be manually copied to
+<i>managed-schema</i> file.
+</p>
+
+<h5>Getting Started</h5>
+
+<p>
+Let's extract autoexposure fields from imaging data dictionary, <i>PDS4_IMG_1D00_1700.JSON</i>.
+</p>
+
+<p>
+First, create a configuration file and save it as <i>/tmp/example.xml</i>.
+<source>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+
+&lt;schemaGen&gt;
+
+  &lt;dataDictionary baseDir="/tmp/schema"&gt;
+    &lt;file&gt;PDS4_IMG_1D00_1700.JSON&lt;/file&gt;
+  &lt;/dataDictionary&gt;
+
+  &lt;classFilters&gt;
+    &lt;include&gt;img.Autoexposure&lt;/include&gt;
+  &lt;/classFilters&gt;
+
+&lt;/schemaGen&gt;
+</source>
+</p>
+
+<p>
+The file has several sections. Data dictionary sections lists all dictionary files to be processed.
+This section is required and should contain one or more data dictionary files.
+In this example, imaging data dictionary <i>PDS4_IMG_1D00_1700.JSON</i> is located in <i>/tmp/schema</i> folder.
+If you want to use different folder or file, adjust your configuration file accordingly.
+</p>
+
+<p>
+Class filter section is optional. Without this section, all classes and its attributes from data dictionary will be
+processed. You can limit number of classes by providing either include or exclude filters, but not both.
+In this example only <i>img.Autoexposure</i> class and its attributes will be processed.
+Note that class name includes <i>img</i> namespace.
+</p>
+
+<p>
+Run <i>generate-solr-schema</i> registry manager command to generate Solr field definitions.
+</p>
+<source>
+registry-manager generate-solr-schema -config /tmp/example.xml
+</source>
+
+<p>
+By default, generated field definitions are saved in <i>/tmp/registry/solr-fields.xml</i> file. 
+You can change default output directory by providing <i>-outDir</i> parameter. For example,
+</p>
+<source>
+registry-manager generate-solr-schema -config /tmp/example.xml -outDir /home/pds4/schema
+</source>
+
+<p>
+Example <i>solr-fields.xml</i> file is shown below.
+<source>
+&lt;fields&gt;
+&lt;field name="img.Autoexposure.img.auto_exposure_data_cut" type="pint" indexed="true" stored="true" multiValued="true" required="false" /&gt;
+&lt;field name="img.Autoexposure.img.active_flag" type="boolean" indexed="true" stored="true" multiValued="true" required="false" /&gt;
+&lt;field name="img.Autoexposure.img.auto_exposure_percent" type="pdouble" indexed="true" stored="true" multiValued="true" required="false" /&gt;
+&lt;field name="img.Autoexposure.img.processing_venue" type="string" indexed="true" stored="true" multiValued="true" required="false" /&gt;
+&lt;field name="img.Autoexposure.img.auto_exposure_pixel_fraction" type="pdouble" indexed="true" stored="true" multiValued="true" required="false" /&gt;
+&lt;field name="img.Autoexposure.img.processing_algorithm" type="string" indexed="true" stored="true" multiValued="true" required="false" /&gt;
+&lt;field name="img.Autoexposure.img.max_auto_exposure_iteration_count" type="pint" indexed="true" stored="true" multiValued="true" required="false" /&gt;
+&lt;field name="img.Autoexposure.img.sequence_number" type="string" indexed="true" stored="true" multiValued="true" required="false" /&gt;
+&lt;/fields&gt;
+</source>
+</p>
+
+<p>
+The following naming convention is used for generated Solr fields:
+<source>
+&lt;namespace&gt;.&lt;class name&gt;.&lt;namespace&gt;.&lt;attribute name&gt;
+</source>
+</p>
+
+<h5>Data Type Map</h5>
+
+<p>
+You might have noticed few warnings when running registry manager.
+<source>
+[WARN] No PDS to Solr data type mapping for 'pds.ASCII_Integer'. Will use 'pint'
+[WARN] No PDS to Solr data type mapping for 'pds.ASCII_Boolean'. Will use 'boolean'
+[WARN] No PDS to Solr data type mapping for 'pds.ASCII_Real'. Will use 'pdouble'
+[WARN] No PDS to Solr data type mapping for 'pds.ASCII_Short_String_Collapsed'. Will use 'string'
+</source>
+</p>
+
+<p>
+Attributes in data dictionary files have PDS data types, such as <i>pds.ASCII_Integer</i>.
+Registry manager will try to convert PDS data types to Solr data types automatically.
+You can also provide your own mappings.
+</p>
+
+<p>
+Add the following section in the configuration file (<i>/tmp/example.xml</i>):
+<source>
+  &lt;dataTypes baseDir="/tmp/schema"&gt;
+    &lt;file&gt;data-types.cfg&lt;/file&gt;
+  &lt;/dataTypes&gt;
+</source>
+</p>
+
+<p>
+And another file, <i>/tmp/schema/data-types.cfg</i> with mappings.
+<source>
+pds.ASCII_Integer = pint
+pds.ASCII_Boolean = boolean
+pds.ASCII_Real = pdouble
+pds.ASCII_Short_String_Collapsed = string
+</source>
+</p>
+
+<p>
+The format of this file is very simle:
+</p>
+<source>
+&lt;PDS data type with namespace&gt; = &lt;Solr data type&gt;
+</source>
+
+<h5>Custom Generators</h5>
+<p>
+Instead of automatically generating Solr fields from data dictionary class attributes, you can define
+custom generators per data dictionary class.
+</p>
+<p>
+First, let's use a configuration file without custom generators (/tmp/example.xml):
+</p>
+<source>
+&lt;schemaGen&gt;
+  &lt;dataDictionary baseDir="/tmp/schema"&gt;
+    &lt;file&gt;PDS4_PDS_JSON_1D00.JSON&lt;/file&gt;
+  &lt;/dataDictionary&gt;
+  &lt;classFilters&gt;
+    &lt;include&gt;pds.Observing_System_Component&lt;/include&gt;
+  &lt;/classFilters&gt;
+&lt;/schemaGen&gt;
+</source>
+
+<p>
+If you run Solr schema generator
+</p>
+<source>
+registry-manager generate-solr-schema -config /tmp/example.xml
+</source>
+
+<p>
+The following fields will be generated:
+<source>
+&lt;field name="pds.Observing_System_Component.pds.name" type="string" indexed="true" stored="true" multiValued="true" required="false" /&gt;
+&lt;field name="pds.Observing_System_Component.pds.type" type="string" indexed="true" stored="true" multiValued="true" required="false" /&gt;
+&lt;field name="pds.Observing_System_Component.pds.description" type="text_general" indexed="true" stored="true" multiValued="true" required="false" /&gt;
+</source>
+</p>
+
+<p>
+Now, let's add the following section to the main configuration file (<i>/tmp/example.xml</i>)
+<source>
+&lt;customGenerators baseDir="/tmp/schema"&gt;
+  &lt;class name="pds.Observing_System_Component" file="Observing_System_Component.cfg" /&gt;
+&lt;/customGenerators&gt;
+</source>
+</p>
+
+<p>
+and another custom generator file, <i>/tmp/schema/Observing_System_Component.cfg</i>
+<source>
+instrument_name = string
+spacecraft_name = string
+</source>
+</p>
+
+<p>
+The format of this file is very simle:
+</p>
+<source>
+&lt;Solr field name&gt; = &lt;Solr data type&gt;
+</source>
+
+<p>
+If you run Solr schema generator
+</p>
+<source>
+registry-manager generate-solr-schema -config /tmp/example.xml
+</source>
+
+<p>
+The following custom fields will be generated:
+<source>
+&lt;field name="instrument_name" type="string" indexed="true" stored="true" multiValued="true" required="false" /&gt;
+&lt;field name="spacecraft_name" type="string" indexed="true" stored="true" multiValued="true" required="false" /&gt;
+</source>
+</p>
+
+<!-- ============= -->
+
+<h4>Updating Solr schema from PDS4 data dictionaries</h4>
+
+<p>
+To updates Solr schema dynamically, by calling Solr schema API, run the following Registry Manager command:
+</p>
+<source>
+registry-manager update-solr-schema -config /tmp/example.xml
+</source>
+
+<p>
+This command uses the same configuration file as <i>generate-solr-schema</i> command described in previous section.
+</p>
+
+<p>
+By default, <i>"registry"</i> collection of local Solr instance <i>http://localhost:8983/solr</i> is updated.
+Both collection name and Solr / ZooKeeper URL are configurable as shown below:
+</p>
+
+<source>
+registry-manager update-solr-schema -config /tmp/example.xml -collection test1 -solrUrl http://myhost:8983/solr
+</source>
+
+<p>
+Solr collection must exist, before calling <i>update-solr-schema</i> command.
+</p>
+</subsection>
+</section>
+
+</body>
+</document>
