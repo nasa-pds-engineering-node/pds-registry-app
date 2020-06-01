@@ -8,6 +8,8 @@ This service provides functionality for tracking, auditing, locating, and mainta
 
 This document addresses the use cases, requirements and software design of the Registry service within the PDS4 data system. This document is intended for the reviewer of the service as well as the developer and tester of the service.
 
+The information in this document is largely borrowed from the original [SRD/SDD developed in 2013](artifacts/pds4_registry_design_20130901.docx).
+
 ##	Controlling Documents
 
 1. Planetary Data System (PDS) Level 1, 2 and 3 Requirements, March 26, 2010.
@@ -28,6 +30,7 @@ This document addresses the use cases, requirements and software design of the R
 
 The component design will evolve over time and this document should reflect that evolution. This document is limited to design content because the specification content will be captured in separate documentation (e.g., Installation Guide, Operation Guide, etc.). This document is under configuration control in Github.
 
+---
  
 # Component Description
 
@@ -68,6 +71,9 @@ This registry captures descriptions about services provided by the system. PDS p
 
 The service defined in this document will provide the PDS4 system with a single implementation of registry capabilities for use by the other services and applications within the system. This service is tailor-able depending on the type of registry and types of artifacts to be registered with a given instance.
 
+---
+
+# Use Cases
 
 A use case represents a capability of the component and why the user (actor) interacts with the system. It should be at a high enough level so as not to reveal or imply the internal structure of the system. An actor is an object (e.g., person, application, etc.) outside the scope of the component but interacts with the component. This section captures the use cases for the Registry service based on the description of the service from the previous section as well as use cases defined in the CCSDS Registry Reference Model [6]. These use cases will be used in the derivation of requirements for the service. The following diagram details the use cases:
 
@@ -167,5 +173,37 @@ Discover registered artifacts from the registry by submitting queries against th
 
 1.  Search service submits a query for artifact(s) via the Registry service API.
 2.  Registry service accepts the query and returns metadata for one or more artifacts from the underlying metadata store matching the criteria.
+
+---
+
+# Requirements
+
+The architecture definition phase of the PDS4 project resulted in the decomposition of the system into several elements [3]. The Registry service derives from the Catalog/Data Management element, which was derived from requirements 2.2.2 and 2.6 of the PDS Level 1, 2, and 3 Requirements document [1]. The following level 3 requirements are relevant to this service:
+
+2.2.2   PDS will track the status of data deliveries from data providers through the PDS to the deep archive
+2.6.2   PDS will design and implement a catalog system for managing information about the holdings of the PDS
+2.6.3   PDS will integrate the catalog with the system for tracking data throughout the PDS 
+2.8.2   PDS will maintain a distributed catalog system which describes the holdings of the archive
+2.8.3   PDS will provide standard protocols for locating, moving, and utilizing data, metadata and computing resources across the distributed archive, among PDS nodes, to and from missions, and to and from the deep archive
+
+In addition to the level 4 and 5 requirements specified below, the Registry service must also comply with the general service-based requirements found in the General System SRD document [5].
+
+## Level 4 Requirements
+
+The level four requirements in PDS represent subsystem or component requirements at a high level. The following requirements pertain to the Registry service:
+
+**L4.REG.1** - The system shall maintain distributed registries of artifacts. (2.6.2, 2.8.2)
+
+Ideally, each PDS Node that maintains a repository of data will have a corresponding registry.
+
+**L4.REG.2** - The system shall federate the registries. (2.8.2)
+
+To federate is to form a single centralized unit from a number of entities, within which each keeps some internal autonomy.
+
+**L4.REG.3** - The system shall register artifacts of a data delivery into an instance of the registry. (2.2.2, 2.6.2)
+
+A data delivery consists of artifacts including but not limited to data, document and software.
+
+**L4.REG.4** - The system shall allow for management of the metadata associated with registered artifacts. (2.6.2)
 
 
