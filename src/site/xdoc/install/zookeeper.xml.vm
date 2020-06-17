@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document>
+<properties>
+  <title>ZooKeeper</title>
+</properties>
+
+<body>
+
+<section name="Apache ZooKeeper">
+
+<p>
+SolrCloud uses Apache ZooKeeper for cluster configuration and coordination.
+Below is a simplified diagram of a production setup with 3 node ZooKeeper cluster 
+and multinode Solr cluster. Both ZooKeeper and Solr clusters can be expanded by adding more nodes.
+This setup provides fault tolerance and high availability.
+</p>
+
+<img src="../images/solr-cluster.jpg" width="35%" />
+
+<p>
+It is recommended to run 3 node ZooKeeper cluster in production, but you can start with a single node cluster. 
+</p>
+
+<!-- ============================================ -->
+
+<subsection name="Installation - VM">
+
+<h4>Single Node - Quick Start</h4>
+
+<p>
+In this tutorial we will install ZooKeeper version 3.5.8 in a VM running CentOS 8.
+</p>
+
+<p>
+ZooKeeper requires Java. The version we are using in this tutorial is OpenJDK 11. 
+See this <a href="java.html">page</a> if you need help installing Java.
+</p>
+
+<p>
+Download tar.gz file from <a href="https://zookeeper.apache.org/releases.html" target="_none">ZooKeeper release page</a>
+and extract it into <i>/opt/zookeeper</i>.
+</p>
+
+<p>
+Create data directory:
+</p>
+<source>
+mkdir /var/lib/zookeeper
+</source>
+
+<p>
+Create a configuration file <i>/opt/zookeeper/conf/zoo.cfg</i>
+</p>
+<source>
+tickTime=2000
+initLimit=10
+syncLimit=5
+dataDir=/var/lib/zookeeper
+clientPort=2181
+admin.enableServer=false
+</source>
+
+<p>
+Start the server:
+</p>
+<source>
+/opt/zookeeper/bin/zkServer.sh start /opt/zookeeper/conf/zoo.cfg
+</source>
+
+<p>
+Connect to the server:
+</p>
+<source>
+/opt/zookeeper/bin/zkCli.sh -server 127.0.0.1:2181
+</source>
+
+<p>
+You should see some log messages, followed by:
+</p>
+
+<source>
+WatchedEvent state:SyncConnected type:None path:null
+[zk: 127.0.0.1:2181(CONNECTED) 0]
+</source>
+
+<p>
+Try running 'ls' command
+</p>
+
+<source>
+[zk: 127.0.0.1:2181(CONNECTED) 0] ls /zookeeper
+[config, quota]
+[zk: 127.0.0.1:2181(CONNECTED) 1]
+</source>
+
+<p>
+Quit the session:
+</p>
+
+<source>
+[zk: 127.0.0.1:2181(CONNECTED) 1] quit
+</source>
+
+<p>
+Stop the server
+</p>
+<source>
+/opt/zookeeper/bin/zkServer.sh stop /opt/zookeeper/conf/zoo.cfg
+</source>
+
+<h4>Open ZooKeeper port</h4>
+
+<source>
+firewall-cmd --zone=public --add-port=2181/tcp --permanent
+firewall-cmd --reload
+firewall-cmd --zone=public --list-ports
+</source>
+
+<h4>Running ZooKeeper as a systemd service</h4>
+
+<p>
+Create <i>zookeeper</i> group and user:
+</p>
+
+<source>
+groupadd zookeeper
+adduser -Mr -g zookeeper zookeeper
+</source>
+
+<p>
+Change file ownership
+</p>
+
+<source>
+chown zookeeper:zookeeper -R /opt/zookeeper/
+chown zookeeper:zookeeper -R /var/lib/zookeeper/
+</source>
+
+
+</subsection>
+
+
+
+</section>
+
+
+</body>
+</document>

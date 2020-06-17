@@ -61,7 +61,8 @@
       <item name="About PDS Registry Application" href="index.html"/>
       <item name="Installation" href="install/index.html">
         <item name="Java" href="install/java.html"/>
-        <item name="Solr" href="install/solr.html"/>
+        <item name="Solr - Quick Start" href="install/solr.html"/>
+        <item name="ZooKeeper" href="install/zookeeper.html"/>
         <item name="Tools (manager, harvest)" href="install/tools.html"/>
         <item name="Initialize the registry" href="install/initialize.html"/>
         <item name="Test your deployment" href="install/test.html"/>
