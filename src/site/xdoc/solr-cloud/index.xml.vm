@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Copyright 2019, California Institute of Technology ("Caltech").
+  U.S. Government sponsorship acknowledged.
+  
+  All rights reserved.
+  
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions are met:
+  
+  * Redistributions of source code must retain the above copyright notice,
+  this list of conditions and the following disclaimer.
+  * Redistributions must reproduce the above copyright notice, this list of
+  conditions and the following disclaimer in the documentation and/or other
+  materials provided with the distribution.
+  * Neither the name of Caltech nor its operating division, the Jet Propulsion
+  Laboratory, nor the names of its contributors may be used to endorse or
+  promote products derived from this software without specific prior written
+  permission.
+  
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<document>
+<properties>
+  <title>SolrCloud</title>
+</properties>
+
+<body>
+
+<section name="SolrCloud Overview">
+<p>
+SolrCloud is a cluster of Solr servers that provides fault tolerance and high availability.
+It uses Apache ZooKeeper for cluster configuration and coordination.
+Number of nodes you need, usually depends on amount of data, number of queries, fault tolerance and high availability requirements.
+</p>
+
+<!-- ============================== -->
+
+<h4>Multinode Cluster</h4>
+<p>
+Below is a simplified diagram of a production setup with 3 node ZooKeeper cluster 
+and multinode Solr cluster. Both ZooKeeper and Solr clusters can be expanded by adding more nodes.
+This setup provides fault tolerance and high availability.
+</p>
+<img src="../images/solr-cluster.jpg" width="35%" />
+
+<!-- ============================== -->
+
+<h4>Single Node Cluster with Separate ZooKeeper</h4>
+<p>
+This configuration has single node ZooKeeper and single node Solr server running in different JVMs.
+This setup can be easily expanded by addning more ZooKeeper or Solr nodes.
+</p>
+
+<img src="../images/solr-cluster-1b.jpg" width="30%" />
+</section>
+
+<!-- ============================== -->
+
+<h4>Single Node Cluster with Embedded ZooKeeper</h4>
+<p>
+This is the simplest configuration of SolrCloud. A single instance of ZooKeeper and Solr server are running in the same JVM.
+This setup does not provide any fault tolerance or high availability, and could not be expanded.
+This configuration is recommended for development or testing and can be easily installed on a laptop or desktop.
+</p>
+<img src="../images/solr-cluster-1a.jpg" width="25%" />
+
+</body>
+
+</document>
+

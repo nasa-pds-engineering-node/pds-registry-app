@@ -2,69 +2,55 @@
 
 <document>
 <properties>
-  <title>ZooKeeper</title>
+  <title>ZooKeeper - VM</title>
 </properties>
 
 <body>
 
-<section name="Apache ZooKeeper">
+<section name="Running Apache ZooKeeper in a VM">
 
 <ul>
-  <li><a href="#Running_in_a_VM">Running in a VM</a></li>
-  <ul>
-    <li><a href="#Single_Node_-_Quick_Start">Single Node - Quick Start</a></li>
-    <li><a href="#Firewall_Configuration">Firewall Configuration</a></li>
-    <li><a href="#Systemd_Service">Systemd Service</a></li>
-  </ul>
-  <li><a href="#Running_in_Docker">Running in Docker</a></li>
+  <li><a href="#Quick_Start">Quick Start</a></li>
+  <li><a href="#Firewall_Configuration">Firewall Configuration</a></li>
+  <li><a href="#Systemd_Service">Systemd Service</a></li>
 </ul>
 
 
-<p>
-SolrCloud uses Apache ZooKeeper for cluster configuration and coordination.
-Below is a simplified diagram of a production setup with 3 node ZooKeeper cluster 
-and multinode Solr cluster. Both ZooKeeper and Solr clusters can be expanded by adding more nodes.
-This setup provides fault tolerance and high availability.
-</p>
-
-<img src="../images/solr-cluster.jpg" width="35%" />
-
-<p>
-It is recommended to run 3 node ZooKeeper cluster in production, but you can start with a single node cluster. 
-</p>
-
 <!-- ============================================ -->
 
-<subsection name="Running in a VM">
-
-<subsection name="Single Node - Quick Start">
+<subsection name="Quick Start">
 
 <p>
 In this tutorial we will install ZooKeeper version 3.5.8 in a VM running CentOS 8.
 </p>
 
 <p>
-<b>Step 1: Install Java</b>
+  <b>Step 1: Create new CentOS 8 VM</b>
+</p>
+<p>
+Minimum system requirements: 2GB RAM, 1 CPU, 20GB HDD
 </p>
 
 <p>
-ZooKeeper requires Java and JAVA_HOME environment variable. 
-The Java version we are using in this tutorial is OpenJDK 11, installed in <i>/opt/jdk-11</i>.
-See this <a href="java.html">page</a> if you need help installing Java.
+  <b>Step 2: Install Java</b>
 </p>
 
+<source>
+yum install java-11-openjdk
+</source>
 
 <p>
-<b>Step 2: Install ZooKeeper</b>
+  <b>Step 3: Install ZooKeeper</b>
 </p>
 
 <p>
+Unfortunately CentOS / RHEL 8 repositories or Apache ZooKeeper project do not have prebuilt RPM installer.
 Download tar.gz file from <a href="https://zookeeper.apache.org/releases.html" target="_none">ZooKeeper release page</a>
 and extract it into <i>/opt/zookeeper</i>.
 </p>
 
 <p>
-<b>Step 3: Create data directory</b>
+  <b>Step 4: Create data directory</b>
 </p>
 
 <source>
@@ -72,7 +58,7 @@ mkdir /var/lib/zookeeper
 </source>
 
 <p>
-<b>Step 4: Create configuration file <i>/opt/zookeeper/conf/zoo.cfg</i></b>
+  <b>Step 5: Create configuration file <i>/opt/zookeeper/conf/zoo.cfg</i></b>
 </p>
 <source>
 tickTime=2000
@@ -84,14 +70,14 @@ admin.enableServer=false
 </source>
 
 <p>
-<b>Step 5: Start the server</b>
+  <b>Step 6: Start the server</b>
 </p>
 <source>
 /opt/zookeeper/bin/zkServer.sh start /opt/zookeeper/conf/zoo.cfg
 </source>
 
 <p>
-<b>Step 6: Connect to the server</b>
+  <b>Step 7: Connect to the server</b>
 </p>
 <source>
 /opt/zookeeper/bin/zkCli.sh -server 127.0.0.1:2181
@@ -117,7 +103,7 @@ Try running 'ls' command
 </source>
 
 <p>
-<b>Step 7: Quit the session</b>
+  <b>Step 8: Quit the session</b>
 </p>
 
 <source>
@@ -125,7 +111,7 @@ Try running 'ls' command
 </source>
 
 <p>
-<b>Step 8: Stop the server</b>
+  <b>Step 9: Stop the server</b>
 </p>
 <source>
 /opt/zookeeper/bin/zkServer.sh stop /opt/zookeeper/conf/zoo.cfg
@@ -154,12 +140,12 @@ firewall-cmd --zone=public --list-ports
 <subsection name="Systemd Service">
 
 <p>
-Apache ZooKeeper project doesn't provide systemd script or prebuilt RPM or DEB installers.
+Apache ZooKeeper project doesn't provide systemd script or prebuilt RPM installer.
 To manually create systemd service, follow the following steps.
 </p>
 
 <p>
-Step 1: Create <i>zookeeper</i> group and user:
+  <b>Step 1: Create zookeeper group and user</b>
 </p>
 
 <source>
@@ -168,7 +154,7 @@ adduser -Mr -g zookeeper zookeeper
 </source>
 
 <p>
-Step 2: Change file ownership
+  <b>Step 2: Change file ownership</b>
 </p>
 
 <source>
@@ -177,7 +163,11 @@ chown zookeeper:zookeeper -R /var/lib/zookeeper/
 </source>
 
 <p>
-Step 3: Create <i>/etc/systemd/system/zookeeper.service</i> file
+  <b>Step 3: Create service file</b>
+</p>
+
+<p>
+Create <i>/etc/systemd/system/zookeeper.service</i> file:
 </p>
 
 <source>
@@ -188,83 +178,51 @@ Requires=network.target
 After=network.target
 
 [Service]
-Environment=JAVA_HOME=/opt/jdk-11
 Type=forking
 User=zookeeper
 Group=zookeeper
 ExecStart=/opt/zookeeper/bin/zkServer.sh start /opt/zookeeper/conf/zoo.cfg
 ExecStop=/opt/zookeeper/bin/zkServer.sh stop /opt/zookeeper/conf/zoo.cfg
 ExecReload=/opt/zookeeper/bin/zkServer.sh restart /opt/zookeeper/conf/zoo.cfg
+SuccessExitStatus=143
 
 [Install]
 WantedBy=default.target
 </source>
 
 <p>
-NOTE: ZooKeeper requires JAVA_HOME environment variable. 
-You can set it in:
-<ul>
-  <li>zookeeper.service file (Environment=JAVA_HOME=/opt/jdk-11)</li>
-  <li>/opt/zookeeper/bin/zkEnv.sh</li>
-  <li>globally for all users in /etc/profile.d/</li>
-</ul>
+  <b>Step 4: Test the service</b>
 </p>
 
 <p>
-<b>Issues:</b>
-</p>
-
-<p>
-<b>Issue 1:</b>
-</p>
-
-<p>
-I was getting permission denied errors when starting zookeeper service
+Start the service:
 </p>
 <source>
 systemctl start zookeeper
 </source>
 
 <p>
-Reloading systemd daemon didn't help.
-</p>
-<source>
-systemctl daemon-reload
-</source>
-
-<p>
-I had to disable SELinux and reboot to make zookeeper service start.
-After reenabling SELinux and rebooting again the service still works.
-</p>
-
-<p>
-<b>Issue 2:</b>
-</p>
-
-<p>
-After running
-</p>
-<source>
-systemctl stop zookeeper
-</source>
-
-<p>
-ZooKeeper stops successfully, but if you run
+Check the status:
 </p>
 <source>
 systemctl status zookeeper
 </source>
 
 <p>
-the service status is 'failed'. This issue is not resolved.
+Stop the service:
 </p>
+<source>
+systemctl stop zookeeper
+</source>
+
+<p>
+Check the status:
+</p>
+<source>
+systemctl status zookeeper
+</source>
 
 </subsection>
-</subsection>
-
-<subsection name="Running in Docker">
-</subsection>
-
 
 </section>
 

@@ -62,7 +62,6 @@
       <item name="Installation" href="install/index.html">
         <item name="Java" href="install/java.html"/>
         <item name="Solr - Quick Start" href="install/solr.html"/>
-        <item name="ZooKeeper" href="install/zookeeper.html"/>
         <item name="Tools (manager, harvest)" href="install/tools.html"/>
         <item name="Initialize the registry" href="install/initialize.html"/>
         <item name="Test your deployment" href="install/test.html"/>
@@ -73,6 +72,9 @@
         <item name="Registry Manager" href="operate/reg-manager.html"/>
         <item name="Registry Customization" href="operate/reg-custom.html"/>
         <item name="Solr Tools" href="operate/solr-tools.html"/>
+      </item>
+      <item name="SolrCloud" href="solr-cloud/index.html">
+        <item name="ZooKeeper - VM" href="solr-cloud/zookeeper-vm.html"/>
       </item>
       <item name="Support" href="index.html#Support" />
     </menu>
