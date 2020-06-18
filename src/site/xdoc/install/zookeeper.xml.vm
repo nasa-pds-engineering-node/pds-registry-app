@@ -9,6 +9,17 @@
 
 <section name="Apache ZooKeeper">
 
+<ul>
+  <li><a href="#Running_in_a_VM">Running in a VM</a></li>
+  <ul>
+    <li><a href="#Single_Node_-_Quick_Start">Single Node - Quick Start</a></li>
+    <li><a href="#Firewall_Configuration">Firewall Configuration</a></li>
+    <li><a href="#Systemd_Service">Systemd Service</a></li>
+  </ul>
+  <li><a href="#Running_in_Docker">Running in Docker</a></li>
+</ul>
+
+
 <p>
 SolrCloud uses Apache ZooKeeper for cluster configuration and coordination.
 Below is a simplified diagram of a production setup with 3 node ZooKeeper cluster 
@@ -24,17 +35,27 @@ It is recommended to run 3 node ZooKeeper cluster in production, but you can sta
 
 <!-- ============================================ -->
 
-<subsection name="Installation - VM">
+<subsection name="Running in a VM">
 
-<h4>Single Node - Quick Start</h4>
+<subsection name="Single Node - Quick Start">
 
 <p>
 In this tutorial we will install ZooKeeper version 3.5.8 in a VM running CentOS 8.
 </p>
 
 <p>
-ZooKeeper requires Java. The version we are using in this tutorial is OpenJDK 11. 
+<b>Step 1: Install Java</b>
+</p>
+
+<p>
+ZooKeeper requires Java and JAVA_HOME environment variable. 
+The Java version we are using in this tutorial is OpenJDK 11, installed in <i>/opt/jdk-11</i>.
 See this <a href="java.html">page</a> if you need help installing Java.
+</p>
+
+
+<p>
+<b>Step 2: Install ZooKeeper</b>
 </p>
 
 <p>
@@ -43,14 +64,15 @@ and extract it into <i>/opt/zookeeper</i>.
 </p>
 
 <p>
-Create data directory:
+<b>Step 3: Create data directory</b>
 </p>
+
 <source>
 mkdir /var/lib/zookeeper
 </source>
 
 <p>
-Create a configuration file <i>/opt/zookeeper/conf/zoo.cfg</i>
+<b>Step 4: Create configuration file <i>/opt/zookeeper/conf/zoo.cfg</i></b>
 </p>
 <source>
 tickTime=2000
@@ -62,14 +84,14 @@ admin.enableServer=false
 </source>
 
 <p>
-Start the server:
+<b>Step 5: Start the server</b>
 </p>
 <source>
 /opt/zookeeper/bin/zkServer.sh start /opt/zookeeper/conf/zoo.cfg
 </source>
 
 <p>
-Connect to the server:
+<b>Step 6: Connect to the server</b>
 </p>
 <source>
 /opt/zookeeper/bin/zkCli.sh -server 127.0.0.1:2181
@@ -95,7 +117,7 @@ Try running 'ls' command
 </source>
 
 <p>
-Quit the session:
+<b>Step 7: Quit the session</b>
 </p>
 
 <source>
@@ -103,13 +125,21 @@ Quit the session:
 </source>
 
 <p>
-Stop the server
+<b>Step 8: Stop the server</b>
 </p>
 <source>
 /opt/zookeeper/bin/zkServer.sh stop /opt/zookeeper/conf/zoo.cfg
 </source>
 
-<h4>Open ZooKeeper port</h4>
+</subsection>
+
+<!-- ================================================================ -->
+
+<subsection name="Firewall Configuration">
+
+<p>
+To open ZooKeeper port (2181), run the following commands
+</p>
 
 <source>
 firewall-cmd --zone=public --add-port=2181/tcp --permanent
@@ -117,10 +147,19 @@ firewall-cmd --reload
 firewall-cmd --zone=public --list-ports
 </source>
 
-<h4>Running ZooKeeper as a systemd service</h4>
+</subsection>
+
+<!-- ================================================================ -->
+
+<subsection name="Systemd Service">
 
 <p>
-Create <i>zookeeper</i> group and user:
+Apache ZooKeeper project doesn't provide systemd script or prebuilt RPM or DEB installers.
+To manually create systemd service, follow the following steps.
+</p>
+
+<p>
+Step 1: Create <i>zookeeper</i> group and user:
 </p>
 
 <source>
@@ -129,7 +168,7 @@ adduser -Mr -g zookeeper zookeeper
 </source>
 
 <p>
-Change file ownership
+Step 2: Change file ownership
 </p>
 
 <source>
@@ -137,9 +176,94 @@ chown zookeeper:zookeeper -R /opt/zookeeper/
 chown zookeeper:zookeeper -R /var/lib/zookeeper/
 </source>
 
+<p>
+Step 3: Create <i>/etc/systemd/system/zookeeper.service</i> file
+</p>
+
+<source>
+[Unit]
+Description=ZooKeeper Service
+Documentation=http://zookeeper.apache.org
+Requires=network.target
+After=network.target
+
+[Service]
+Environment=JAVA_HOME=/opt/jdk-11
+Type=forking
+User=zookeeper
+Group=zookeeper
+ExecStart=/opt/zookeeper/bin/zkServer.sh start /opt/zookeeper/conf/zoo.cfg
+ExecStop=/opt/zookeeper/bin/zkServer.sh stop /opt/zookeeper/conf/zoo.cfg
+ExecReload=/opt/zookeeper/bin/zkServer.sh restart /opt/zookeeper/conf/zoo.cfg
+
+[Install]
+WantedBy=default.target
+</source>
+
+<p>
+NOTE: ZooKeeper requires JAVA_HOME environment variable. 
+You can set it in:
+<ul>
+  <li>zookeeper.service file (Environment=JAVA_HOME=/opt/jdk-11)</li>
+  <li>/opt/zookeeper/bin/zkEnv.sh</li>
+  <li>globally for all users in /etc/profile.d/</li>
+</ul>
+</p>
+
+<p>
+<b>Issues:</b>
+</p>
+
+<p>
+<b>Issue 1:</b>
+</p>
+
+<p>
+I was getting permission denied errors when starting zookeeper service
+</p>
+<source>
+systemctl start zookeeper
+</source>
+
+<p>
+Reloading systemd daemon didn't help.
+</p>
+<source>
+systemctl daemon-reload
+</source>
+
+<p>
+I had to disable SELinux and reboot to make zookeeper service start.
+After reenabling SELinux and rebooting again the service still works.
+</p>
+
+<p>
+<b>Issue 2:</b>
+</p>
+
+<p>
+After running
+</p>
+<source>
+systemctl stop zookeeper
+</source>
+
+<p>
+ZooKeeper stops successfully, but if you run
+</p>
+<source>
+systemctl status zookeeper
+</source>
+
+<p>
+the service status is 'failed'. This issue is not resolved.
+</p>
 
 </subsection>
+</subsection>
 
+<subsection name="Running in Docker">
+</subsection>
 
 
 </section>

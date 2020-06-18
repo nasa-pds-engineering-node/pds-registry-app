@@ -188,7 +188,7 @@ ProxyPassReverse /solr http://localhost:8983/solr
 <p>Your Solr server is ready, you should now deploy the <a href="tools.html">tools</a> to harvest metadata and manage your registry.</p>
 </section>
   
-  <section name="Having trouble?">
+  <section name="Common Errors">
     <p>If you are having trouble getting Solr to start up and/or access the Admin UI, there are a few potential debugging mechanisms:
     </p>
     
