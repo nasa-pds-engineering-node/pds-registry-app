@@ -40,9 +40,9 @@ Create new VM and install minimal CentOS 8 server without GUI. Configure static 
 <tr><td>NIC</td><td>Static IP</td></tr>
 </table>
 
-<!-- ================================================== -->
-
 </subsection>
+
+<!-- ================================================== -->
 
 <subsection name="Install Java">
 
@@ -154,7 +154,25 @@ WantedBy=default.target
 </source>
 
 <p>
-  <b>Step 2: Test the service</b>
+  <b>Step 2: Fix SELinux context</b>
+</p>
+<p>
+If SELinux is enabled, run the following command to check SELinux context type.
+</p>
+<source>
+ls -Z /opt/zookeeper/bin/zkServer.sh
+</source>
+
+<p>
+The context type must be <i>bin_t</i>. 
+If the value is different, for example, <i>admin_home_t</i>, run the following command to fix it.
+</p>
+<source>
+restorecon -v /opt/zookeeper/bin/zkServer.sh
+</source>
+
+<p>
+  <b>Step 3: Test the service</b>
 </p>
 
 <p>
@@ -165,24 +183,27 @@ systemctl start zookeeper
 </source>
 
 <p>
-Check the status:
+Check the service status:
 </p>
 <source>
 systemctl status zookeeper
 </source>
 
 <p>
-Stop the service:
+Check ZooKeeper cluster status
 </p>
 <source>
-systemctl stop zookeeper
+/opt/zookeeper/bin/zkServer.sh status /opt/zookeeper/conf/zoo.cfg
 </source>
-
 <p>
-Check the status:
+You should get a message similar to this
 </p>
 <source>
-systemctl status zookeeper
+/usr/bin/java
+ZooKeeper JMX enabled by default
+Using config: /opt/zookeeper/conf/zoo.cfg
+Client port found: 2181. Client address: localhost.
+Mode: standalone
 </source>
 
 </subsection>
@@ -193,7 +214,7 @@ systemctl status zookeeper
 
 <subsection name="Znode for Solr Configuration">
 <p>
-Create a node in ZooKeeper tree (called 'znode') to store Solr Configuration.
+Create a node in ZooKeeper tree (also known as 'znode') to store Solr configuration.
 </p>
 
 <p>

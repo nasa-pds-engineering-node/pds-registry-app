@@ -9,30 +9,44 @@
 
 <section name="Running Apache Solr in a VM">
 
+<p>
+This document describes installation and configuration of Apache Solr in a VM running CentOS 8.
+</p>
+
+<p>
 <ul>
-  <li><a href="#Quick_Start">Quick Start</a></li>
-  <li><a href="#Firewall_Configuration">Firewall Configuration</a></li>
+  <li><a href="#Create_CentOS_VM">Create CentOS VM</a></li>
+  <li><a href="#Install_Java">install Java</a></li>
+  <li><a href="#Install_Solr">Install Solr</a></li>
   <li><a href="#Systemd_Service">Systemd Service</a></li>
+  <li><a href="#Firewall_Configuration">Firewall Configuration</a></li>
 </ul>
-
-
-<!-- ============================================ -->
-
-<subsection name="Quick Start">
-
-<p>
-In this tutorial we will install Apache Solr version 8.5.2 in a VM running CentOS 8.
 </p>
 
-<p>
-  <b>Step 1: Create new CentOS 8 VM</b>
-</p>
-<p>
-Minimum system requirements: 2GB RAM, 1 CPU, 20GB HDD
-</p>
+<!-- ================================================== -->
+
+<subsection name="Create CentOS VM">
 
 <p>
-  <b>Step 2: Install Java and lsof</b>
+Create new VM and install minimal CentOS 8 server without GUI. Configure static IP.
+</p>
+
+<table>
+<tr><td>Min RAM</td><td>2GB</td></tr>
+<tr><td>Min CPU</td><td>1</td></tr>
+<tr><td>Min HDD</td><td>20GB</td></tr>
+<tr><td>Operating System</td><td>CentOS 8</td></tr>
+<tr><td>NIC</td><td>Static IP</td></tr>
+</table>
+
+</subsection>
+
+<!-- ================================================== -->
+
+<subsection name="Install Java">
+
+<p>
+Install Java and 'lsof'.
 </p>
 
 <source>
@@ -40,14 +54,19 @@ yum install java-11-openjdk
 yum install lsof
 </source>
 
+</subsection>
+
+<!-- ================================================== -->
+
+<subsection name="Install Solr">
 <p>
-  <b>Step 3: Install Solr</b>
+  <b>Step 1: Download and extract Solr tgz archive</b>
 </p>
 
 <p>
 Download <a href="http://archive.apache.org/dist/lucene/solr/8.5.2/solr-8.5.2.tgz">Solr tgz archive</a>
 and extract it into <i>/opt/solr</i> directory. 
-You can also extract it into <i>/opt/solr-8.5.2</i> directory and then create a soft link
+You can also extract the archive into <i>/opt/solr-8.5.2</i> directory and then create a soft link
 </p>
 <source>
 cd /opt
@@ -55,14 +74,14 @@ ln -s solr-8.5.2 solr
 </source>
 
 <p>
-  <b>Step 4: Create data directory</b>
+  <b>Step 2: Create data directory</b>
 </p>
 <source>
 mkdir /var/lib/solr
 </source>
 
 <p>
-  <b>Step 5: Edit Solr environment variables</b>
+  <b>Step 3: Edit Solr environment variables</b>
 </p>
 <p>
 Edit ZooKeeper connection string, data directory, and other parameters 
@@ -76,7 +95,7 @@ SOLR_ULIMIT_CHECKS=false
 </source>
 
 <p>
-  <b>Step 6: Create solr group and user</b>
+  <b>Step 4: Create solr group and user</b>
 </p>
 
 <source>
@@ -85,7 +104,7 @@ adduser -Mr -g solr solr
 </source>
 
 <p>
-Change file ownership
+  <b>Step 5: Change file ownership</b>
 </p>
 
 <source>
@@ -93,8 +112,126 @@ chown solr:solr -R /opt/solr/
 chown solr:solr -R /var/lib/solr/
 </source>
 
+</subsection>
+
+
+<!-- ================================================================ -->
+
+<subsection name="Systemd Service">
+
+<p>
+Apache Solr project doesn't provide systemd script or prebuilt RPM installer.
+To manually create systemd service, follow the following steps.
+</p>
+
+<p>
+  <b>Step 1: Create service file</b>
+</p>
+
+<p>
+Create <i>/etc/systemd/system/solr.service</i> file:
+</p>
+
+<source>
+[Unit]
+Description=Solr Service
+Documentation=https://lucene.apache.org/solr/resources.html
+Requires=network.target
+After=network.target
+
+[Service]
+Type=forking
+User=solr
+Group=solr
+ExecStart=/opt/solr/bin/solr start
+ExecStop=/opt/solr/bin/solr stop
+ExecReload=/opt/solr/bin/solr restart
+SuccessExitStatus=143
+
+[Install]
+WantedBy=default.target
+</source>
+
+<p>
+  <b>Step 2: Fix SELinux context</b>
+</p>
+<p>
+If SELinux is enabled, run the following command to check SELinux context type.
+</p>
+<source>
+ls -Z /opt/solr/bin/solr
+</source>
+
+<p>
+The context type must be <i>bin_t</i>. 
+If the value is different, for example, <i>admin_home_t</i>, run the following command to fix it.
+</p>
+<source>
+restorecon -v /opt/solr/bin/solr
+</source>
+
+<p>
+  <b>Step 3: Test the service</b>
+</p>
+
+<p>
+Start the service:
+</p>
+<source>
+systemctl start solr
+</source>
+
+<p>
+Check the service status:
+</p>
+<source>
+systemctl status solr
+</source>
+
+<p>
+Check Solr cluster status
+</p>
+<source>
+/opt/solr/bin/solr status
+</source>
+
+<p>
+You should get a message similar to this
+</p>
+<source>
+Found 1 Solr nodes:
+
+Solr process 2387 running on port 8983
+{
+  "solr_home":"/opt/solr/server/solr",
+  "version":"8.5.2 384dadd9141cec3f848d8c416315dc2384749814 - mdrob - 2020-05-19 13:23:17",
+  "startTime":"2020-06-23T19:45:32.227Z",
+  "uptime":"0 days, 0 hours, 44 minutes, 3 seconds",
+  "memory":"81.4 MB (%15.9) of 1 GB",
+  "cloud":{
+    "ZooKeeper":"192.168.75.128:2181/solr",
+    "liveNodes":"1",
+    "collections":"0"}}
+</source>
 
 </subsection>
+
+<!-- ================================================================ -->
+
+<subsection name="Firewall Configuration">
+
+<p>
+To open Solr port (8983), run the following commands
+</p>
+
+<source>
+firewall-cmd --zone=public --add-port=8983/tcp --permanent
+firewall-cmd --reload
+firewall-cmd --zone=public --list-ports
+</source>
+
+</subsection>
+
 
 </section>
 
