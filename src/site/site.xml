@@ -75,6 +75,7 @@
       </item>
       <item name="SolrCloud" href="solr-cloud/index.html">
         <item name="ZooKeeper - VM" href="solr-cloud/zookeeper-vm.html"/>
+        <item name="Solr - VM" href="solr-cloud/solr-vm.html"/>
       </item>
       <item name="Support" href="index.html#Support" />
     </menu>

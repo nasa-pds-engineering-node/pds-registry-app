@@ -9,56 +9,76 @@
 
 <section name="Running Apache ZooKeeper in a VM">
 
+<p>
+This document describes installation and configuration of ZooKeeper version 3.5.8 in a VM running CentOS 8.
+</p>
+
+<p>
 <ul>
-  <li><a href="#Quick_Start">Quick Start</a></li>
-  <li><a href="#Firewall_Configuration">Firewall Configuration</a></li>
+  <li><a href="#Create_CentOS_VM">Create CentOS VM</a></li>
+  <li><a href="#Install_Java">install Java</a></li>
+  <li><a href="#Install_ZooKeeper">Install ZooKeeper</a></li>
   <li><a href="#Systemd_Service">Systemd Service</a></li>
+  <li><a href="#Znode_for_Solr_Configuration">Znode for Solr Configuration</a></li>
+  <li><a href="#Firewall_Configuration">Firewall Configuration</a></li>
 </ul>
-
-
-<!-- ============================================ -->
-
-<subsection name="Quick Start">
-
-<p>
-In this tutorial we will install ZooKeeper version 3.5.8 in a VM running CentOS 8.
 </p>
 
-<p>
-  <b>Step 1: Create new CentOS 8 VM</b>
-</p>
-<p>
-Minimum system requirements: 2GB RAM, 1 CPU, 20GB HDD
-</p>
+<!-- ================================================== -->
+
+<subsection name="Create CentOS VM">
 
 <p>
-  <b>Step 2: Install Java</b>
+Create new VM and install minimal CentOS 8 server without GUI. Configure static IP.
 </p>
+
+<table>
+<tr><td>Min RAM</td><td>2GB</td></tr>
+<tr><td>Min CPU</td><td>1</td></tr>
+<tr><td>Min HDD</td><td>20GB</td></tr>
+<tr><td>Operating System</td><td>CentOS 8</td></tr>
+<tr><td>NIC</td><td>Static IP</td></tr>
+</table>
+
+<!-- ================================================== -->
+
+</subsection>
+
+<subsection name="Install Java">
 
 <source>
 yum install java-11-openjdk
 </source>
 
+</subsection>
+
+<!-- ================================================== -->
+
+<subsection name="Install ZooKeeper">
 <p>
-  <b>Step 3: Install ZooKeeper</b>
+  <b>Step 1: Download and extract ZooKeeper tar.gz</b>
 </p>
 
 <p>
 Unfortunately CentOS / RHEL 8 repositories or Apache ZooKeeper project do not have prebuilt RPM installer.
-Download tar.gz file from <a href="https://zookeeper.apache.org/releases.html" target="_none">ZooKeeper release page</a>
-and extract it into <i>/opt/zookeeper</i>.
+Download <a href="http://archive.apache.org/dist/zookeeper/zookeeper-3.5.8/apache-zookeeper-3.5.8-bin.tar.gz">tar.gz archive</a>
+from Apache web site and extract it into <i>/opt/zookeeper</i> directory.
+You can also extract the archive into <i>/opt/zookeeper-3.5.8</i> directory and then create a soft link
 </p>
+<source>
+cd /opt
+ln -s zookeeper-3.5.8 zookeeper
+</source>
 
 <p>
-  <b>Step 4: Create data directory</b>
+  <b>Step 2: Create data directory</b>
 </p>
-
 <source>
 mkdir /var/lib/zookeeper
 </source>
 
 <p>
-  <b>Step 5: Create configuration file <i>/opt/zookeeper/conf/zoo.cfg</i></b>
+  <b>Step 3: Create configuration file <i>/opt/zookeeper/conf/zoo.cfg</i></b>
 </p>
 <source>
 tickTime=2000
@@ -66,74 +86,35 @@ initLimit=10
 syncLimit=5
 dataDir=/var/lib/zookeeper
 clientPort=2181
+
+# Disable admin UI
 admin.enableServer=false
+
+# Solr needs following commands
+4lw.commands.whitelist=mntr,conf,ruok
 </source>
 
 <p>
-  <b>Step 6: Start the server</b>
+  <b>Step 4: Create zookeeper group and user</b>
 </p>
+
 <source>
-/opt/zookeeper/bin/zkServer.sh start /opt/zookeeper/conf/zoo.cfg
+groupadd zookeeper
+adduser -Mr -g zookeeper zookeeper
 </source>
 
 <p>
-  <b>Step 7: Connect to the server</b>
-</p>
-<source>
-/opt/zookeeper/bin/zkCli.sh -server 127.0.0.1:2181
-</source>
-
-<p>
-You should see some log messages, followed by:
+  <b>Step 5: Change file ownership</b>
 </p>
 
 <source>
-WatchedEvent state:SyncConnected type:None path:null
-[zk: 127.0.0.1:2181(CONNECTED) 0]
-</source>
-
-<p>
-Try running 'ls' command
-</p>
-
-<source>
-[zk: 127.0.0.1:2181(CONNECTED) 0] ls /zookeeper
-[config, quota]
-[zk: 127.0.0.1:2181(CONNECTED) 1]
-</source>
-
-<p>
-  <b>Step 8: Quit the session</b>
-</p>
-
-<source>
-[zk: 127.0.0.1:2181(CONNECTED) 1] quit
-</source>
-
-<p>
-  <b>Step 9: Stop the server</b>
-</p>
-<source>
-/opt/zookeeper/bin/zkServer.sh stop /opt/zookeeper/conf/zoo.cfg
+chown zookeeper:zookeeper -R /opt/zookeeper/
+chown zookeeper:zookeeper -R /var/lib/zookeeper/
 </source>
 
 </subsection>
 
-<!-- ================================================================ -->
 
-<subsection name="Firewall Configuration">
-
-<p>
-To open ZooKeeper port (2181), run the following commands
-</p>
-
-<source>
-firewall-cmd --zone=public --add-port=2181/tcp --permanent
-firewall-cmd --reload
-firewall-cmd --zone=public --list-ports
-</source>
-
-</subsection>
 
 <!-- ================================================================ -->
 
@@ -145,25 +126,7 @@ To manually create systemd service, follow the following steps.
 </p>
 
 <p>
-  <b>Step 1: Create zookeeper group and user</b>
-</p>
-
-<source>
-groupadd zookeeper
-adduser -Mr -g zookeeper zookeeper
-</source>
-
-<p>
-  <b>Step 2: Change file ownership</b>
-</p>
-
-<source>
-chown zookeeper:zookeeper -R /opt/zookeeper/
-chown zookeeper:zookeeper -R /var/lib/zookeeper/
-</source>
-
-<p>
-  <b>Step 3: Create service file</b>
+  <b>Step 1: Create service file</b>
 </p>
 
 <p>
@@ -191,7 +154,7 @@ WantedBy=default.target
 </source>
 
 <p>
-  <b>Step 4: Test the service</b>
+  <b>Step 2: Test the service</b>
 </p>
 
 <p>
@@ -223,6 +186,83 @@ systemctl status zookeeper
 </source>
 
 </subsection>
+
+
+<!-- ================================================== -->
+
+
+<subsection name="Znode for Solr Configuration">
+<p>
+Create a node in ZooKeeper tree (called 'znode') to store Solr Configuration.
+</p>
+
+<p>
+  <b>Step 1: Start ZooKeeper service if it is not running</b>
+</p>
+<source>
+systemctl start zookeeper
+</source>
+
+<p>
+  <b>Step 2: Connect to the server</b>
+</p>
+<p>
+Use ZooKeeper command-line client to connect to the server
+</p>
+<source>
+/opt/zookeeper/bin/zkCli.sh -server 127.0.0.1:2181
+</source>
+
+<p>
+You should see some log messages, followed by the prompt
+</p>
+
+<source>
+WatchedEvent state:SyncConnected type:None path:null
+[zk: 127.0.0.1:2181(CONNECTED) 0]
+</source>
+
+<p>
+You may need to hit enter key if the prompt doesn't show up.
+</p>
+
+<p>
+  <b>Step 3: Create '/solr' znode</b>
+</p>
+
+<source>
+[zk: 127.0.0.1:2181(CONNECTED) 0] create /solr
+Created /solr
+[zk: 127.0.0.1:2181(CONNECTED) 1]
+</source>
+
+<p>
+  <b>Step 4: Disconnect from the server</b>
+</p>
+
+<source>
+[zk: 127.0.0.1:2181(CONNECTED) 1] quit
+</source>
+
+</subsection>
+
+
+<!-- ================================================================ -->
+
+<subsection name="Firewall Configuration">
+
+<p>
+To open ZooKeeper port (2181), run the following commands
+</p>
+
+<source>
+firewall-cmd --zone=public --add-port=2181/tcp --permanent
+firewall-cmd --reload
+firewall-cmd --zone=public --list-ports
+</source>
+
+</subsection>
+
 
 </section>
 

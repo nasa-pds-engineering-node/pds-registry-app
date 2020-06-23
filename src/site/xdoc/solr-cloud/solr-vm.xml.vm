@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document>
+<properties>
+  <title>Solr - VM</title>
+</properties>
+
+<body>
+
+<section name="Running Apache Solr in a VM">
+
+<ul>
+  <li><a href="#Quick_Start">Quick Start</a></li>
+  <li><a href="#Firewall_Configuration">Firewall Configuration</a></li>
+  <li><a href="#Systemd_Service">Systemd Service</a></li>
+</ul>
+
+
+<!-- ============================================ -->
+
+<subsection name="Quick Start">
+
+<p>
+In this tutorial we will install Apache Solr version 8.5.2 in a VM running CentOS 8.
+</p>
+
+<p>
+  <b>Step 1: Create new CentOS 8 VM</b>
+</p>
+<p>
+Minimum system requirements: 2GB RAM, 1 CPU, 20GB HDD
+</p>
+
+<p>
+  <b>Step 2: Install Java and lsof</b>
+</p>
+
+<source>
+yum install java-11-openjdk
+yum install lsof
+</source>
+
+<p>
+  <b>Step 3: Install Solr</b>
+</p>
+
+<p>
+Download <a href="http://archive.apache.org/dist/lucene/solr/8.5.2/solr-8.5.2.tgz">Solr tgz archive</a>
+and extract it into <i>/opt/solr</i> directory. 
+You can also extract it into <i>/opt/solr-8.5.2</i> directory and then create a soft link
+</p>
+<source>
+cd /opt
+ln -s solr-8.5.2 solr
+</source>
+
+<p>
+  <b>Step 4: Create data directory</b>
+</p>
+<source>
+mkdir /var/lib/solr
+</source>
+
+<p>
+  <b>Step 5: Edit Solr environment variables</b>
+</p>
+<p>
+Edit ZooKeeper connection string, data directory, and other parameters 
+in <i>/opt/solr/bin/solr.in.sh</i> as needed.
+</p>
+<source>
+ZK_HOST="192.168.75.128:2181/solr"
+SOLR_DATA_HOME=/var/lib/solr
+SOLR_HEAP="1G"
+SOLR_ULIMIT_CHECKS=false
+</source>
+
+<p>
+  <b>Step 6: Create solr group and user</b>
+</p>
+
+<source>
+groupadd solr
+adduser -Mr -g solr solr
+</source>
+
+<p>
+Change file ownership
+</p>
+
+<source>
+chown solr:solr -R /opt/solr/
+chown solr:solr -R /var/lib/solr/
+</source>
+
+
+</subsection>
+
+</section>
+
+
+</body>
+</document>
