@@ -39,43 +39,82 @@
 
 <body>
 
-<section name="SolrCloud Overview">
+<section name="SolrCloud">
+
+<p>
+<ul>
+  <li><a href="#Overview">Overview</a></li>
+  <li><a href="#Deployment_Summary">Deployment Summary</a></li>
+  <li><a href="#High_Availability_Summary">High Availability Summary</a></li>
+  <li><a href="#Shards_and_Replicas">Shards and Replicas</a></li>
+</ul>
+</p>
+
+<subsection name="Overview">
+
 <p>
 SolrCloud is a cluster of Solr servers that provides fault tolerance and high availability.
 It uses Apache ZooKeeper for cluster configuration and coordination.
 Number of nodes you need, usually depends on amount of data, number of queries, fault tolerance and high availability requirements.
 </p>
-
-<!-- ============================== -->
-
-<h4>Multinode Cluster</h4>
 <p>
-Below is a simplified diagram of a production setup with 3 node ZooKeeper cluster 
-and multinode Solr cluster. Both ZooKeeper and Solr clusters can be expanded by adding more nodes.
-This setup provides fault tolerance and high availability.
-</p>
-<img src="../images/solr-cluster.jpg" width="35%" />
-
-<!-- ============================== -->
-
-<h4>Single Node Cluster with Separate ZooKeeper</h4>
-<p>
-This configuration has single node ZooKeeper and single node Solr server running in different JVMs.
-This setup can be easily expanded by addning more ZooKeeper or Solr nodes.
+There are two main SolrCloud deployment types: single Solr server with embedded ZooKeeper and
+multinode deployment with separate Solr and ZooKeeper clusters.
 </p>
 
-<img src="../images/solr-cluster-1b.jpg" width="30%" />
-</section>
-
 <!-- ============================== -->
 
-<h4>Single Node Cluster with Embedded ZooKeeper</h4>
+<h4>Single Solr Server with Embedded ZooKeeper</h4>
 <p>
 This is the simplest configuration of SolrCloud. A single instance of ZooKeeper and Solr server are running in the same JVM.
 This setup does not provide any fault tolerance or high availability, and could not be expanded.
 This configuration is recommended for development or testing and can be easily installed on a laptop or desktop.
 </p>
-<img src="../images/solr-cluster-1a.jpg" width="25%" />
+<img src="../images/solr-cloud-dev.png" style="width:12em;" />
+
+<!-- ============================== -->
+
+<h4>Multinode Cluster</h4>
+<p>
+This configuration is recommended for production. It provides fault tolerance and high availability.
+Both ZooKeeper and Solr clusters can be expanded by adding more nodes.
+</p>
+<img src="../images/solr-cloud-prod.png" style="width:28em;" />
+
+</subsection>
+
+<!-- ============================== -->
+
+<subsection name="Deployment Summary">
+
+<table>
+<tr><td>Deployment type</td><td>Multinode cluster</td><td>Standalone Solr server with embedded ZooKeeper</td></tr>
+<tr><td>Usage</td><td>Production / QA</td><td>Development / QA</td></tr>
+<tr><td>Scalability</td><td>Yes</td><td>No</td></tr>
+<tr><td>Fault tolerance and high availability</td><td>Yes</td><td>No</td></tr>
+<tr><td>Deployment options</td><td>On-prem or cloud: VMs, Kubernetes</td><td>Laptop or desktop: standalone, VM, docker</td></tr>
+</table>
+</subsection>
+
+<!-- ============================== -->
+
+<subsection name="High Availability Summary">
+
+<table>
+<tr><th>Number of ZooKeeper nodes</th><th>Number of Solr nodes</th><th>High availability</th></tr>
+<tr><td>1</td><td>1</td><td>No</td></tr>
+<tr><td>1</td><td>2+</td><td>ZooKeeper - No, Solr - Yes</td></tr>
+<tr><td>3</td><td>2+</td><td>Yes</td></tr>
+</table>
+
+</subsection>
+
+<!-- ============================== -->
+
+<subsection name="Shards and Replicas">
+</subsection>
+
+</section>
 
 </body>
 

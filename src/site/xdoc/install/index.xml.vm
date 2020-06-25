@@ -62,16 +62,16 @@ You will need Java to run Registry Manager, Harvest and Apache Solr.
 <subsection name="Apache Solr">
 <p>
 Apache Solr running in cloud mode is required to store PDS Registry data. 
-It can be installed as described in <a href="solr.html">Solr Installation</a> section.
-You can run Solr locally on your laptop or desktop or remotely on a server.
+It can be installed on a developer laptop as described in <a href="solr.html">Solr - Quick Start</a> section.
+For production deployment see <a href="../solr-cloud/index.html">SolrCloud</a> section.
 </p>
 </subsection>
 
 <!-- ============================================================== -->
 
-<subsection name="Registry Application Tools">
+<subsection name="Registry Tools">
 <p>
-Tools which are used to initialize and populate the registry. The installation is described in <a href="tools.html">this section</a>.
+The installation of Registry Manager and Harvest is described in <a href="tools.html">this section</a>.
 </p>
 </subsection>
 

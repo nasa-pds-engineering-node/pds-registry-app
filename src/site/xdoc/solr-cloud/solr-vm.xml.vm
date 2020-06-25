@@ -16,7 +16,7 @@ This document describes installation and configuration of Apache Solr in a VM ru
 <p>
 <ul>
   <li><a href="#Create_CentOS_VM">Create CentOS VM</a></li>
-  <li><a href="#Install_Java">install Java</a></li>
+  <li><a href="#Install_Java">Install Java</a></li>
   <li><a href="#Install_Solr">Install Solr</a></li>
   <li><a href="#Systemd_Service">Systemd Service</a></li>
   <li><a href="#Firewall_Configuration">Firewall Configuration</a></li>
@@ -146,7 +146,6 @@ Group=solr
 ExecStart=/opt/solr/bin/solr start
 ExecStop=/opt/solr/bin/solr stop
 ExecReload=/opt/solr/bin/solr restart
-SuccessExitStatus=143
 
 [Install]
 WantedBy=default.target
