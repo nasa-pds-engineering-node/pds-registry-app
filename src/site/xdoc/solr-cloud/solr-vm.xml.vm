@@ -20,6 +20,7 @@ This document describes installation and configuration of Apache Solr in a VM ru
   <li><a href="#Install_Solr">Install Solr</a></li>
   <li><a href="#Systemd_Service">Systemd Service</a></li>
   <li><a href="#Firewall_Configuration">Firewall Configuration</a></li>
+  <li><a href="#Multiple_Nodes">Multiple Nodes</a></li>
 </ul>
 </p>
 
@@ -88,7 +89,7 @@ Edit ZooKeeper connection string, data directory, and other parameters
 in <i>/opt/solr/bin/solr.in.sh</i> as needed.
 </p>
 <source>
-ZK_HOST="192.168.75.128:2181/solr"
+ZK_HOST="192.168.75.11:2181/solr"
 SOLR_DATA_HOME=/var/lib/solr
 SOLR_HEAP="1G"
 SOLR_ULIMIT_CHECKS=false
@@ -152,6 +153,13 @@ WantedBy=default.target
 </source>
 
 <p>
+Reload systemd daemon
+</p>
+<source>
+systemctl daemon-reload
+</source>
+
+<p>
   <b>Step 2: Fix SELinux context</b>
 </p>
 <p>
@@ -171,6 +179,20 @@ restorecon -v /opt/solr/bin/solr
 
 <p>
   <b>Step 3: Test the service</b>
+</p>
+
+<p>
+<b>NOTE: Make sure that</b> 
+<ul>
+  <li>ZooKeeper cluster (or a standalone ZooKeeper server) is running.</li>
+  <li>ZooKeeper client port (2181) is open.</li>
+  <li><i>ZK_HOST</i> variable in <i>/opt/solr/bin/solr.in.sh</i> file points to your ZooKeeper cluster / server.
+(See <a href="solr-vm.html#Install_Solr">Install Solr, Edit Solr environment variables</a> section above).
+</li>
+  <li>'/solr' znode exists in your ZooKeeper.
+(See <a href="zookeeper-vm.html#Znode_for_Solr_Configuration">ZooKeeper installation guide</a>)
+</li>
+</ul>
 </p>
 
 <p>
@@ -228,6 +250,51 @@ firewall-cmd --zone=public --add-port=8983/tcp --permanent
 firewall-cmd --reload
 firewall-cmd --zone=public --list-ports
 </source>
+
+</subsection>
+
+
+<!-- ================================================================ -->
+
+<subsection name="Multiple Nodes">
+
+<h4>Adding more nodes to the cluster</h4>
+<p>
+Create more Solr VMs and repeat installation steps described above for each new VM.
+When you start Solr service, the node joins the cluster.
+</p>
+
+<h4>Listing / Discovering Live Solr Nodes</h4>
+<p>
+To list all live Solr nodes in the cluster, connect to ZooKeeper and run <i>'ls /solr/live_nodes'</i> command
+</p>
+<source>
+/opt/zookeeper/bin/zkCli.sh -server 192.168.75.11:2181
+...
+[zk: 192.168.75.11:2181(CONNECTED) 0] ls /solr/live_nodes
+[192.168.75.11:8983_solr, 192.168.75.12:8983_solr]
+</source>
+
+<p>
+In this example there are 2 Solr nodes 192.168.75.11 and 192.168.75.12 running on port 8983.
+</p>
+
+<h4>Using Admin UI</h4>
+<p>
+To view basic information about Solr nodes, open a web browser and go to any Solr node in the cluster,
+e.g., <i>http://192.168.75.11:8983/solr/</i>. Click on 'Cloud' and then 'Nodes' menu on the left.
+You will see a page similar to this. 
+</p>
+<p>
+<img src="../images/solr-ui-nodes.png" style="width:80em;" />
+</p>
+<p>
+In this example we already created 'registry' collection and loaded some data.
+There are 2 nodes in the cluster, 2 shards and 2 replicas.
+</p>
+<p>
+Total number of document is 208. Shard 1 has 106 documents and shard 2 has 102.
+</p>
 
 </subsection>
 

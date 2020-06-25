@@ -154,6 +154,13 @@ WantedBy=default.target
 </source>
 
 <p>
+Reload systemd daemon
+</p>
+<source>
+systemctl daemon-reload
+</source>
+
+<p>
   <b>Step 2: Fix SELinux context</b>
 </p>
 <p>

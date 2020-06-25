@@ -74,8 +74,8 @@
         <item name="Solr Tools" href="operate/solr-tools.html"/>
       </item>
       <item name="SolrCloud" href="solr-cloud/index.html">
-        <item name="ZooKeeper - VM" href="solr-cloud/zookeeper-vm.html"/>
-        <item name="Solr - VM" href="solr-cloud/solr-vm.html"/>
+        <item name="ZooKeeper Installation (VM)" href="solr-cloud/zookeeper-vm.html"/>
+        <item name="Solr Installation (VM)" href="solr-cloud/solr-vm.html"/>
       </item>
       <item name="Support" href="index.html#Support" />
     </menu>
