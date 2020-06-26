@@ -88,11 +88,11 @@ Both ZooKeeper and Solr clusters can be expanded by adding more nodes.
 <subsection name="Deployment Summary">
 
 <table>
-<tr><th>Deployment type</th><td>Multinode cluster</td><td>Standalone Solr server with embedded ZooKeeper</td></tr>
+<tr><th>Deployment type</th><td>Multinode cluster</td><td>Single Solr server with embedded ZooKeeper</td></tr>
 <tr><th>Usage</th><td>Production / QA</td><td>Development / QA</td></tr>
 <tr><th>Scalability</th><td>Yes</td><td>No</td></tr>
 <tr><th>Fault tolerance and high availability</th><td>Yes</td><td>No</td></tr>
-<tr><th>Deployment options</th><td>On-prem or cloud: VMs, Kubernetes</td><td>Laptop or desktop: standalone, VM, docker</td></tr>
+<tr><th>Deployment options</th><td>On-prem or cloud: VMs, Kubernetes</td><td>Laptop or desktop: host, VM, docker</td></tr>
 </table>
 </subsection>
 

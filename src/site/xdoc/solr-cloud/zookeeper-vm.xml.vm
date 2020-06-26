@@ -16,11 +16,12 @@ This document describes installation and configuration of ZooKeeper version 3.5.
 <p>
 <ul>
   <li><a href="#Create_CentOS_VM">Create CentOS VM</a></li>
-  <li><a href="#Install_Java">install Java</a></li>
+  <li><a href="#Install_Java">Install Java</a></li>
   <li><a href="#Install_ZooKeeper">Install ZooKeeper</a></li>
   <li><a href="#Systemd_Service">Systemd Service</a></li>
   <li><a href="#Znode_for_Solr_Configuration">Znode for Solr Configuration</a></li>
   <li><a href="#Firewall_Configuration">Firewall Configuration</a></li>
+  <li><a href="#Multi-Node_Cluster">Multi-Node Cluster</a></li>
 </ul>
 </p>
 
@@ -280,11 +281,22 @@ Created /solr
 <subsection name="Firewall Configuration">
 
 <p>
-To open ZooKeeper port (2181), run the following commands
+You need to open following ports:
+<ul>
+  <li><b>2181</b> - clients connect to this port</li>
+  <li><b>2888</b> - follower nodes use this port to connect to the leader</li>
+  <li><b>3888</b> - this port is used for leader election</li>
+</ul>
+</p>
+
+<p>
+Run these commands to open ports:
 </p>
 
 <source>
 firewall-cmd --zone=public --add-port=2181/tcp --permanent
+firewall-cmd --zone=public --add-port=2888/tcp --permanent
+firewall-cmd --zone=public --add-port=3888/tcp --permanent
 firewall-cmd --reload
 firewall-cmd --zone=public --list-ports
 </source>
@@ -292,8 +304,108 @@ firewall-cmd --zone=public --list-ports
 </subsection>
 
 
-</section>
+<!-- ================================================================ -->
 
+<subsection name="Multi-Node Cluster">
+
+<p>
+It is best to use an odd number of servers, because ZooKeeper requires a majority to elect a leader.
+In this example we will use 3 nodes with static IPs:
+</p>
+<source>
+192.168.75.11
+192.168.75.12
+192.168.75.13
+</source>
+
+<p>
+  <b>Step 1: Install ZooKeeper</b>
+</p>
+<p>
+Install ZooKeeper on 3 nodes as described above. Make sure that ports 2181, 2888, and 3888 are open on all 3 nodes.
+</p>
+
+<p>
+  <b>Step 2: Stop zookeeper service if it is running</b>
+</p>
+<source>
+systemctl stop zookeeper
+</source>
+
+<p>
+  <b>Step 3: Edit configuration file</b>
+</p>
+<p>
+Edit <i>/opt/zookeeper/conf/zoo.cfg</i> file on all 3 nodes to add a list of ZooKeeper nodes
+</p>
+<source>
+tickTime=2000
+initLimit=10
+syncLimit=5
+dataDir=/var/lib/zookeeper
+clientPort=2181
+
+# Disable admin UI
+admin.enableServer=false
+
+# Solr needs following commands
+4lw.commands.whitelist=mntr,conf,ruok
+
+# Cluster
+server.1=192.168.75.11:2888:3888
+server.2=192.168.75.12:2888:3888
+server.3=192.168.75.13:2888:3888
+</source>
+
+<p>
+  <b>Step 4: Create ID file</b>
+</p>
+<p>
+On each node create <i>/var/lib/zookeeper/myid</i> file containing the node ID - 1, 2, or 3. Make sure that 'zookeeper' user owns the file.
+</p>
+<source>
+# On node 192.168.75.11 run
+echo "1" > /var/lib/zookeeper/myid
+chown zookeeper:zookeeper /var/lib/zookeeper/myid
+
+# On node 192.168.75.12 run
+echo "2" > /var/lib/zookeeper/myid
+chown zookeeper:zookeeper /var/lib/zookeeper/myid
+
+# On node 192.168.75.13 run
+echo "3" > /var/lib/zookeeper/myid
+chown zookeeper:zookeeper /var/lib/zookeeper/myid
+</source>
+
+<p>
+  <b>Step 5: Start zookeeper service on all 3 nodes</b>
+</p>
+<source>
+systemctl start zookeeper
+</source>
+
+<p>
+  <b>Step 6: Check cluster status</b>
+</p>
+
+<p>
+To quickly check cluster status, use 'nc' command to connect to each ZooKeeper node and execute ZooKeeper 'mntr' command.
+</p>
+
+<source>
+echo mntr | nc 192.168.75.11 2181 | grep zk_server_state
+zk_server_state follower
+
+echo mntr | nc 192.168.75.12 2181 | grep zk_server_state
+zk_server_state follower
+
+echo mntr | nc 192.168.75.13 2181 | grep zk_server_state
+zk_server_state leader
+</source>
+
+</subsection>
+
+</section>
 
 </body>
 </document>

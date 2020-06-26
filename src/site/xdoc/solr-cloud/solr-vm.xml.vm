@@ -20,7 +20,7 @@ This document describes installation and configuration of Apache Solr in a VM ru
   <li><a href="#Install_Solr">Install Solr</a></li>
   <li><a href="#Systemd_Service">Systemd Service</a></li>
   <li><a href="#Firewall_Configuration">Firewall Configuration</a></li>
-  <li><a href="#Multiple_Nodes">Multiple Nodes</a></li>
+  <li><a href="#Multi-Node_Cluster">Multi-Node Cluster</a></li>
 </ul>
 </p>
 
@@ -256,7 +256,7 @@ firewall-cmd --zone=public --list-ports
 
 <!-- ================================================================ -->
 
-<subsection name="Multiple Nodes">
+<subsection name="Multi-Node Cluster">
 
 <h4>Adding more nodes to the cluster</h4>
 <p>
@@ -293,7 +293,7 @@ In this example we already created 'registry' collection and loaded some data.
 There are 2 nodes in the cluster, 2 shards and 2 replicas.
 </p>
 <p>
-Total number of document is 208. Shard 1 has 106 documents and shard 2 has 102.
+Total number of documents is 208. Shard 1 has 106 documents and shard 2 has 102.
 </p>
 
 </subsection>
