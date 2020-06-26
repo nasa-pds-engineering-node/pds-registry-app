@@ -8,7 +8,7 @@ This service provides functionality for tracking, auditing, locating, and mainta
 
 This document addresses the use cases, requirements and software design of the Registry service within the PDS4 data system. This document is intended for the reviewer of the service as well as the developer and tester of the service.
 
-The information in this document is largely inherited from the original legacy design detailed in the [SRD/SDD developed in 2013](artifacts/pds4_registry_legacy_design_20130901.docx).
+The information in this document is largely inherited from the original legacy design detailed in the [SRD/SDD developed in 2013](artifacts/registry/pds4_registry_legacy_design_20130901.docx).
 
 ##	Controlling Documents
 
