@@ -8,7 +8,7 @@ This service provides functionality for tracking, auditing, locating, and mainta
 
 This document addresses the use cases, requirements and software design of the Registry service within the PDS4 data system. This document is intended for the reviewer of the service as well as the developer and tester of the service.
 
-The information in this document is largely inherited from the original legacy design detailed in the [SRD/SDD developed in 2013](artifacts/pds4_registry_legacy_design_20130901.docx).
+The information in this document is largely borrowed from the original [SRD/SDD developed in 2013](artifacts/pds4_registry_design_20130901.docx).
 
 ##	Controlling Documents
 
@@ -205,9 +205,5 @@ To federate is to form a single centralized unit from a number of entities, with
 A data delivery consists of artifacts including but not limited to data, document and software.
 
 **L4.REG.4** - The system shall allow for management of the metadata associated with registered artifacts. (2.6.2)
-
-## Level 5 Requirements
-
-Level 5 Requirements are detailed in [Github Issues](https://github.com/NASA-PDS/registry/issues?q=is%3Aissue+label%3Arequirement+)
 
 
