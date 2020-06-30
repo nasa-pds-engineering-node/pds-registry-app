@@ -34,17 +34,13 @@
 
 <document>
 <properties>
-  <title>Operation</title>
+  <title>Test vs Prod</title>
 </properties>
 
 <body>
 
-<section name="Operation Overview">
+<section name="Test vs Production">
 
-<p>
-The high level architecture of PDS Registry and its main components is shown below.
-</p>
-<img src="../images/registry-harvest.jpg" width="35%" />
 </section>
 
 

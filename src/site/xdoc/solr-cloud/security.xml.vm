@@ -48,10 +48,10 @@
 </section>
   
 <section name="Setup HTTP Proxy for Solr Admin UI">
-  <p>To view the Solr Admin UI on a remote server, you will need to have your System Administrator setup a proxy similar to the following:
-  <source>
-ProxyPass /solr/ http://localhost:8983/solr/
-ProxyPassReverse /solr/ http://localhost:8983/solr/
+<p>
+To view the Solr Admin UI on a remote server, you will need to have your System Administrator setup a proxy similar to the following:
+</p>
+<source>
 ProxyPass /solr http://localhost:8983/solr
 ProxyPassReverse /solr http://localhost:8983/solr
 &lt;Location /solr&gt;
@@ -61,9 +61,7 @@ ProxyPassReverse /solr http://localhost:8983/solr
     Allow from 127.0.0.1
   &lt;/Limit&gt;
 &lt;/Location&gt;
-  </source>
-  </p>
-
+</source>
 
 </section>
 
