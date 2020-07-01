@@ -61,17 +61,24 @@
       <item name="About PDS Registry Application" href="index.html"/>
       <item name="Installation" href="install/index.html">
         <item name="Java" href="install/java.html"/>
-        <item name="Solr" href="install/solr.html"/>
+        <item name="Solr - Quick Start" href="install/solr.html"/>
         <item name="Tools (manager, harvest)" href="install/tools.html"/>
         <item name="Initialize the registry" href="install/initialize.html"/>
         <item name="Test your deployment" href="install/test.html"/>
         
       </item>
       <item name="Operation" href="operate/index.html">
+        <item name="Common Operations" href="operate/common-ops.html"/>
+        <item name="Test vs Prod" href="operate/test-vs-prod.html"/>
         <item name="Harvest" href="operate/harvest.html"/>
         <item name="Registry Manager" href="operate/reg-manager.html"/>
         <item name="Registry Customization" href="operate/reg-custom.html"/>
         <item name="Solr Tools" href="operate/solr-tools.html"/>
+      </item>
+      <item name="SolrCloud" href="solr-cloud/index.html">
+        <item name="ZooKeeper Installation (VM)" href="solr-cloud/zookeeper-vm.html"/>
+        <item name="Solr Installation (VM)" href="solr-cloud/solr-vm.html"/>
+        <item name="Security" href="solr-cloud/security.html"/>
       </item>
       <item name="Support" href="index.html#Support" />
     </menu>

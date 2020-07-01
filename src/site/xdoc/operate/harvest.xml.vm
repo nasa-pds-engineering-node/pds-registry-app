@@ -7,7 +7,33 @@
 
 <body>
 
-<section name="Harvest Overview">
+<section name="Harvest">
+
+<p>
+<ul>
+  <li><a href="#Overview">Overview</a></li>
+  <li><a href="#Quick_Start">Quick Start</a></li>
+  <li><a href="#InputDirs">Input Directories and Filters</a></li>
+  <ul>
+    <li><a href="#MultiDirs">Multiple Directories</a></li>
+    <li><a href="#FileFilter">Filtering Files</a></li>
+    <li><a href="#SubDirs">Excluding Sub-Directories</a></li>
+    <li><a href="#ProdFilter">Filtering Products</a></li>
+  </ul>
+  <li><a href="#Extract">Extract More Metadata</a></li>
+  <ul>
+    <li><a href="#FileInfo">Basic File Information</a></li>
+    <li><a href="#BLOB">BLOB Storage</a></li>
+    <li><a href="#FileRef">File Reference / Access URL</a></li>
+    <li><a href="#IntRefs">Internal References</a></li>
+    <li><a href="#XPath">Extract Metadata by XPath</a></li>
+    <li><a href="#DDic">Extract Metadata by Data Dictionary Class</a></li>
+  </ul>
+</ul>
+</p>
+
+<subsection name="Overview">
+
 <p>
 Harvest is a command-line tool for extracting metadata from PDS4 products (labels).
 It parses PDS4 files and stores extracted metadata in an intermediate XML file.
@@ -28,7 +54,11 @@ usage: harvest &lt;options&gt;
  -o  &lt;dir&gt;     Output directory for Solr documents. Default is /tmp/harvest/solr
  -v  &lt;level&gt;   Logger verbosity: 0=Debug, 1=Info (default), 2=Warning, 3=Error.
 </source>
+
+</subsection>
 </section>
+
+<!-- ========================================================== -->
 
 <section name="Quick Start">
 <p>
@@ -89,9 +119,9 @@ deleted by this package id.
 
 <!-- ====================================================================== -->
 
-<section name="Input Directories and Filters">
+<section name="Input Directories and Filters" id="InputDirs">
 
-<subsection name="Crawl Products from Multiple Directories">
+<subsection name="Crawl Products from Multiple Directories" id="MultiDirs">
 <p>
 To process products from multiple directories, specify multiple &lt;path&gt; entries in Harvest configuration file:
 <source>
@@ -105,7 +135,7 @@ To process products from multiple directories, specify multiple &lt;path&gt; ent
 </p>
 </subsection>
 
-<subsection name="Filtering Files">
+<subsection name="Filtering Files" id="FileFilter">
 <p>
 This feature has limited functionality since all PDS4 product labels are XML files and
 Harvest could not process other files. Usually you would include the following file filter in most 
@@ -129,7 +159,7 @@ You can use one or more &lt;include&gt; filters or one or more &lt;exclude&gt; f
 
 </subsection>
 
-<subsection name="Excluding Sub-Directories">
+<subsection name="Excluding Sub-Directories" id="SubDirs">
 <p>
 For example, to exclude <i>xml_schema</i> sub-folder, add a directory filter in Harvest configuration file:
 <source>
@@ -147,7 +177,7 @@ There is no include option for sub-directories.
 
 </subsection>
 
-<subsection name="Filtering Products">
+<subsection name="Filtering Products" id="ProdFilter">
 <p>
 You can include or exclude products. For example, to only process documents, add following 
 product filter in Harvest configuration file:
@@ -170,9 +200,9 @@ product filter in Harvest configuration file:
 
 <!-- ===================================================== -->
 
-<section name="Extracting More Metadata">
+<section name="Extracting More Metadata" id="Extract">
 
-<subsection name="Basic File Information">
+<subsection name="Basic File Information" id="FileInfo">
 
 <p>
 To extracts basic file information, such as file name, type, size, and MD5 hash, 
@@ -195,7 +225,7 @@ Now if you run Harvest, the following fields will be extracted in addition to ot
 
 <!-- =========== -->
 
-<subsection name="BLOB Storage">
+<subsection name="BLOB Storage" id="BLOB">
 
 <p>
 You can store whole PDS product labels as BLOBs (Binary Large OBjects). 
@@ -226,7 +256,7 @@ registry-manager export-file -lidvid urn:nasa:pds:ladee_ldex:data_calibrated::1.
 
 <!-- ====================================== -->
 
-<subsection name="File Reference / Access URL">
+<subsection name="File Reference / Access URL" id="FileRef">
 <p>
 To store full path of a product label file, add the following section in Harvest configuration file.
 <source>
@@ -271,7 +301,7 @@ Now, after running Harvest, you shoul see different <i>_file_ref</i> value:
 
 <!-- ====================================== -->
 
-<subsection name="Internal References">
+<subsection name="Internal References" id="IntRefs">
 
 <p>
 To extract all internal references, add the following section in Harvest configuration file.
@@ -315,7 +345,7 @@ If <i>keep</i> attribute is <i>false</i>, then only lid reference is saved.
 
 <!-- ====================================== -->
 
-<subsection name="Extract Metadata by XPath">
+<subsection name="Extract Metadata by XPath" id="XPath">
 
 <p>
 To extract metadata by XPath, you have to create one or more mapping files and list them 
@@ -409,7 +439,7 @@ To extract latitude and longitude you can use the following XPaths without names
 
 <!-- ====================================== -->
 
-<subsection name="Extract Metadata by Data Dictionary Class / Extract All Fields">
+<subsection name="Extract Metadata by Data Dictionary Class / Extract All Fields" id="DDic">
 
 <p>
 Harvest can automatically flatten out XML files and generate field names using the following naming convention:

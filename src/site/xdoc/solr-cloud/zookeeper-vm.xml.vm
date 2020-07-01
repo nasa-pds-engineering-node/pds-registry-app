@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document>
+<properties>
+  <title>ZooKeeper - VM</title>
+</properties>
+
+<body>
+
+<section name="Running Apache ZooKeeper in a VM">
+
+<p>
+This document describes installation and configuration of ZooKeeper version 3.5.8 in a VM running CentOS 8.
+</p>
+
+<p>
+<ul>
+  <li><a href="#Create_CentOS_VM">Create CentOS VM</a></li>
+  <li><a href="#Install_Java">Install Java</a></li>
+  <li><a href="#Install_ZooKeeper">Install ZooKeeper</a></li>
+  <li><a href="#Systemd_Service">Systemd Service</a></li>
+  <li><a href="#Znode_for_Solr_Configuration">Znode for Solr Configuration</a></li>
+  <li><a href="#Firewall_Configuration">Firewall Configuration</a></li>
+  <li><a href="#Multi-Node_Cluster">Multi-Node Cluster</a></li>
+</ul>
+</p>
+
+<!-- ================================================== -->
+
+<subsection name="Create CentOS VM">
+
+<p>
+Create new VM and install minimal CentOS 8 server without GUI. Configure static IP.
+</p>
+
+<table>
+<tr><td>Min RAM</td><td>2GB</td></tr>
+<tr><td>Min CPU</td><td>1</td></tr>
+<tr><td>Min HDD</td><td>20GB</td></tr>
+<tr><td>Operating System</td><td>CentOS 8</td></tr>
+<tr><td>NIC</td><td>Static IP</td></tr>
+</table>
+
+</subsection>
+
+<!-- ================================================== -->
+
+<subsection name="Install Java">
+
+<source>
+yum install java-11-openjdk
+</source>
+
+</subsection>
+
+<!-- ================================================== -->
+
+<subsection name="Install ZooKeeper">
+<p>
+  <b>Step 1: Download and extract ZooKeeper tar.gz</b>
+</p>
+
+<p>
+Unfortunately CentOS / RHEL 8 repositories or Apache ZooKeeper project do not have prebuilt RPM installer.
+Download <a href="http://archive.apache.org/dist/zookeeper/zookeeper-3.5.8/apache-zookeeper-3.5.8-bin.tar.gz">tar.gz archive</a>
+from Apache web site and extract it into <i>/opt/zookeeper</i> directory.
+You can also extract the archive into <i>/opt/zookeeper-3.5.8</i> directory and then create a soft link
+</p>
+<source>
+cd /opt
+ln -s zookeeper-3.5.8 zookeeper
+</source>
+
+<p>
+  <b>Step 2: Create data directory</b>
+</p>
+<source>
+mkdir /var/lib/zookeeper
+</source>
+
+<p>
+  <b>Step 3: Create configuration file <i>/opt/zookeeper/conf/zoo.cfg</i></b>
+</p>
+<source>
+tickTime=2000
+initLimit=10
+syncLimit=5
+dataDir=/var/lib/zookeeper
+clientPort=2181
+
+# Disable admin UI
+admin.enableServer=false
+
+# Solr needs following commands
+4lw.commands.whitelist=mntr,conf,ruok
+</source>
+
+<p>
+  <b>Step 4: Create zookeeper group and user</b>
+</p>
+
+<source>
+groupadd zookeeper
+adduser -Mr -g zookeeper zookeeper
+</source>
+
+<p>
+  <b>Step 5: Change file ownership</b>
+</p>
+
+<source>
+chown zookeeper:zookeeper -R /opt/zookeeper/
+chown zookeeper:zookeeper -R /var/lib/zookeeper/
+</source>
+
+</subsection>
+
+
+
+<!-- ================================================================ -->
+
+<subsection name="Systemd Service">
+
+<p>
+Apache ZooKeeper project doesn't provide systemd script or prebuilt RPM installer.
+To manually create systemd service, follow the following steps.
+</p>
+
+<p>
+  <b>Step 1: Create service file</b>
+</p>
+
+<p>
+Create <i>/etc/systemd/system/zookeeper.service</i> file:
+</p>
+
+<source>
+[Unit]
+Description=ZooKeeper Service
+Documentation=http://zookeeper.apache.org
+Requires=network.target
+After=network.target
+
+[Service]
+Type=forking
+User=zookeeper
+Group=zookeeper
+ExecStart=/opt/zookeeper/bin/zkServer.sh start /opt/zookeeper/conf/zoo.cfg
+ExecStop=/opt/zookeeper/bin/zkServer.sh stop /opt/zookeeper/conf/zoo.cfg
+ExecReload=/opt/zookeeper/bin/zkServer.sh restart /opt/zookeeper/conf/zoo.cfg
+SuccessExitStatus=143
+
+[Install]
+WantedBy=default.target
+</source>
+
+<p>
+Reload systemd daemon
+</p>
+<source>
+systemctl daemon-reload
+</source>
+
+<p>
+  <b>Step 2: Fix SELinux context</b>
+</p>
+<p>
+If SELinux is enabled, run the following command to check SELinux context type.
+</p>
+<source>
+ls -Z /opt/zookeeper/bin/zkServer.sh
+</source>
+
+<p>
+The context type must be <i>bin_t</i>. 
+If the value is different, for example, <i>admin_home_t</i>, run the following command to fix it.
+</p>
+<source>
+restorecon -v /opt/zookeeper/bin/zkServer.sh
+</source>
+
+<p>
+  <b>Step 3: Test the service</b>
+</p>
+
+<p>
+Start the service:
+</p>
+<source>
+systemctl start zookeeper
+</source>
+
+<p>
+Check the service status:
+</p>
+<source>
+systemctl status zookeeper
+</source>
+
+<p>
+Check ZooKeeper cluster status
+</p>
+<source>
+/opt/zookeeper/bin/zkServer.sh status /opt/zookeeper/conf/zoo.cfg
+</source>
+<p>
+You should get a message similar to this
+</p>
+<source>
+/usr/bin/java
+ZooKeeper JMX enabled by default
+Using config: /opt/zookeeper/conf/zoo.cfg
+Client port found: 2181. Client address: localhost.
+Mode: standalone
+</source>
+
+</subsection>
+
+
+<!-- ================================================== -->
+
+
+<subsection name="Znode for Solr Configuration">
+<p>
+Create a node in ZooKeeper tree (also known as 'znode') to store Solr configuration.
+</p>
+
+<p>
+  <b>Step 1: Start ZooKeeper service if it is not running</b>
+</p>
+<source>
+systemctl start zookeeper
+</source>
+
+<p>
+  <b>Step 2: Connect to the server</b>
+</p>
+<p>
+Use ZooKeeper command-line client to connect to the server
+</p>
+<source>
+/opt/zookeeper/bin/zkCli.sh -server 127.0.0.1:2181
+</source>
+
+<p>
+You should see some log messages, followed by the prompt
+</p>
+
+<source>
+WatchedEvent state:SyncConnected type:None path:null
+[zk: 127.0.0.1:2181(CONNECTED) 0]
+</source>
+
+<p>
+You may need to hit enter key if the prompt doesn't show up.
+</p>
+
+<p>
+  <b>Step 3: Create '/solr' znode</b>
+</p>
+
+<source>
+[zk: 127.0.0.1:2181(CONNECTED) 0] create /solr
+Created /solr
+[zk: 127.0.0.1:2181(CONNECTED) 1]
+</source>
+
+<p>
+  <b>Step 4: Disconnect from the server</b>
+</p>
+
+<source>
+[zk: 127.0.0.1:2181(CONNECTED) 1] quit
+</source>
+
+</subsection>
+
+
+<!-- ================================================================ -->
+
+<subsection name="Firewall Configuration">
+
+<p>
+You need to open following ports:
+<ul>
+  <li><b>2181</b> - clients connect to this port</li>
+  <li><b>2888</b> - follower nodes use this port to connect to the leader</li>
+  <li><b>3888</b> - this port is used for leader election</li>
+</ul>
+</p>
+
+<p>
+Run these commands to open ports:
+</p>
+
+<source>
+firewall-cmd --zone=public --add-port=2181/tcp --permanent
+firewall-cmd --zone=public --add-port=2888/tcp --permanent
+firewall-cmd --zone=public --add-port=3888/tcp --permanent
+firewall-cmd --reload
+firewall-cmd --zone=public --list-ports
+</source>
+
+</subsection>
+
+
+<!-- ================================================================ -->
+
+<subsection name="Multi-Node Cluster">
+
+<p>
+It is best to use an odd number of servers, because ZooKeeper requires a majority to elect a leader.
+In this example we will use 3 nodes with static IPs:
+</p>
+<source>
+192.168.75.11
+192.168.75.12
+192.168.75.13
+</source>
+
+<p>
+  <b>Step 1: Install ZooKeeper</b>
+</p>
+<p>
+Install ZooKeeper on 3 nodes as described above. Make sure that ports 2181, 2888, and 3888 are open on all 3 nodes.
+</p>
+
+<p>
+  <b>Step 2: Stop zookeeper service if it is running</b>
+</p>
+<source>
+systemctl stop zookeeper
+</source>
+
+<p>
+  <b>Step 3: Edit configuration file</b>
+</p>
+<p>
+Edit <i>/opt/zookeeper/conf/zoo.cfg</i> file on all 3 nodes to add a list of ZooKeeper nodes
+</p>
+<source>
+tickTime=2000
+initLimit=10
+syncLimit=5
+dataDir=/var/lib/zookeeper
+clientPort=2181
+
+# Disable admin UI
+admin.enableServer=false
+
+# Solr needs following commands
+4lw.commands.whitelist=mntr,conf,ruok
+
+# Cluster
+server.1=192.168.75.11:2888:3888
+server.2=192.168.75.12:2888:3888
+server.3=192.168.75.13:2888:3888
+</source>
+
+<p>
+  <b>Step 4: Create ID file</b>
+</p>
+<p>
+On each node create <i>/var/lib/zookeeper/myid</i> file containing the node ID - 1, 2, or 3. Make sure that 'zookeeper' user owns the file.
+</p>
+<source>
+# On node 192.168.75.11 run
+echo "1" > /var/lib/zookeeper/myid
+chown zookeeper:zookeeper /var/lib/zookeeper/myid
+
+# On node 192.168.75.12 run
+echo "2" > /var/lib/zookeeper/myid
+chown zookeeper:zookeeper /var/lib/zookeeper/myid
+
+# On node 192.168.75.13 run
+echo "3" > /var/lib/zookeeper/myid
+chown zookeeper:zookeeper /var/lib/zookeeper/myid
+</source>
+
+<p>
+  <b>Step 5: Start zookeeper service on all 3 nodes</b>
+</p>
+<source>
+systemctl start zookeeper
+</source>
+
+<p>
+  <b>Step 6: Check cluster status</b>
+</p>
+
+<p>
+To quickly check cluster status, use 'nc' command to connect to each ZooKeeper node and execute ZooKeeper 'mntr' command.
+</p>
+
+<source>
+echo mntr | nc 192.168.75.11 2181 | grep zk_server_state
+zk_server_state follower
+
+echo mntr | nc 192.168.75.12 2181 | grep zk_server_state
+zk_server_state follower
+
+echo mntr | nc 192.168.75.13 2181 | grep zk_server_state
+zk_server_state leader
+</source>
+
+</subsection>
+
+</section>
+
+</body>
+</document>

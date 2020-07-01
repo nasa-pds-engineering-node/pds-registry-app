@@ -88,7 +88,7 @@ harvest -c &lt;path to the package&gt;/harvest-$context.get("harvest.version")/c
 	<subsection name="registry-mgr">
 		<p>To push the newly created registry record to the server, simply run (~/tmp is the path where the input records created in the previous step are):</p>
 		<source>
-registry-manager load-data -filePath ~/tmp
+registry-manager load-data -file ~/tmp
 		</source>
 	</subsection>
 	

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Copyright 2019, California Institute of Technology ("Caltech").
+  U.S. Government sponsorship acknowledged.
+  
+  All rights reserved.
+  
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions are met:
+  
+  * Redistributions of source code must retain the above copyright notice,
+  this list of conditions and the following disclaimer.
+  * Redistributions must reproduce the above copyright notice, this list of
+  conditions and the following disclaimer in the documentation and/or other
+  materials provided with the distribution.
+  * Neither the name of Caltech nor its operating division, the Jet Propulsion
+  Laboratory, nor the names of its contributors may be used to endorse or
+  promote products derived from this software without specific prior written
+  permission.
+  
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<document>
+<properties>
+  <title>Test vs Prod</title>
+</properties>
+
+<body>
+
+<section name="Test vs Production">
+
+<p>
+This section describes few Test vs Production use cases
+</p>
+
+<!-- ===================================== -->
+
+<subsection name="Use a test environment to play around with registry data">
+<p>
+Install Solr, Registry Manager and Harvest on your laptop as described in <a href="../install/index.html">Installation</a> section.
+</p>
+
+<p>
+You can use multiple collections at the same time. It doesn't have to be default 'registry' collection.
+</p>
+
+<p>
+The following example will create 3 collections, test1, test2, and test3.
+</p>
+<source>
+registry-manager create-registry -collection test1
+registry-manager create-registry -collection test2
+registry-manager create-registry -collection test3
+</source>
+
+<p>
+You can customize individual collections as described in <a href="../operate/reg-custom.html">Registry Customization</a>
+</p>
+
+<p>
+For example, to create collection test1 from customized Solr config set stored in /tmp/test1 directory, call this command
+</p>
+<source>
+registry-manager create-registry -configDir /tmp/test1 -collection test1
+</source>
+
+<p>
+You can easily delete any of your test collections and start over. For example,
+</p>
+<source>
+registry-manager delete-registry -collection test1
+</source>
+
+
+</subsection>
+
+<!-- ===================================== -->
+
+<subsection name="Swap all test data into operations">
+
+<p>
+Extract all data from a test collection into an XML file, as shown below
+</p>
+<source>
+registry-manager export-data -file /tmp/mydata.xml -all -collection test1
+</source>
+
+<p>
+Then load the XML file into production environment. 
+In the following example 3-node ZooKeeper cluster is used to load data into multi-node production cluster.
+</p>
+<source>
+registry-manager load-data -file /tmp/mydata.xml -zkHost zk1.prod.local:2181,zk2.prod.local:2181,zk3.prod.local:2181/solr
+</source>
+
+<p>
+Instead of ZooKeeper connection string you can also use a URL of a Solr node.
+</p>
+<source>
+registry-manager load-data -file /tmp/mydata.xml -solrUrl http://my.prod.local:8983/solr
+</source>
+
+<p>
+NOTE: You may need to copy (FTP) your XML file into production environment.
+</p>
+
+</subsection>
+
+
+<!-- ===================================== -->
+
+<subsection name="Swap a subset of test data into operations">
+
+<p>
+Extract a subset of data by packageId from a test collection into an XML file, as shown below
+</p>
+<source>
+registry-manager export-data -file /tmp/mydata.xml -packageId 8d8ae96d-044e-473d-a278-62635b1c5977 -collection test1
+</source>
+
+<p>
+Then load the XML file into production environment. 
+</p>
+<source>
+registry-manager load-data -file /tmp/mydata.xml -solrUrl http://my.prod.local:8983/solr
+</source>
+
+</subsection>
+
+<!-- ===================================== -->
+
+<subsection name="Rollback changes made in operations">
+
+<p>
+Each time you run Harvest tool, it generates unique packageId (UUID) and stores it in each Solr document ("_package_id" field). 
+If you loaded some data and want to delete it, find out the packageId from Harvest generated file. 
+Then run the following command to delete all documents by that packageId,
+</p>
+<source>
+registry-manager delete-data -packageId 8d8ae96d-044e-473d-a278-62635b1c5977 -solrUrl http://my.prod.local:8983/solr
+</source>
+
+<p>
+You can also delete documents by lidvid or lid.
+</p>
+<source>
+registry-manager delete-data -lidvid urn:nasa:pds:context:target:asteroid.4_vesta::1.1
+</source>
+
+<p>
+<b>NOTE: </b>You can overwrite existing documents by loading new documents with the same lidvids. 
+Lidvid is a primary key in the registry. In this case, there is no way to restore original documents.
+</p>
+
+</subsection>
+
+</section>
+
+
+</body>
+</document>
