@@ -41,13 +41,80 @@
 
 <section name="Security">
 
-<p>Currently, we are working on defining a more comprehensive Security component for the Registry. In the meantime, it is recommended this service 
-  be installed on servers that allow internal access only.
+<p>
 </p>
+
+<img src="../images/reg-prod-1.png" style="width:50em;" />
+
 
 </section>
   
-<section name="Setup HTTP Proxy for Solr Admin UI">
+
+<subsection name="NGINX">
+
+<h4>Redirecting all HTTP requests to HTTPS</h4>
+
+<source>
+http {
+...
+    server {
+        listen       80;
+        server_name  _;
+
+        return 301 https://$host$request_uri;
+    }
+...
+}
+</source>
+
+</subsection>
+
+
+<subsection name="ZooKeeper">
+
+<p>
+<b>Step 1: Edit ZooKeeper configuration file</b>
+</p>
+
+<p>
+Replace <i>clientPort</i> property with <i>secureClientPort</i> in ZooKeeper configuration file (/opt/zookeeper/conf/zoo.cfg).
+</p>
+
+<source>
+secureClientPort=2181
+</source>
+
+<p>
+<b>Step 2: Edit ZooKeeper startup script</b>
+</p>
+
+<p>
+Add following JVM properties at the top of <i>/opt/zookeeper/bin/zkServer.sh</i> file.
+Adjust key store and trust store parameters if needed.
+</p>
+
+<source>
+#!/usr/bin/env bash
+
+SERVER_TLS_FLAGS="
+-Dzookeeper.serverCnxnFactory=org.apache.zookeeper.server.NettyServerCnxnFactory
+-Dzookeeper.ssl.keyStore.location=/opt/zookeeper/ssl/zk1.jks
+-Dzookeeper.ssl.keyStore.password=password
+-Dzookeeper.ssl.trustStore.location=/opt/zookeeper/ssl/zk-trust.jks
+-Dzookeeper.ssl.trustStore.password=password"
+
+SERVER_JVMFLAGS="$SERVER_JVMFLAGS $SERVER_TLS_FLAGS"
+</source>
+
+</subsection>
+
+
+<subsection name="Solr">
+</subsection>
+
+
+
+<subsection name="Setup HTTP Proxy for Solr Admin UI">
 <p>
 To view the Solr Admin UI on a remote server, you will need to have your System Administrator setup a proxy similar to the following:
 </p>
@@ -63,7 +130,7 @@ ProxyPassReverse /solr http://localhost:8983/solr
 &lt;/Location&gt;
 </source>
 
-</section>
+</subsection>
 
 
 </body>
