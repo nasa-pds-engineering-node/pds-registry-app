@@ -70,49 +70,6 @@ http {
 </subsection>
 
 
-<subsection name="ZooKeeper">
-
-<p>
-<b>Step 1: Edit ZooKeeper configuration file</b>
-</p>
-
-<p>
-Replace <i>clientPort</i> property with <i>secureClientPort</i> in ZooKeeper configuration file (/opt/zookeeper/conf/zoo.cfg).
-</p>
-
-<source>
-secureClientPort=2181
-</source>
-
-<p>
-<b>Step 2: Edit ZooKeeper startup script</b>
-</p>
-
-<p>
-Add following JVM properties at the top of <i>/opt/zookeeper/bin/zkServer.sh</i> file.
-Adjust key store and trust store parameters if needed.
-</p>
-
-<source>
-#!/usr/bin/env bash
-
-SERVER_TLS_FLAGS="
--Dzookeeper.serverCnxnFactory=org.apache.zookeeper.server.NettyServerCnxnFactory
--Dzookeeper.ssl.keyStore.location=/opt/zookeeper/ssl/zk1.jks
--Dzookeeper.ssl.keyStore.password=password
--Dzookeeper.ssl.trustStore.location=/opt/zookeeper/ssl/zk-trust.jks
--Dzookeeper.ssl.trustStore.password=password"
-
-SERVER_JVMFLAGS="$SERVER_JVMFLAGS $SERVER_TLS_FLAGS"
-</source>
-
-</subsection>
-
-
-<subsection name="Solr">
-</subsection>
-
-
 
 <subsection name="Setup HTTP Proxy for Solr Admin UI">
 <p>

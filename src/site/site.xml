@@ -79,7 +79,9 @@
         <item name="SolrCloud" href="prod/solrcloud.html"/>
         <item name="ZooKeeper Installation (VM)" href="prod/zookeeper-vm.html"/>
         <item name="Solr Installation (VM)" href="prod/solr-vm.html"/>
-        <item name="Security" href="prod/security.html"/>
+      </item>
+      <item name="Security" href="security/index.html">
+        <item name="ZooKeeper" href="security/zk.html"/>
       </item>
       <item name="Support" href="index.html#Support" />
     </menu>

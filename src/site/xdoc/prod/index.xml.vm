@@ -73,7 +73,7 @@ Nodes can be deployed in containers (Kubernetes) or VMs.
 <ul>
   <li>3 ZooKeeper nodes are deployed as a StatefulSet.</li>
   <li>2+ Solr nodes are deployed as a StatefulSet.</li>
-  <li>2+ API nodes are deployed as ReplicaSets (stateless).</li>
+  <li>2+ API nodes are deployed as a ReplicaSet (stateless).</li>
 </ul>
 </p>
 
