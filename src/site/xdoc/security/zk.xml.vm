@@ -39,14 +39,15 @@
 
 <body>
 
-<section name="ZooKepper Security">
+<section name="ZooKeeper Security">
 
 <p>
 <ul>
   <li><a href="#mTLS">Authentication. Mutual TLS</a></li>
   <ul>
     <li><a href="#Keys_and_Certificates">Keys and Certificates</a></li>
-    <li><a href="#Configure_ZooKeeper">Configure ZooKeeper</a></li>
+    <li><a href="#Configure_ZooKeeper_Server">Configure ZooKeeper Server</a></li>
+    <li><a href="#Configure_ZooKeeper_CLI">Configure ZooKeeper CLI</a></li>
     <li><a href="#Configure_Solr">Configure Solr</a></li>
     <li><a href="#Configure_Registry_Manager">Configure Registry Manager</a></li>
   </ul>
@@ -64,6 +65,8 @@ Both the server and clients identify itself by a Distinguished Name (DN) contain
 <p>
 <img src="../images/m-tls-zk.png" style="width:60em;" />
 </p>
+
+<!-- ============================================== -->
 
 <h4>Keys and Certificates</h4>
 
@@ -137,7 +140,9 @@ keytool -importcert -alias "zk3" -keystore "zk-client-trust.jks" -file "zk3.cer"
 keytool -importcert -alias "solr" -keystore "zk-client-trust.jks" -file "zk-client-solr.cer" -storepass "password"
 </source>
 
-<h4>Configure ZooKeeper</h4>
+<!-- ============================================== -->
+
+<h4>Configure ZooKeeper Server</h4>
 
 <p>
 <b>Step 1: Edit ZooKeeper configuration file</b>
@@ -152,12 +157,14 @@ secureClientPort=2181
 </source>
 
 <p>
-<b>Step 2: Copy Keys and Certificates</b>
+<b>Step 2: Copy key and trust store</b>
 </p>
+
 <p>
-In this example we will store JKS (Java Key Store) files in <i>/opt/zookeeper/ssl</i> directory. 
+In this example we will use <i>/opt/zookeeper/ssl</i> directory. 
 You can select another, more secure location.
 </p>
+
 <p>
 Copy <i>zk-trust.jks</i> to all ZooKeeper nodes, <i>zk1.jks</i> to node <i>zk1.test.local</i>, 
 <i>zk2.jks</i> to node <i>zk2.test.local</i> and <i>zk3.jks</i> to node <i>zk3.test.local</i>.
@@ -194,9 +201,126 @@ systemctl stop zookeeper
 systemctl start zookeeper
 </source>
 
+
+<!-- ============================================== -->
+
+<h4>Configure ZooKeeper CLI</h4>
+
+<p>
+<b>Step 1: Edit ZooKeeper CLI script</b>
+</p>
+
+<p>
+NOTE: for ZooKeeper CLI on ZooKeeper server nodes you can use server key and trust store.
+On any other node / machine you should use client key and trust store.
+</p>
+
+<p>
+Add following JVM properties at the top of <i>/opt/zookeeper/bin/zkCli.sh</i> file.
+Adjust key and trust store location and password.
+</p>
+
+<source>
+#!/usr/bin/env bash
+
+CLIENT_TLS_FLAGS="
+-Dzookeeper.clientCnxnSocket=org.apache.zookeeper.ClientCnxnSocketNetty 
+-Dzookeeper.client.secure=true 
+-Dzookeeper.ssl.keyStore.location=/opt/zookeeper/ssl/zk1.jks 
+-Dzookeeper.ssl.keyStore.password=password 
+-Dzookeeper.ssl.trustStore.location=/opt/zookeeper/ssl/zk-trust.jks 
+-Dzookeeper.ssl.trustStore.password=password"
+
+CLIENT_JVMFLAGS="$CLIENT_JVMFLAGS $CLIENT_TLS_FLAGS"
+</source>
+
+<p>
+<b>Step 2: Test CLI</b>
+</p>
+
+<p>
+Run <i>zkCli.sh</i> to connect to a ZooKeeper server. 
+The server host name should match "CN" attribute in the server certificate.
+</p>
+
+<source>
+./zkCli.sh -server zk1.test.local:2181
+</source>
+
+
+<!-- ============================================== -->
+
 <h4>Configure Solr</h4>
 
+<!-- ============================================== -->
+
 <h4>Configure Registry Manager</h4>
+
+<p>
+<b>Step 1: Copy key and trust store</b>
+</p>
+
+<p>
+Copy <i>zk-client-solr.jks</i> and <i>zk-client-trust.jks</i> to your home directory or another location.
+</p>
+
+<p>
+<b>Step 2: Edit Registry Manager startup script (Windows)</b>
+</p>
+
+<p>On Windows, edit <i>registry-manager.bat</i>. Replace last line</p>
+<source>
+"%JAVA%" -jar "%TOOL_JAR%" %*
+</source>
+
+<p>
+with
+</p>
+
+<source>
+"%JAVA%" ^
+  "-Dzookeeper.clientCnxnSocket=org.apache.zookeeper.ClientCnxnSocketNetty"^
+  "-Dzookeeper.client.secure=true"^
+  "-Dzookeeper.ssl.keyStore.location=/Users/test/zk-client-solr.jks"^
+  "-Dzookeeper.ssl.keyStore.password=password"^
+  "-Dzookeeper.ssl.trustStore.location=/Users/test/zk-client-trust.jks"^
+  "-Dzookeeper.ssl.trustStore.password=password"^
+  -jar "%TOOL_JAR%" %*
+</source>
+
+<p>
+Adjust key and trust store paths and passwords.
+</p>
+
+<p>
+<b>Step 2: Edit Registry Manager startup script (Linux)</b>
+</p>
+
+<p>On Linux, edit <i>registry-manager</i>. Replace last line</p>
+<source>
+"$JAVA" -jar "$TOOL_JAR" $@
+</source>
+
+<p>
+with
+</p>
+
+<source>
+CLIENT_TLS_FLAGS="
+-Dzookeeper.clientCnxnSocket=org.apache.zookeeper.ClientCnxnSocketNetty 
+-Dzookeeper.client.secure=true 
+-Dzookeeper.ssl.keyStore.location=/home/test/ssl/zk-client-solr.jks 
+-Dzookeeper.ssl.keyStore.password=password 
+-Dzookeeper.ssl.trustStore.location=/home/test/ssl/zk-client-trust.jks 
+-Dzookeeper.ssl.trustStore.password=password"
+
+"$JAVA" $CLIENT_TLS_FLAGS -jar "$TOOL_JAR" $@
+
+</source>
+
+<p>
+Adjust key and trust store paths and passwords.
+</p>
 
 
 </subsection>
