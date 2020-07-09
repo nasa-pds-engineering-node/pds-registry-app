@@ -57,7 +57,7 @@ Main components of multi-node cluster:
 <ul>
   <li><b>ZooKeeper</b> nodes - provide cluster configuration and coordination.</li>
   <li><b>Solr</b> nodes - store PDS data and provide low level search API. </li>
-  <li><b>API</b> nodes - provide PDS registry APIs. Only API nodes are exposed to public network.</li>
+  <li><b>API</b> nodes - provide PDS registry API. Only API nodes are exposed to public network.</li>
   <li><b>Load balancer / proxy server</b> - forwards user requests to API servers. Provides public HTTPS access point.</li>
 </ul>
 </p>

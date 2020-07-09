@@ -130,7 +130,8 @@ keytool -importcert -alias "solr" -keystore "zk-trust.jks" -file "zk-client-solr
 <p>
 Create client trust store and import all ZooKeeper node certificates (zk1, zk2, zk3) and the client certificate.
 The same trust store can be used by all ZooKeeper clients. 
-Note that content of both server and client trust stores is the same at this point.
+Although content of both server and client trust stores is the same at this point, 
+you should use different files for servers and clients.
 </p>
 
 <source>
@@ -252,6 +253,55 @@ The server host name should match "CN" attribute in the server certificate.
 
 <h4>Configure Solr</h4>
 
+<p>
+<b>Step 1: Copy key and trust store</b>
+</p>
+
+<p>
+Copy <i>zk-client-solr.jks</i> and <i>zk-client-trust.jks</i> to <i>/opt/solr/ssl</i> or another location.
+</p>
+
+
+<p>
+<b>Step 2: Edit Solr startup script</b>
+</p>
+
+<p>
+Add these properties to <i>/opt/solr/bin/solr.in.sh</i> file
+</p>
+
+<source>
+ZK_CLIENT_TLS_FLAGS="
+-Dzookeeper.clientCnxnSocket=org.apache.zookeeper.ClientCnxnSocketNetty 
+-Dzookeeper.client.secure=true 
+-Dzookeeper.ssl.keyStore.location=/opt/solr/ssl/zk-client-solr.jks 
+-Dzookeeper.ssl.keyStore.password=password 
+-Dzookeeper.ssl.trustStore.location=/opt/solr/ssl/zk-client-trust.jks 
+-Dzookeeper.ssl.trustStore.password=password"
+
+SOLR_OPTS="$SOLR_OPTS $ZK_CLIENT_TLS_FLAGS"
+</source>
+
+<p>
+<b>Step 3: Restart Solr</b>
+</p>
+
+<source>
+systemctl stop solr
+systemctl start solr
+</source>
+
+<p>
+<b>Issues</b>
+</p>
+
+<p>
+There is an issue with Solr admin UI. 
+The <i>Cloud -&gt;ZK Status</i> page doesn't work with TLS. 
+</p>
+
+<img src="../images/solr-zk-status-tls.png" style="width:35em;" />
+
 <!-- ============================================== -->
 
 <h4>Configure Registry Manager</h4>
@@ -306,7 +356,7 @@ with
 </p>
 
 <source>
-CLIENT_TLS_FLAGS="
+ZK_CLIENT_TLS_FLAGS="
 -Dzookeeper.clientCnxnSocket=org.apache.zookeeper.ClientCnxnSocketNetty 
 -Dzookeeper.client.secure=true 
 -Dzookeeper.ssl.keyStore.location=/home/test/ssl/zk-client-solr.jks 
@@ -314,8 +364,7 @@ CLIENT_TLS_FLAGS="
 -Dzookeeper.ssl.trustStore.location=/home/test/ssl/zk-client-trust.jks 
 -Dzookeeper.ssl.trustStore.password=password"
 
-"$JAVA" $CLIENT_TLS_FLAGS -jar "$TOOL_JAR" $@
-
+"$JAVA" $ZK_CLIENT_TLS_FLAGS -jar "$TOOL_JAR" $@
 </source>
 
 <p>
