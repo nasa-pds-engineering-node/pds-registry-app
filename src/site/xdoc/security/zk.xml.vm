@@ -43,7 +43,7 @@
 
 <p>
 <ul>
-  <li><a href="#mTLS">Authentication. Mutual TLS</a></li>
+  <li><a href="#mTLS">Mutual TLS Authentication</a></li>
   <ul>
     <li><a href="#Keys_and_Certificates">Keys and Certificates</a></li>
     <li><a href="#Configure_ZooKeeper_Server">Configure ZooKeeper Server</a></li>
@@ -55,7 +55,7 @@
 </p>
 
 
-<subsection name="Authentication. Mutual TLS" id="mTLS">
+<subsection name="Mutual TLS Authentication" id="mTLS">
 
 <p>
 Mutual TLS is based on asymmetric (public-key) cryptography. 
@@ -315,44 +315,12 @@ Copy <i>zk-client-solr.jks</i> and <i>zk-client-trust.jks</i> to your home direc
 </p>
 
 <p>
-<b>Step 2: Edit Registry Manager startup script (Windows)</b>
+<b>Step 2: Edit Registry Manager startup script</b>
 </p>
 
-<p>On Windows, edit <i>registry-manager.bat</i>. Replace last line</p>
-<source>
-"%JAVA%" -jar "%TOOL_JAR%" %*
-</source>
-
 <p>
-with
-</p>
-
-<source>
-"%JAVA%" ^
-  "-Dzookeeper.clientCnxnSocket=org.apache.zookeeper.ClientCnxnSocketNetty"^
-  "-Dzookeeper.client.secure=true"^
-  "-Dzookeeper.ssl.keyStore.location=/Users/test/zk-client-solr.jks"^
-  "-Dzookeeper.ssl.keyStore.password=password"^
-  "-Dzookeeper.ssl.trustStore.location=/Users/test/zk-client-trust.jks"^
-  "-Dzookeeper.ssl.trustStore.password=password"^
-  -jar "%TOOL_JAR%" %*
-</source>
-
-<p>
+Add <i>ZK_CLIENT_TLS_FLAGS</i> variable in <i>$REGISTRY_HOME/bin/registry-manager</i>.
 Adjust key and trust store paths and passwords.
-</p>
-
-<p>
-<b>Step 2: Edit Registry Manager startup script (Linux)</b>
-</p>
-
-<p>On Linux, edit <i>registry-manager</i>. Replace last line</p>
-<source>
-"$JAVA" -jar "$TOOL_JAR" $@
-</source>
-
-<p>
-with
 </p>
 
 <source>
@@ -363,14 +331,23 @@ ZK_CLIENT_TLS_FLAGS="
 -Dzookeeper.ssl.keyStore.password=password 
 -Dzookeeper.ssl.trustStore.location=/home/test/ssl/zk-client-trust.jks 
 -Dzookeeper.ssl.trustStore.password=password"
-
-"$JAVA" $ZK_CLIENT_TLS_FLAGS -jar "$TOOL_JAR" $@
 </source>
 
 <p>
-Adjust key and trust store paths and passwords.
+Replace last line in <i>$REGISTRY_HOME/bin/registry-manager</i>.
 </p>
 
+<source>
+"$JAVA" -jar "$TOOL_JAR" $@
+</source>
+
+<p>
+with
+</p>
+
+<source>
+"$JAVA" $ZK_CLIENT_TLS_FLAGS -jar "$TOOL_JAR" $@
+</source>
 
 </subsection>
 
