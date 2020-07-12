@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.2.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/0.2.0-SNAPSHOT) (2020-06-23)
+## [0.2.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/0.2.0-SNAPSHOT) (2020-07-12)
 
 [Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v0.1.1...0.2.0-SNAPSHOT)
 
@@ -8,6 +8,7 @@
 
 - Enhance documentation for PDS4 Attribute Search deployment and customization [\#22](https://github.com/NASA-PDS/pds-registry-app/issues/22)
 - Design and Implement capability to handle archive\_status [\#16](https://github.com/NASA-PDS/pds-registry-app/issues/16)
+- Develop ability to deploy Test vs Operations Registry environments [\#15](https://github.com/NASA-PDS/pds-registry-app/issues/15)
 - Develop capability for handling multiple product versions [\#10](https://github.com/NASA-PDS/pds-registry-app/issues/10)
 
 ## [v0.1.1](https://github.com/NASA-PDS/pds-registry-app/tree/v0.1.1) (2020-05-22)
