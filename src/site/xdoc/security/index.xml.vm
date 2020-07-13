@@ -39,56 +39,124 @@
 
 <body>
 
-<section name="Security">
+<section name="Security Overview">
 
 <p>
+You can implement both network and application security. 
+For most deployments, network security with public access to read-only APIs 
+provided by application servers (API nodes) should be enough.
 </p>
 
-<img src="../images/reg-prod-1.png" style="width:50em;" />
 
+<subsection name="Network Security">
+
+<p>
+<ul>
+  <li>All public traffic is routed through a load balancer / proxy server.</li>
+  <li>Only HTTPS protocol is available on public LAN.</li>
+  <li>Admin APIs are only available on private LAN.</li>
+  <li>It is not recommended to expose any Solr APIs to the public.</li>
+  <li>All public read-only APIs are provided by application servers (API nodes).</li>
+</ul>
+</p>
+
+<img src="../images/network-prod.png" style="width:50em;" />
+
+<h4>Ports</h4>
+
+<p>
+If you run a firewall, the following ports have to be open on private LAN:
+</p>
+
+<p>
+<b>ZooKeeper nodes:</b>
+</p>
+<p>
+<ul>
+  <li><b>2181</b> - ZooKeeper clients connect to this port</li>
+  <li><b>2888</b> - ZooKeeper follower nodes use this port to connect to the ZooKeeper leader</li>
+  <li><b>3888</b> - This port is used for ZooKeeper leader election</li>
+</ul>
+</p>
+
+<p>
+<b>Solr nodes:</b>
+</p>
+<p>
+<ul>
+  <li><b>8983</b> - Solr clients connect to this port</li>
+</ul>
+</p>
+
+<p>
+<b>API nodes:</b>
+</p>
+<p>
+<ul>
+  <li><b>8000</b> - API clients connect to this port</li>
+</ul>
+</p>
+
+</subsection>
+
+<!-- ================================================= -->  
+
+<subsection name="ZooKeeper">
+
+<h4>Authentication</h4>
+<p>
+ZooKeeper supports multiple authentication schemes.
+</p>
+
+<p>
+<ul>
+  <li>Mutual TLS</li>
+  <li>SASL with Digest-MD5</li>
+  <li>SASL with Kerberos</li>
+  <li>Custom</li>
+</ul>
+</p>
+
+<h4>Authorization</h4>
+<p>
+<ul>
+  <li>Access control lists (ACLs)</li>
+</ul>
+</p>
+
+</subsection>
+
+
+<!-- ================================================= -->  
+
+<subsection name="Solr">
+
+<h4>Authentication</h4>
+<p>
+Solr supports multiple authentication schemes.
+</p>
+
+<p>
+<ul>
+  <li>Mutual TLS</li>
+  <li>Basic</li>
+  <li>Bearer token (JSON Web Token - JWT)</li>
+  <li>Kerberos</li>
+  <li>Authentication provided by Hadoop authentication library (Kerberos, LDAP, SignerSecretProvider). Documentation of this library is very bad.</li>
+  <li>Custom</li>
+</ul>
+</p>
+
+<h4>Authorization</h4>
+<p>
+<ul>
+  <li>Role Based</li>
+</ul>
+</p>
+
+</subsection>
 
 </section>
-  
-
-<subsection name="NGINX">
-
-<h4>Redirecting all HTTP requests to HTTPS</h4>
-
-<source>
-http {
-...
-    server {
-        listen       80;
-        server_name  _;
-
-        return 301 https://$host$request_uri;
-    }
-...
-}
-</source>
-
-</subsection>
-
-
-
-<subsection name="Setup HTTP Proxy for Solr Admin UI">
-<p>
-To view the Solr Admin UI on a remote server, you will need to have your System Administrator setup a proxy similar to the following:
-</p>
-<source>
-ProxyPass /solr http://localhost:8983/solr
-ProxyPassReverse /solr http://localhost:8983/solr
-&lt;Location /solr&gt;
-  &lt;Limit PUT POST DELETE&gt;
-    Order Deny,Allow
-    Deny from All
-    Allow from 127.0.0.1
-  &lt;/Limit&gt;
-&lt;/Location&gt;
-</source>
-
-</subsection>
-
 
 </body>
 </document>
