@@ -62,8 +62,8 @@
       <item name="Installation" href="install/index.html">
         <item name="Java" href="install/java.html"/>
         <item name="Solr - Quick Start" href="install/solr.html"/>
-        <item name="Tools (manager, harvest)" href="install/tools.html"/>
-        <item name="Initialize the registry" href="install/initialize.html"/>
+        <item name="Tools (Manager, Harvest)" href="install/tools.html"/>
+        <item name="Initialize the Registry" href="install/initialize.html"/>
         <item name="Test your deployment" href="install/test.html"/>
         
       </item>
@@ -81,7 +81,7 @@
         <item name="Solr Installation (VM)" href="prod/solr-vm.html"/>
       </item>
       <item name="Security" href="security/index.html">
-        <item name="Proxy Server" href="security/proxy.html"/>
+        <item name="Load Balancer &amp; Proxy" href="security/proxy.html"/>
         <item name="ZooKeeper" href="security/zk.html"/>
         <item name="Solr" href="security/solr.html"/>
       </item>
