@@ -167,7 +167,7 @@ You can also call Solr API to set the "urlScheme" cluster property
 </p>
 
 <source>
-https://localhost:8983/solr/admin/collections?action=CLUSTERPROP&amp;name=urlScheme&amp;val=https
+http://localhost:8983/solr/admin/collections?action=CLUSTERPROP&amp;name=urlScheme&amp;val=https
 </source>
 
 <p>
