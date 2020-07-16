@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Copyright 2019, California Institute of Technology ("Caltech").
+  U.S. Government sponsorship acknowledged.
+  
+  All rights reserved.
+  
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions are met:
+  
+  * Redistributions of source code must retain the above copyright notice,
+  this list of conditions and the following disclaimer.
+  * Redistributions must reproduce the above copyright notice, this list of
+  conditions and the following disclaimer in the documentation and/or other
+  materials provided with the distribution.
+  * Neither the name of Caltech nor its operating division, the Jet Propulsion
+  Laboratory, nor the names of its contributors may be used to endorse or
+  promote products derived from this software without specific prior written
+  permission.
+  
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<document>
+<properties>
+  <title>ZooKeeper Security</title>
+</properties>
+
+<body>
+
+<section name="ZooKeeper Security">
+
+<p>
+<ul>
+  <li><a href="#mTLS">Mutual TLS Authentication</a></li>
+  <ul>
+    <li><a href="#Keys_and_Certificates">Keys and Certificates</a></li>
+    <li><a href="#Configure_ZooKeeper_Server">Configure ZooKeeper Server</a></li>
+    <li><a href="#Configure_ZooKeeper_CLI">Configure ZooKeeper CLI</a></li>
+    <li><a href="#Configure_Solr">Configure Solr</a></li>
+    <li><a href="#Configure_Registry_Manager">Configure Registry Manager</a></li>
+  </ul>
+</ul>
+</p>
+
+
+<subsection name="Mutual TLS Authentication" id="mTLS">
+
+<p>
+Mutual TLS is based on asymmetric (public-key) cryptography. 
+Both the server and clients identify itself by a Distinguished Name (DN) contained in their certificates.
+</p>
+
+<p>
+<img src="../images/m-tls-zk.png" style="width:60em;" />
+</p>
+
+<!-- ============================================== -->
+
+<h4>Keys and Certificates</h4>
+
+<p>
+<b>Step 1: Generate server keys and certificates</b>
+</p>
+
+<p>
+Run Java keytool to generate private and public key (keypair) for each ZooKeeper node in the cluster (zk1, zk2, zk3).
+You have to use ZooKeeper node host name as the key Common Name (CN), e.g., "CN=zk1.test.local".
+</p>
+
+<source>
+keytool -genkeypair -alias "zk1" -keystore "zk1.jks" -dname "CN=zk1.test.local" -keyalg RSA -storepass "password"
+keytool -genkeypair -alias "zk2" -keystore "zk2.jks" -dname "CN=zk2.test.local" -keyalg RSA -storepass "password"
+keytool -genkeypair -alias "zk3" -keystore "zk3.jks" -dname "CN=zk3.test.local" -keyalg RSA -storepass "password"
+</source>
+
+<p>
+Export certificates.
+</p>
+
+<source>
+keytool -exportcert -alias "zk1" -keystore "zk1.jks" -file "zk1.cer" -storepass "password"
+keytool -exportcert -alias "zk2" -keystore "zk2.jks" -file "zk2.cer" -storepass "password"
+keytool -exportcert -alias "zk3" -keystore "zk3.jks" -file "zk3.cer" -storepass "password"
+</source>
+
+<p>
+<b>Step 2: Generate client keys and certificate</b>
+</p>
+
+<p>
+Run Java keytool to generate keypair and export certificate. Use "CN=solr".
+</p>
+
+<source>
+keytool -genkeypair -alias "solr" -keystore "zk-client-solr.jks" -dname "CN=solr" -keyalg RSA -storepass "password"
+keytool -exportcert -alias "solr" -keystore "zk-client-solr.jks" -file "zk-client-solr.cer" -storepass "password"
+</source>
+
+<p>
+<b>Step 3: Create server trust store</b>
+</p>
+<p>
+Create server trust store and import all ZooKeeper node certificates (zk1, zk2, zk3) and the client certificate.
+The same trust store can be used by all ZooKeeper nodes.
+</p>
+
+<source>
+keytool -importcert -alias "zk1" -keystore "zk-trust.jks" -file "zk1.cer" -storepass "password"
+keytool -importcert -alias "zk2" -keystore "zk-trust.jks" -file "zk2.cer" -storepass "password"
+keytool -importcert -alias "zk3" -keystore "zk-trust.jks" -file "zk3.cer" -storepass "password"
+keytool -importcert -alias "solr" -keystore "zk-trust.jks" -file "zk-client-solr.cer" -storepass "password"
+</source>
+
+<p>
+<b>Step 4: Create client trust store</b>
+</p>
+
+<p>
+Create client trust store and import all ZooKeeper node certificates (zk1, zk2, zk3) and the client certificate.
+The same trust store can be used by all ZooKeeper clients. 
+Although content of both server and client trust stores is the same at this point, 
+you should use different files for servers and clients.
+</p>
+
+<source>
+keytool -importcert -alias "zk1" -keystore "zk-client-trust.jks" -file "zk1.cer" -storepass "password"
+keytool -importcert -alias "zk2" -keystore "zk-client-trust.jks" -file "zk2.cer" -storepass "password"
+keytool -importcert -alias "zk3" -keystore "zk-client-trust.jks" -file "zk3.cer" -storepass "password"
+keytool -importcert -alias "solr" -keystore "zk-client-trust.jks" -file "zk-client-solr.cer" -storepass "password"
+</source>
+
+<!-- ============================================== -->
+
+<h4>Configure ZooKeeper Server</h4>
+
+<p>
+<b>Step 1: Edit ZooKeeper configuration file</b>
+</p>
+
+<p>
+Replace <i>clientPort</i> property with <i>secureClientPort</i> in ZooKeeper configuration file (/opt/zookeeper/conf/zoo.cfg).
+</p>
+
+<source>
+secureClientPort=2181
+</source>
+
+<p>
+<b>Step 2: Copy key and trust store</b>
+</p>
+
+<p>
+In this example we will use <i>/opt/zookeeper/ssl</i> directory. 
+You can select another, more secure location.
+</p>
+
+<p>
+Copy <i>zk-trust.jks</i> to all ZooKeeper nodes, <i>zk1.jks</i> to node <i>zk1.test.local</i>, 
+<i>zk2.jks</i> to node <i>zk2.test.local</i> and <i>zk3.jks</i> to node <i>zk3.test.local</i>.
+</p>
+
+<p>
+<b>Step 3: Edit ZooKeeper startup script</b>
+</p>
+
+<p>
+Add following JVM properties at the top of <i>/opt/zookeeper/bin/zkServer.sh</i> file
+on each ZooKeeper node. Adjust key store name for different nodes (zk1.jks, zk2.jks, zk3.jks).
+</p>
+
+<source>
+#!/usr/bin/env bash
+
+SERVER_TLS_FLAGS="
+-Dzookeeper.serverCnxnFactory=org.apache.zookeeper.server.NettyServerCnxnFactory
+-Dzookeeper.ssl.keyStore.location=/opt/zookeeper/ssl/zk1.jks
+-Dzookeeper.ssl.keyStore.password=password
+-Dzookeeper.ssl.trustStore.location=/opt/zookeeper/ssl/zk-trust.jks
+-Dzookeeper.ssl.trustStore.password=password"
+
+SERVER_JVMFLAGS="$SERVER_JVMFLAGS $SERVER_TLS_FLAGS"
+</source>
+
+<p>
+<b>Step 4: Restart ZooKeeper on each node</b>
+</p>
+
+<source>
+systemctl stop zookeeper
+systemctl start zookeeper
+</source>
+
+
+<!-- ============================================== -->
+
+<h4>Configure ZooKeeper CLI</h4>
+
+<p>
+<b>Step 1: Edit ZooKeeper CLI script</b>
+</p>
+
+<p>
+NOTE: for ZooKeeper CLI on ZooKeeper server nodes you can use server key and trust store.
+On any other node / machine you should use client key and trust store.
+</p>
+
+<p>
+Add following JVM properties at the top of <i>/opt/zookeeper/bin/zkCli.sh</i> file.
+Adjust key and trust store location and password.
+</p>
+
+<source>
+#!/usr/bin/env bash
+
+CLIENT_TLS_FLAGS="
+-Dzookeeper.clientCnxnSocket=org.apache.zookeeper.ClientCnxnSocketNetty 
+-Dzookeeper.client.secure=true 
+-Dzookeeper.ssl.keyStore.location=/opt/zookeeper/ssl/zk1.jks 
+-Dzookeeper.ssl.keyStore.password=password 
+-Dzookeeper.ssl.trustStore.location=/opt/zookeeper/ssl/zk-trust.jks 
+-Dzookeeper.ssl.trustStore.password=password"
+
+CLIENT_JVMFLAGS="$CLIENT_JVMFLAGS $CLIENT_TLS_FLAGS"
+</source>
+
+<p>
+<b>Step 2: Test CLI</b>
+</p>
+
+<p>
+Run <i>zkCli.sh</i> to connect to a ZooKeeper server. 
+The server host name should match "CN" attribute in the server certificate.
+</p>
+
+<source>
+./zkCli.sh -server zk1.test.local:2181
+</source>
+
+
+<!-- ============================================== -->
+
+<h4>Configure Solr</h4>
+
+<p>
+<b>Step 1: Copy key and trust store</b>
+</p>
+
+<p>
+Copy <i>zk-client-solr.jks</i> and <i>zk-client-trust.jks</i> to <i>/opt/solr/ssl</i> or another location.
+</p>
+
+
+<p>
+<b>Step 2: Edit Solr startup script</b>
+</p>
+
+<p>
+Add these properties to <i>/opt/solr/bin/solr.in.sh</i> file
+</p>
+
+<source>
+ZK_CLIENT_TLS_FLAGS="
+-Dzookeeper.clientCnxnSocket=org.apache.zookeeper.ClientCnxnSocketNetty 
+-Dzookeeper.client.secure=true 
+-Dzookeeper.ssl.keyStore.location=/opt/solr/ssl/zk-client-solr.jks 
+-Dzookeeper.ssl.keyStore.password=password 
+-Dzookeeper.ssl.trustStore.location=/opt/solr/ssl/zk-client-trust.jks 
+-Dzookeeper.ssl.trustStore.password=password"
+
+SOLR_OPTS="$SOLR_OPTS $ZK_CLIENT_TLS_FLAGS"
+</source>
+
+<p>
+<b>Step 3: Restart Solr</b>
+</p>
+
+<source>
+systemctl stop solr
+systemctl start solr
+</source>
+
+<p>
+<b>Issues</b>
+</p>
+
+<p>
+There is an issue with Solr admin UI. 
+The <i>Cloud -&gt;ZK Status</i> page doesn't work with TLS. 
+</p>
+
+<img src="../images/solr-zk-status-tls.png" style="width:35em;" />
+
+<!-- ============================================== -->
+
+<h4>Configure Registry Manager</h4>
+
+<p>
+<b>Step 1: Copy key and trust store</b>
+</p>
+
+<p>
+Copy <i>zk-client-solr.jks</i> and <i>zk-client-trust.jks</i> to your home directory or another location.
+</p>
+
+<p>
+<b>Step 2: Edit Registry Manager startup script</b>
+</p>
+
+<p>
+Add <i>ZK_CLIENT_TLS_FLAGS</i> variable in <i>$REGISTRY_HOME/bin/registry-manager</i>.
+Adjust key and trust store paths and passwords.
+</p>
+
+<source>
+ZK_CLIENT_TLS_FLAGS="
+-Dzookeeper.clientCnxnSocket=org.apache.zookeeper.ClientCnxnSocketNetty 
+-Dzookeeper.client.secure=true 
+-Dzookeeper.ssl.keyStore.location=/home/test/ssl/zk-client-solr.jks 
+-Dzookeeper.ssl.keyStore.password=password 
+-Dzookeeper.ssl.trustStore.location=/home/test/ssl/zk-client-trust.jks 
+-Dzookeeper.ssl.trustStore.password=password"
+</source>
+
+<p>
+Replace last line in <i>$REGISTRY_HOME/bin/registry-manager</i>.
+</p>
+
+<source>
+"$JAVA" -jar "$TOOL_JAR" $@
+</source>
+
+<p>
+with
+</p>
+
+<source>
+"$JAVA" $ZK_CLIENT_TLS_FLAGS -jar "$TOOL_JAR" $@
+</source>
+
+</subsection>
+
+</section>
+
+</body>
+</document>

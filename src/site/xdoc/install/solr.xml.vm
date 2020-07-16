@@ -29,7 +29,7 @@ PDS Registry has been tested with Solr version $context.get("solr.version").
 Solr can run in two modes: 
 <ul>
   <li><b>SolrCloud - this is the only mode supported by the PDS EN Registry tools.</b> 
-You can learn more about SolrCloud in <a href="../solr-cloud/index.html">this section</a>.</li>
+You can learn more about SolrCloud in <a href="../prod/solrcloud.html">this section</a>.</li>
   <li>Standalone (legacy mode) - this is the default mode. Make sure you don't start Solr in this mode by mistake.</li> 
 </ul>
 </p>
@@ -41,8 +41,8 @@ You can learn more about SolrCloud in <a href="../solr-cloud/index.html">this se
 <subsection name="Installation">
 
 <p>
-This section describes installation of Apache Solr on a developer laptop.
-For production deployment, see <a href="../solr-cloud/index.html">SolrCloud section</a>.
+To install Apache Solr on a developer laptop follow instructions below.
+For production deployment, see <a href="../prod/index.html">this section</a>.
 </p>
 
 <p>

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Copyright 2019, California Institute of Technology ("Caltech").
+  U.S. Government sponsorship acknowledged.
+  
+  All rights reserved.
+  
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions are met:
+  
+  * Redistributions of source code must retain the above copyright notice,
+  this list of conditions and the following disclaimer.
+  * Redistributions must reproduce the above copyright notice, this list of
+  conditions and the following disclaimer in the documentation and/or other
+  materials provided with the distribution.
+  * Neither the name of Caltech nor its operating division, the Jet Propulsion
+  Laboratory, nor the names of its contributors may be used to endorse or
+  promote products derived from this software without specific prior written
+  permission.
+  
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<document>
+<properties>
+  <title>Security</title>
+</properties>
+
+<body>
+
+<section name="Security Overview">
+
+<p>
+You can implement both network and application security. 
+For most deployments, network security with public access to read-only APIs 
+provided by application servers (API nodes) should be enough.
+</p>
+
+
+<subsection name="Network Security">
+
+<p>
+<ul>
+  <li>All public traffic is routed through a load balancer / proxy server.</li>
+  <li>Only HTTPS protocol is available on public LAN.</li>
+  <li>Admin APIs are only available on private LAN.</li>
+  <li>It is not recommended to expose any Solr APIs to the public.</li>
+  <li>All public read-only APIs are provided by application servers (API nodes).</li>
+</ul>
+</p>
+
+<img src="../images/network-prod.png" style="width:50em;" />
+
+<h4>Ports</h4>
+
+<p>
+If you run a firewall, the following ports have to be open on private LAN:
+</p>
+
+<p>
+<b>ZooKeeper nodes:</b>
+</p>
+<p>
+<ul>
+  <li><b>2181</b> - ZooKeeper clients connect to this port</li>
+  <li><b>2888</b> - ZooKeeper follower nodes use this port to connect to the ZooKeeper leader</li>
+  <li><b>3888</b> - This port is used for ZooKeeper leader election</li>
+</ul>
+</p>
+
+<p>
+<b>Solr nodes:</b>
+</p>
+<p>
+<ul>
+  <li><b>8983</b> - Solr clients connect to this port</li>
+</ul>
+</p>
+
+<p>
+<b>API nodes:</b>
+</p>
+<p>
+<ul>
+  <li><b>8000</b> - API clients connect to this port</li>
+</ul>
+</p>
+
+</subsection>
+
+<!-- ================================================= -->  
+
+<subsection name="ZooKeeper">
+
+<h4>Authentication</h4>
+<p>
+ZooKeeper supports multiple authentication schemes.
+</p>
+
+<p>
+<ul>
+  <li>Mutual TLS</li>
+  <li>SASL with Digest-MD5</li>
+  <li>SASL with Kerberos</li>
+  <li>Custom</li>
+</ul>
+</p>
+
+<h4>Authorization</h4>
+<p>
+<ul>
+  <li>Access control lists (ACLs)</li>
+</ul>
+</p>
+
+</subsection>
+
+
+<!-- ================================================= -->  
+
+<subsection name="Solr">
+
+<h4>Authentication</h4>
+<p>
+Solr supports multiple authentication schemes.
+</p>
+
+<p>
+<ul>
+  <li>Mutual TLS</li>
+  <li>Basic</li>
+  <li>Bearer token (JSON Web Token - JWT)</li>
+  <li>Kerberos</li>
+  <li>Authentication provided by Hadoop authentication library (Kerberos, LDAP, SignerSecretProvider). Documentation of this library is very bad.</li>
+  <li>Custom</li>
+</ul>
+</p>
+
+<h4>Authorization</h4>
+<p>
+<ul>
+  <li>Role Based</li>
+</ul>
+</p>
+
+</subsection>
+
+</section>
+
+</body>
+</document>

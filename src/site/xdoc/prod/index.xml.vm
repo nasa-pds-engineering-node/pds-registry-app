@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Copyright 2019, California Institute of Technology ("Caltech").
+  U.S. Government sponsorship acknowledged.
+  
+  All rights reserved.
+  
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions are met:
+  
+  * Redistributions of source code must retain the above copyright notice,
+  this list of conditions and the following disclaimer.
+  * Redistributions must reproduce the above copyright notice, this list of
+  conditions and the following disclaimer in the documentation and/or other
+  materials provided with the distribution.
+  * Neither the name of Caltech nor its operating division, the Jet Propulsion
+  Laboratory, nor the names of its contributors may be used to endorse or
+  promote products derived from this software without specific prior written
+  permission.
+  
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<document>
+<properties>
+  <title>Production Deployment</title>
+</properties>
+
+<body>
+
+<section name="Production Deployment">
+
+<p>
+<ul>
+  <li><a href="#Overview">Overview</a></li>
+  <li><a href="#Kubernetes">Kubernetes</a></li>
+  <li><a href="#VMs">VMs</a></li>
+  <li><a href="#Ports">Ports</a></li>
+</ul>
+</p>
+
+<subsection name="Overview">
+
+<p>
+Main components of multi-node cluster:
+<ul>
+  <li><b>ZooKeeper</b> nodes - provide cluster configuration and coordination.</li>
+  <li><b>Solr</b> nodes - store PDS data and provide low level search API. </li>
+  <li><b>API</b> nodes - provide PDS registry API. Only API nodes are exposed to public network.</li>
+  <li><b>Load balancer / proxy server</b> - forwards user requests to API servers. Provides public HTTPS access point.</li>
+</ul>
+</p>
+
+<img src="../images/network-prod.png" style="width:50em;" />
+
+<p>
+Nodes can be deployed in containers (Kubernetes) or VMs. 
+</p>
+
+<h4>Kubernetes</h4>
+<p>
+<ul>
+  <li>3 ZooKeeper nodes are deployed as a StatefulSet.</li>
+  <li>2+ Solr nodes are deployed as a StatefulSet.</li>
+  <li>2+ API nodes are deployed as a ReplicaSet (stateless).</li>
+</ul>
+</p>
+
+<h4>VMs</h4>
+<p>
+To reduce VM overhead you can deploy multiple nodes of different type (ZooKeeper, Solr, API) in the same VM.  
+It is recommended to have 3 VMs for HA setup.
+</p>
+
+<img src="../images/network-3vm.png" style="width:30em;" />
+
+<p>
+Minimal non-HA configuration can be deployed in a single VM.
+</p>
+
+<img src="../images/network-1vm.png" style="width:30em;" />
+
+</subsection>
+
+<subsection name="Ports">
+<p>
+<ul>
+  <li><b>2181</b> - ZooKeeper clients connect to this port</li>
+  <li><b>2888</b> - ZooKeeper follower nodes use this port to connect to the ZooKeeper leader</li>
+  <li><b>3888</b> - This port is used for ZooKeeper leader election</li>
+  <li><b>8000</b> - API clients connect to this port</li>
+  <li><b>8983</b> - Solr clients connect to this port</li>
+</ul>
+</p>
+
+</subsection>
+
+</section>
+
+</body>
+
+</document>

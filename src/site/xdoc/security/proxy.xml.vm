@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Copyright 2019, California Institute of Technology ("Caltech").
+  U.S. Government sponsorship acknowledged.
+  
+  All rights reserved.
+  
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions are met:
+  
+  * Redistributions of source code must retain the above copyright notice,
+  this list of conditions and the following disclaimer.
+  * Redistributions must reproduce the above copyright notice, this list of
+  conditions and the following disclaimer in the documentation and/or other
+  materials provided with the distribution.
+  * Neither the name of Caltech nor its operating division, the Jet Propulsion
+  Laboratory, nor the names of its contributors may be used to endorse or
+  promote products derived from this software without specific prior written
+  permission.
+  
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<document>
+<properties>
+  <title>Apache HTTP Server</title>
+</properties>
+
+<body>
+
+<section name="Reverse Proxy and Load Balancer Configuration">
+
+<!-- =================================================== -->
+
+<subsection name="NGINX">
+
+<p>
+Nginx is a web server which can also be used as a reverse proxy, load balancer, mail proxy and HTTP cache.
+It is very easy to setup, configure and it has very good documentation.
+</p>
+
+<p>
+The following example shows how to configure a load balancer, redirect all HTTP requests to HTTPS 
+and how to proxy requests.
+</p>
+
+<source>
+http {
+...
+    # Load balancer
+    upstream registry-cluster {
+        server api1.test.local:8000;
+        server api2.test.local:8000;
+        server api3.test.local:8000;
+    }
+
+    # Redirect all HTTP requests to HTTPS
+    server {
+        listen       80;
+        server_name  _;
+        return 301 https://$host$request_uri;
+    }
+
+    # Proxy
+    server {
+        listen       443 ssl;
+        ...
+        location /registry {
+            proxy_pass http://registry-cluster/registry-api/;
+        }
+    }
+}
+</source>
+
+</subsection>
+
+
+<!-- =================================================== -->
+
+<subsection name="Apache HTTP Server">
+
+<p>
+Apache HTTP Server can act as a web server, reverse proxy and a load balancer.
+</p>
+
+<p>
+To enable reverse proxy and load balancer features, uncomment these modules in <i>httpd.conf</i> 
+</p>
+
+<source>
+LoadModule proxy_module modules/mod_proxy.so
+LoadModule proxy_http_module modules/mod_proxy_http.so
+LoadModule slotmem_shm_module modules/mod_slotmem_shm.so
+
+LoadModule proxy_balancer_module modules/mod_proxy_balancer.so
+LoadModule lbmethod_byrequests_module modules/mod_lbmethod_byrequests.so
+</source>
+
+<p>
+To redirect all HTTP requests to HTTPS you can use the following commands
+</p>
+<source>
+&lt;VirtualHost *:80&gt;
+    Redirect permanent / https://www.myhost.com/
+&lt;/VirtualHost&gt;
+</source>
+
+<p>
+Example load balancer and proxy configuration is shown below
+</p>
+
+<source>
+&lt;Proxy balancer://registry-cluster&gt;
+    BalancerMember http://api1.test.local:8000
+    BalancerMember http://api2.test.local:8000
+    BalancerMember http://api3.test.local:8000
+&lt;/Proxy&gt;
+
+&lt;VirtualHost *:443&gt;
+    ...
+    ProxyPass           /registry balancer://registry-cluster/registry-api/
+    ProxyPassReverse    /registry balancer://registry-cluster/registry-api/
+&lt;/VirtualHost&gt;
+</source>
+
+
+</subsection>
+
+</section>
+
+</body>
+</document>

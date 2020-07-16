@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Copyright 2019, California Institute of Technology ("Caltech").
+  U.S. Government sponsorship acknowledged.
+  
+  All rights reserved.
+  
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions are met:
+  
+  * Redistributions of source code must retain the above copyright notice,
+  this list of conditions and the following disclaimer.
+  * Redistributions must reproduce the above copyright notice, this list of
+  conditions and the following disclaimer in the documentation and/or other
+  materials provided with the distribution.
+  * Neither the name of Caltech nor its operating division, the Jet Propulsion
+  Laboratory, nor the names of its contributors may be used to endorse or
+  promote products derived from this software without specific prior written
+  permission.
+  
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<document>
+<properties>
+  <title>Solr Security</title>
+</properties>
+
+<body>
+
+<section name="Solr Security">
+
+<p>
+<ul>
+  <li><a href="#mTLS">Mutual TLS Authentication</a></li>
+  <ul>
+    <li><a href="#Keys_and_Certificates">Keys and Certificates</a></li>
+    <li><a href="#Configure_Solr">Configure Solr</a></li>
+    <li><a href="#Configure_Registry_Manager">Configure Registry Manager</a></li>
+  </ul>
+</ul>
+</p>
+
+
+<subsection name="Mutual TLS Authentication" id="mTLS">
+
+<p style="color:red;">
+<b>NOTE:</b> TLS / SSL functionality in Solr 8.5.x is not working 
+(See <a style="color:red;" href="https://issues.apache.org/jira/browse/SOLR-14105" target="_blank">SOLR-14105 issue</a> for more info).
+You have to use Solr 8.4.x. 
+</p>
+
+<p>
+Mutual TLS is based on asymmetric (public-key) cryptography. 
+Both the server and clients identify itself by a Distinguished Name (DN) contained in their certificates.
+</p>
+
+<p>
+<img src="../images/m-tls-solr.png" style="width:60em;" />
+</p>
+
+<!-- ============================================== -->
+
+<h4>Keys and Certificates</h4>
+
+<p>
+<b>Step 1: Generate server keys and certificates</b>
+</p>
+
+<p>
+Run Java keytool to generate private and public key (keypair) for Solr nodes. 
+In this example we will use the same keypair for all Solr nodes and wildcard Common Name (CN). 
+You can also generate individual keypairs for each node.
+</p>
+
+<source>
+keytool -genkeypair -alias "solr" -keystore "solr.jks" -dname "CN=*.test.local" -keyalg RSA -storepass "password"
+</source>
+
+<p>
+Export certificate.
+</p>
+
+<source>
+keytool -exportcert -alias "solr" -keystore "solr.jks" -file "solr.cer" -storepass "password"
+</source>
+
+<p>
+<b>Step 2: Generate client keys and certificate</b>
+</p>
+
+<p>
+Run Java keytool to generate keypair and export certificate. Use "CN=solr-admin".
+</p>
+
+<source>
+keytool -genkeypair -alias "solr-admin" -keystore "solr-admin.jks" -dname "CN=solr-admin" -keyalg RSA -storepass "password"
+keytool -exportcert -alias "solr-admin" -keystore "solr-admin.jks" -file "solr-admin.cer" -storepass "password"
+</source>
+
+<p>
+<b>Step 3: Create server trust store</b>
+</p>
+
+<p>
+Create server trust store and import Solr server and client certificates.
+</p>
+
+<source>
+keytool -importcert -alias "solr" -keystore "solr-trust.jks" -file "solr.cer" -storepass "password"
+keytool -importcert -alias "solr-admin" -keystore "solr-trust.jks" -file "solr-admin.cer" -storepass "password"
+</source>
+
+<p>
+<b>Step 4: Create client trust store</b>
+</p>
+
+<p>
+Create client trust store and import Solr server and client certificates.
+The same trust store can be used by all Solr clients. 
+Although content of both server and client trust stores is the same at this point, 
+you should use different files for servers and clients.
+</p>
+
+<source>
+keytool -importcert -alias "solr" -keystore "solr-admin-trust.jks" -file "solr.cer" -storepass "password"
+keytool -importcert -alias "solr-admin" -keystore "solr-admin-trust.jks" -file "solr-admin.cer" -storepass "password"
+</source>
+
+<!-- ============================================== -->
+
+<h4>Configure Solr</h4>
+
+<p>
+<b>Step 1: Set "urlScheme" cluster property</b>
+</p>
+
+<p>
+Connect to ZooKeeper
+</p>
+
+<source>
+/opt/zookeeper/bin/zkCli.sh -server zk1.test.local
+</source>
+
+<p>
+and create the following znode 
+</p>
+
+<source>
+create /solr/clusterprops.json {"urlScheme":"https"}
+</source>
+
+<p>
+You can also call Solr API to set the "urlScheme" cluster property
+</p>
+
+<source>
+http://localhost:8983/solr/admin/collections?action=CLUSTERPROP&amp;name=urlScheme&amp;val=https
+</source>
+
+<p>
+<b>Step 2: Copy key and trust store</b>
+</p>
+
+<p>
+In this example we will use <i>/opt/solr/ssl</i> directory. 
+You can select another, more secure location.
+</p>
+
+<p>
+Copy <i>solr.jks</i> and <i>solr-trust.jks</i> to all Solr nodes.
+</p>
+
+<p>
+<b>Step 3: Edit Solr startup script</b>
+</p>
+
+<p>
+Add following SSL parameters in <i>/opt/solr/bin/solr.in.sh</i> on each Solr node.
+</p>
+
+<source>
+SOLR_SSL_KEY_STORE=/opt/solr/ssl/solr.jks
+SOLR_SSL_KEY_STORE_PASSWORD=password
+SOLR_SSL_TRUST_STORE=/opt/solr/ssl/solr-trust.jks
+SOLR_SSL_TRUST_STORE_PASSWORD=password
+SOLR_SSL_NEED_CLIENT_AUTH=true
+</source>
+
+<p>
+Also set SOLR_HOST variable in <i>/opt/solr/bin/solr.in.sh</i>. 
+Default value, "loacalhost", may cause SSL host validation issues.
+</p>
+
+<source>
+SOLR_HOST=solr1.test.local
+</source>
+
+
+<p>
+<b>Step 4: Restart Solr on each node</b>
+</p>
+
+<source>
+systemctl stop solr
+systemctl start solr
+</source>
+
+
+<!-- ============================================== -->
+
+<h4>Configure Registry Manager</h4>
+
+<p>
+<b>Step 1: Copy key and trust store</b>
+</p>
+
+<p>
+Copy <i>zk-client-solr.jks</i> and <i>zk-client-trust.jks</i> to your home directory or another location.
+</p>
+
+<p>
+<b>Step 2: Edit Registry Manager startup script</b>
+</p>
+
+<p>
+Add <i>SOLR_CLIENT_TLS_FLAGS</i> variable in <i>$REGISTRY_HOME/bin/registry-manager</i>.
+Adjust key and trust store paths and passwords.
+</p>
+
+<source>
+SOLR_CLIENT_TLS_FLAGS="
+-Djavax.net.ssl.keyStore=/opt/solr/ssl/solr-admin.jks
+-Djavax.net.ssl.keyStorePassword=password
+-Djavax.net.ssl.trustStore=/opt/solr/ssl/solr-admin-trust.jks
+-Djavax.net.ssl.trustStorePassword=password"
+</source>
+
+<p>
+Replace last line in <i>$REGISTRY_HOME/bin/registry-manager</i>.
+</p>
+
+<source>
+"$JAVA" $ZK_CLIENT_TLS_FLAGS -jar "$TOOL_JAR" $@
+</source>
+
+<p>
+with
+</p>
+
+<source>
+"$JAVA" $ZK_CLIENT_TLS_FLAGS $SOLR_CLIENT_TLS_FLAGS -jar "$TOOL_JAR" $@
+</source>
+
+</subsection>
+
+</section>
+
+</body>
+</document>

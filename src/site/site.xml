@@ -62,8 +62,8 @@
       <item name="Installation" href="install/index.html">
         <item name="Java" href="install/java.html"/>
         <item name="Solr - Quick Start" href="install/solr.html"/>
-        <item name="Tools (manager, harvest)" href="install/tools.html"/>
-        <item name="Initialize the registry" href="install/initialize.html"/>
+        <item name="Tools (Manager, Harvest)" href="install/tools.html"/>
+        <item name="Initialize the Registry" href="install/initialize.html"/>
         <item name="Test your deployment" href="install/test.html"/>
         
       </item>
@@ -75,10 +75,15 @@
         <item name="Registry Customization" href="operate/reg-custom.html"/>
         <item name="Solr Tools" href="operate/solr-tools.html"/>
       </item>
-      <item name="SolrCloud" href="solr-cloud/index.html">
-        <item name="ZooKeeper Installation (VM)" href="solr-cloud/zookeeper-vm.html"/>
-        <item name="Solr Installation (VM)" href="solr-cloud/solr-vm.html"/>
-        <item name="Security" href="solr-cloud/security.html"/>
+      <item name="Production Deployment" href="prod/index.html">
+        <item name="SolrCloud" href="prod/solrcloud.html"/>
+        <item name="ZooKeeper Installation (VM)" href="prod/zookeeper-vm.html"/>
+        <item name="Solr Installation (VM)" href="prod/solr-vm.html"/>
+      </item>
+      <item name="Security" href="security/index.html">
+        <item name="Load Balancer &amp; Proxy" href="security/proxy.html"/>
+        <item name="ZooKeeper" href="security/zk.html"/>
+        <item name="Solr" href="security/solr.html"/>
       </item>
       <item name="Support" href="index.html#Support" />
     </menu>
