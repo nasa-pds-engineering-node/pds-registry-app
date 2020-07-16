@@ -1,6 +1,15 @@
 # Changelog
 
-## [0.2.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/0.2.0-SNAPSHOT) (2020-07-12)
+## [Unreleased](https://github.com/NASA-PDS/pds-registry-app/tree/HEAD)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/0.2.0-SNAPSHOT...HEAD)
+
+**Closed issues:**
+
+- Research and document Application Security [\#29](https://github.com/NASA-PDS/pds-registry-app/issues/29)
+- Research and document Server Security [\#28](https://github.com/NASA-PDS/pds-registry-app/issues/28)
+
+## [0.2.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/0.2.0-SNAPSHOT) (2020-07-16)
 
 [Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v0.1.1...0.2.0-SNAPSHOT)
 
