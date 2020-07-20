@@ -115,12 +115,13 @@ Both ZooKeeper and Solr clusters can be expanded by adding more nodes.
 
 <ul>
 <li>
-A <b>shard</b> is a partition of the collection, containing a subset of documents from the collection.
-For example, if "registry" collection has 3 shards and 3,000 documents, then each shard (partition) has about 1,000 documents.
+A <b>shard</b> is a logical partition of the collection, containing a subset of documents from the collection.
+For example, if "registry" collection has 3,000 documents and 3 shards, then each shard has about 1,000 documents.
 </li>
 <li>
-A <b>replica</b> is a copy of a shard. For example, if "registry" collection has 3 shards and 2 replicas,
-then there are 6 partitions: 3 shards x 2 replicas = 6.
+A <b>replica</b> is a copy of a shard / document. 
+For example, if "registry" collection has 3,000 documents, 3 shards and 2 replicas (2 copies of each shard / document),
+then there are 6 partitions (3 shards x 2 replicas) containing 1,000 documents each. There are 2 copies of each document.
 </li>
 <li>
 Every shard has a <b>leader</b> replica. Leaders are automatically elected.
@@ -145,6 +146,7 @@ You can read more about shards and indexing data in SolrCloud at
 
 <p>
 Below are few example configurations for a collection with different number of shards and replicas in 3 node Solr cluster.
+The collection contains 3,000 documents.
 </p>
 
 <p>
@@ -181,7 +183,7 @@ Below are few example configurations for a collection with different number of s
 <p>
 <ul>
   <li>Concurrent writes - 3 nodes</li>
-  <li>Concurrent reads - 3 nodes (6 replicas)</li>
+  <li>Concurrent reads - 3 nodes (6 partitions)</li>
   <li>Fault tolerant - Yes (1 node could go down)</li>
 </ul>
 </p>
