@@ -112,6 +112,80 @@ Both ZooKeeper and Solr clusters can be expanded by adding more nodes.
 <!-- ============================== -->
 
 <subsection name="Shards and Replicas">
+
+<ul>
+<li>
+A <b>shard</b> is a partition of the collection, containing a subset of documents from the collection.
+For example, if "registry" collection has 3 shards and 3,000 documents, then each shard (partition) has about 1,000 documents.
+</li>
+<li>
+A <b>replica</b> is a copy of a shard. For example, if "registry" collection has 3 shards and 2 replicas,
+then there are 6 partitions: 3 shards x 2 replicas = 6.
+</li>
+<li>
+Every shard has a <b>leader</b> replica. Leaders are automatically elected.
+If a leader goes down, one of the other replicas is automatically elected as the new leader.
+</li>
+<li>
+When a document is sent to a Solr node for <b>indexing</b>, the system first determines which shard that document belongs to, 
+and then which node is currently hosting the leader for that shard. 
+The document is then forwarded to the current leader for indexing, and the leader forwards the update to all of the other replicas.
+</li>
+<li>
+By default, all replicas (partitions) serve <b>queries</b>.
+</li>
+</ul>
+
+<p>
+You can read more about shards and indexing data in SolrCloud at 
+<a href="https://lucene.apache.org/solr/guide/8_6/shards-and-indexing-data-in-solrcloud.html" target="_blank">Solr web site</a>.
+</p>
+
+<h4>Examples</h4>
+
+<p>
+Below are few example configurations for a collection with different number of shards and replicas in 3 node Solr cluster.
+</p>
+
+<p>
+<b>1 Shard, 1 Replica</b>
+</p>
+<img src="../images/shards-1.png" style="width:40em;" />
+
+<p>
+<ul>
+  <li>Concurrent writes - 1 node</li>
+  <li>Concurrent reads - 1 node</li>
+  <li>Fault tolerant - No</li>
+</ul>
+</p>
+
+<p>
+<b>1 Shard, 3 Replicas</b>
+</p>
+<img src="../images/shards-2.png" style="width:40em;" />
+
+<p>
+<ul>
+  <li>Concurrent writes - 1 node</li>
+  <li>Concurrent reads - 3 nodes</li>
+  <li>Fault tolerant - Yes (2 nodes could go down)</li>
+</ul>
+</p>
+
+<p>
+<b>3 Shards, 2 Replicas</b>
+</p>
+<img src="../images/shards-3.png" style="width:40em;" />
+
+<p>
+<ul>
+  <li>Concurrent writes - 3 nodes</li>
+  <li>Concurrent reads - 3 nodes (6 replicas)</li>
+  <li>Fault tolerant - Yes (1 node could go down)</li>
+</ul>
+</p>
+
 </subsection>
 
 </section>
