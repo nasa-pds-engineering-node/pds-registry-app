@@ -120,7 +120,7 @@ A <b>core</b> is an instance of a Lucene index.
 </li>
 <li>
 A <b>shard</b> is a logical partition of the collection, containing a subset of documents from the collection.
-For example, if "registry" collection has 3,000 documents and 3 shards, then each shard has about 1,000 document.
+For example, if "registry" collection has 3,000 documents and 3 shards, then each shard has about 1,000 documents.
 Each shard has one or more replicas.
 </li>
 <li>
@@ -188,7 +188,7 @@ The collection contains 3,000 documents.
 <p>
 <ul>
   <li>Concurrent writes - 3 nodes</li>
-  <li>Concurrent reads - 3 nodes (6 partitions)</li>
+  <li>Concurrent reads - 3 nodes (6 cores)</li>
   <li>Fault tolerant - Yes (1 node could go down)</li>
 </ul>
 </p>
@@ -327,7 +327,7 @@ Also see <a href="https://lucene.apache.org/solr/guide/8_6/v2-api.html">v2 API d
 </p>
 
 <p>
-You can also view some partial information about collections and its replicas in Solr admin UI.
+You can also view some information about collections and its replicas in Solr admin UI.
 </p>
 <p>
 <img src="../images/solr-ui-nodes.png" style="width:80em;" />
