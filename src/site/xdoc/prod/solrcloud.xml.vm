@@ -47,6 +47,7 @@
   <li><a href="#Deployment_Summary">Deployment Summary</a></li>
   <li><a href="#High_Availability_Summary">High Availability Summary</a></li>
   <li><a href="#Shards_and_Replicas">Shards and Replicas</a></li>
+  <li><a href="#Cluster_Expansion">Cluster Expansion</a></li>
 </ul>
 </p>
 
@@ -111,17 +112,21 @@ Both ZooKeeper and Solr clusters can be expanded by adding more nodes.
 
 <!-- ============================== -->
 
-<subsection name="Shards and Replicas">
+<subsection name="Cores, Shards and Replicas">
 
 <ul>
 <li>
-A <b>shard</b> is a logical partition of the collection, containing a subset of documents from the collection.
-For example, if "registry" collection has 3,000 documents and 3 shards, then each shard has about 1,000 documents.
+A <b>core</b> is an instance of a Lucene index.
 </li>
 <li>
-A <b>replica</b> is a copy of a shard / document. 
-For example, if "registry" collection has 3,000 documents, 3 shards and 2 replicas (2 copies of each shard / document),
-then there are 6 partitions (3 shards x 2 replicas) containing 1,000 documents each. There are 2 copies of each document.
+A <b>shard</b> is a logical partition of the collection, containing a subset of documents from the collection.
+For example, if "registry" collection has 3,000 documents and 3 shards, then each shard has about 1,000 document.
+Each shard has one or more replicas.
+</li>
+<li>
+A <b>replica</b> is a copy of a shard. Each replica exists within Solr as a core.
+For example, if "registry" collection has 3,000 documents, 3 shards and 2 replicas (per shard),
+then there are 6 cores (3 shards x 2 replicas) containing 1,000 documents each. There are 2 copies of each document.
 </li>
 <li>
 Every shard has a <b>leader</b> replica. Leaders are automatically elected.
@@ -133,7 +138,7 @@ and then which node is currently hosting the leader for that shard.
 The document is then forwarded to the current leader for indexing, and the leader forwards the update to all of the other replicas.
 </li>
 <li>
-By default, all replicas (partitions) serve <b>queries</b>.
+By default, all replicas (cores) serve <b>queries</b>.
 </li>
 </ul>
 
@@ -187,6 +192,138 @@ The collection contains 3,000 documents.
   <li>Fault tolerant - Yes (1 node could go down)</li>
 </ul>
 </p>
+
+<h4>Creating Collections</h4>
+
+<p>
+By default, when you create a collection in Solr, the number of shards and replicas is 1.
+The following example shows how to create registry collection with 3 shards and 2 replicas.
+</p>
+
+<source>
+registry-manager create-registry -zkHost zk1.test.local -shards 3 -replicas 2
+</source>
+
+</subsection>
+
+<!-- ====================================================== -->
+
+<subsection name="Cluster Expansion">
+<h4>Getting Information about Solr Collections</h4>
+<p>
+Before expanding the cluster you may need to get more information about your Solr collection(s).
+The following example shows how to call Solr API to get information about "registry" collection.
+</p>
+<source>
+curl "http://solr1.test.local:8983/api/c/registry"
+</source>
+
+<p>
+The response is a long JSON, similar to this
+</p>
+<source>
+{
+  "responseHeader":{
+    "status":0,
+    "QTime":26},
+  "cluster":{
+    "collections":{
+      "registry":{
+        "pullReplicas":"0",
+        "replicationFactor":"1",
+        "shards":{"shard1":{
+            "range":"80000000-7fffffff",
+            "state":"active",
+            "replicas":{"core_node2":{
+                "core":"registry_shard1_replica_n1",
+                "base_url":"http://solr2.test.local:8983/solr",
+                "node_name":"solr2.test.local:8983_solr",
+                "state":"active",
+                "type":"NRT",
+                "force_set_state":"false",
+                "leader":"true"}}}},
+        "router":{"name":"compositeId"},
+        "maxShardsPerNode":"1",
+        "autoAddReplicas":"false",
+        "nrtReplicas":"1",
+        "tlogReplicas":"0",
+        "znodeVersion":4,
+        "configName":"registry"}},
+    "live_nodes":["solr2.test.local:8983_solr",
+      "solr1.test.local:8983_solr"]}}
+</source>
+
+<p>
+As you can see, collection "registry", has only one shard called "shard1". The shard has one replica called "core_node2"
+located on node "solr2.test.local:8983_solr".
+</p>
+
+<h4>Adding Replicas to a Shard</h4>
+<p>
+To add a replica to "shard1" of collection "registry" call one of the following Solr APIs.
+</p>
+
+<source>
+# API v1
+curl "http://localhost:8983/solr/admin/collections?action=ADDREPLICA&amp;collection=registry&amp;shard=shard1"
+
+# API v2
+curl "http://solr1.test.local:8983/api/c/registry/shards" \
+  -XPOST -H 'Content-type:application/json' \
+  -d '{ add-replica: { shard: "shard1" } }'
+</source>
+
+<p>
+Get "registry" collection info and check that new replica was created.
+</p>
+
+<source>
+curl "http://solr1.test.local:8983/api/c/registry
+</source>
+
+<p>
+In our example, "shard1" now has two replicas "core_node2" and "core_node4".
+Solr naming convention for replicas, shards and cores is strange. You can see some random numbers in names.
+</p>
+
+<source>
+...
+"shards":{"shard1":{
+    ...
+    "replicas":{
+      "core_node2":{
+        "core":"registry_shard1_replica_n1",
+        "node_name":"solr2.test.local:8983_solr",
+        ...
+        "state":"active",
+        "leader":"true"},
+      "core_node4":{
+        "core":"registry_shard1_replica_n3",
+        "node_name":"solr1.test.local:8983_solr",
+        ...
+        "state":"active" }}}},
+</source>
+
+<p>
+Note that Solr placed each replica on a different node. In some cases it might not work as expected.
+There is an API to move a replica from one node to another. In the following example, replica "core_node4"
+is moved from node "solr2.test.local:8983_solr" to "solr3.test.local:8983_solr".
+The whole command should be on a single line. We split it here to make it more readable.
+</p>
+
+<source>
+curl "http://localhost:8983/solr/admin/collections?action=MOVEREPLICA
+  &amp;collection=registry
+  &amp;shard=shard1
+  &amp;replica=core_node4
+  &amp;sourceNode=solr2.test.local:8983_solr
+  &amp;targetNode=solr3.test.local:8983_solr"
+</source>
+
+<h4>Increasing Number of Shards</h4>
+<p>
+</p>
+
 
 </subsection>
 
