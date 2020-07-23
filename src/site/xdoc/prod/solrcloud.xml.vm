@@ -46,7 +46,7 @@
   <li><a href="#Overview">Overview</a></li>
   <li><a href="#Deployment_Summary">Deployment Summary</a></li>
   <li><a href="#High_Availability_Summary">High Availability Summary</a></li>
-  <li><a href="#Shards_and_Replicas">Shards and Replicas</a></li>
+  <li><a href="#Shards">Cores, Shards and Replicas</a></li>
   <li><a href="#Cluster_Expansion">Cluster Expansion</a></li>
 </ul>
 </p>
@@ -112,7 +112,7 @@ Both ZooKeeper and Solr clusters can be expanded by adding more nodes.
 
 <!-- ============================== -->
 
-<subsection name="Cores, Shards and Replicas">
+<subsection name="Cores, Shards and Replicas" id="Shards">
 
 <ul>
 <li>
