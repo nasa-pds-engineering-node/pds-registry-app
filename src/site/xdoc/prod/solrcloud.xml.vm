@@ -320,10 +320,63 @@ curl "http://localhost:8983/solr/admin/collections?action=MOVEREPLICA
   &amp;targetNode=solr3.test.local:8983_solr"
 </source>
 
-<h4>Increasing Number of Shards</h4>
 <p>
+You can learn more about replica management APIs at
+<a href="https://lucene.apache.org/solr/guide/8_6/replica-management.html" target="_blank">Solr website</a>.
+Also see <a href="https://lucene.apache.org/solr/guide/8_6/v2-api.html">v2 API docs</a>.
 </p>
 
+<p>
+You can also view some partial information about collections and its replicas in Solr admin UI.
+</p>
+<p>
+<img src="../images/solr-ui-nodes.png" style="width:80em;" />
+</p>
+
+
+<!-- ======================= -->
+
+<h4>Increasing Number of Shards</h4>
+
+<p>
+There is a Solr API to split a shard into 2 or more pieces. 
+In the following example, we will split "shard1" of "registry" collection into 2 new shards.
+</p>
+<source>
+curl "http://localhost:8983/solr/admin/collections?action=SPLITSHARD&amp;collection=registry&amp;shard=shard1"
+</source>
+
+<p>
+Old shard, "shard1", will be deactivated and two new shards, "shard1_0" and "shard1_1" will be created.
+"Shard1" had 2 replicas, so both new shards, "shard1_0" and "shard1_1", will have 2 replicas too.
+</p>
+
+<p>
+For some reason, Solr placed both replicas of "shard1_1" on the same node, so I had to move one of the replicas
+to another node.
+</p>
+
+<source>
+curl "http://localhost:8983/solr/admin/collections?action=MOVEREPLICA
+  &amp;collection=registry
+  &amp;shard=shard1_1
+  &amp;replica=core_node10
+  &amp;sourceNode=solr1.test.local:8983_solr
+  &amp;targetNode=solr2.test.local:8983_solr"
+</source>
+
+<p>
+Now old shard can be deleted.
+</p>
+<source>
+curl "http://localhost:8983/solr/admin/collections?action=DELETESHARD&amp;collection=registry&amp;shard=shard1"
+</source>
+
+<p>
+You can learn more about shard management APIs at
+<a href="https://lucene.apache.org/solr/guide/8_6/shard-management.html" target="_blank">Solr website</a>.
+Also see <a href="https://lucene.apache.org/solr/guide/8_6/v2-api.html">v2 API docs</a>.
+</p>
 
 </subsection>
 
