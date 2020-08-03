@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Copyright 2019, California Institute of Technology ("Caltech").
+  U.S. Government sponsorship acknowledged.
+  
+  All rights reserved.
+  
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions are met:
+  
+  * Redistributions of source code must retain the above copyright notice,
+  this list of conditions and the following disclaimer.
+  * Redistributions must reproduce the above copyright notice, this list of
+  conditions and the following disclaimer in the documentation and/or other
+  materials provided with the distribution.
+  * Neither the name of Caltech nor its operating division, the Jet Propulsion
+  Laboratory, nor the names of its contributors may be used to endorse or
+  promote products derived from this software without specific prior written
+  permission.
+  
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<document>
+<properties>
+  <title>Reporting</title>
+</properties>
+
+<body>
+
+<section name="Reporting &amp; Visualization">
+
+<p>
+Current version of PDS Registry uses Apache Solr to store data.
+To create simple reports and visualizations you can utilize 
+<a href="https://github.com/lucidworks/banana" target="_blank">Lucidworks Banana</a>.
+</p>
+</section>
+
+<section name="Lucidworks Banana">
+<p>
+Banana is an open source project forked from an old Kibana version. The project is in maintenance mode. 
+There is almost no documentation or other online resources to get any help from.
+</p>
+
+<p style="color:red;">
+<b>Security Warning:</b> Banana is a JavaScript application which requires direct access to Solr APIs.
+Run it only on a private LAN.
+</p>
+
+<subsection name="Installation in NGINX">
+<p>
+Banana is a JavaScript application writtent in AngularJS v1.0.8 and can be installen in any web server.
+The following instructions are for NGINX server.
+</p>
+
+<p>
+<b>Step 1: Download and install Banana web app</b> 
+</p>
+<p>
+Download <a href="https://github.com/lucidworks/banana/releases/tag/v1.6.26">latest source release</a>
+and extract it to some folder such as <i>/tmp</i>. 
+</p>
+<p>
+Create a directory for Banana web application, such as <i>/opt/nginx/apps/banana</i>.
+</p>
+<p>
+Copy content of <i>/tmp/banana-1.6.26/src</i> directory to <i>/opt/nginx/apps/banana</i>.
+</p>
+
+<p>
+<b>Step 2: Configure Solr</b>
+</p>
+
+<p>
+Create "banana-int" collection for storing Banana dashboards in Solr.
+</p>
+<source>
+$SOLR_HOME/bin/solr create -c banana-int
+</source>
+
+<p>
+<b>Step 3: Configure NGINX</b>
+</p>
+
+<p>
+NOTE: Banana is calling Solr APIs directly from a web browser.
+For this to work, you either have to enable Cross-origin resource sharing (CORS) for Solr or use a reverse proxy.
+In the following example we configured reverse proxy for <i>/solr</i> location, so both <i>/banana</i>
+and <i>/solr</i> urls are available on the same host.
+</p>
+
+<p style="color:red;">
+<b>WARNING:</b>This configuration gives both read and write access to all Solr APIs.
+</p>
+
+
+<source>
+http {
+    ...
+    upstream solr-app {
+        server localhost:8983;
+    }
+
+    server {
+        listen       80;
+        server_name  _;
+
+        location /solr {
+            proxy_pass http://solr-app/solr;
+        }
+
+        location /banana {
+            root   /opt/nginx/apps;
+            index  index.html;
+        }
+    }
+}
+</source>
+
+</subsection>
+
+<subsection name="Banana UI">
+
+<p>
+<img src="../images/banana-1.png" style="width:55em;" />
+</p>
+
+</subsection>
+
+
+</section>
+
+</body>
+</document>
