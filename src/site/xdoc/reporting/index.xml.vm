@@ -50,8 +50,11 @@ To create simple reports and visualizations you can utilize
 
 <section name="Lucidworks Banana">
 <p>
-Banana is an open source project forked from an old Kibana version. The project is in maintenance mode. 
-There is almost no documentation or other online resources to get any help from.
+Banana is an open source project forked from an old Kibana version. 
+</p>
+<p>
+NOTE: The project is in maintenance mode. 
+There is almost no documentation or other online resources to get any help.
 </p>
 
 <p style="color:red;">
@@ -96,7 +99,7 @@ $SOLR_HOME/bin/solr create -c banana-int
 
 <p>
 NOTE: Banana is calling Solr APIs directly from a web browser.
-For this to work, you either have to enable Cross-origin resource sharing (CORS) for Solr or use a reverse proxy.
+For this to work, you either have to enable cross-origin resource sharing (CORS) for Solr or use a reverse proxy.
 In the following example we configured reverse proxy for <i>/solr</i> location, so both <i>/banana</i>
 and <i>/solr</i> urls are available on the same host.
 </p>
@@ -137,10 +140,20 @@ In a web browser go to <i>/banana</i> URL on your NGINX server, for example, <i>
 You should see a web page similar to this.
 </p>
 <p>
-<img src="../images/banana-1.png" style="width:55em;" />
+<img src="../images/banana-new.png" style="width:55em;" />
+</p>
+
+<p>
+<b>Troubleshooting</b>
+</p>
+
+<p>
+Banana is a JavaScript application. You can see error messages in your web browser "developer console".
 </p>
 
 </subsection>
+
+<!-- ======================================================== -->
 
 <subsection name="Banana UI Quick Start">
 <p>
@@ -148,7 +161,7 @@ To create new dashboard, click "New" icon in the top menu, then select "Non time
 </p>
 
 <p>
-<img src="../images/banana-2.png" style="width:30em;" />
+<img src="../images/banana-new-db-1.png" style="width:30em;" />
 </p>
 
 <p>
@@ -163,21 +176,35 @@ but it will only work if CORS is enabled for that URL (there should be the follo
 </p>
 
 <p>
-<img src="../images/banana-3.png" style="width:50em;" />
+<img src="../images/banana-new-db-2.png" style="width:50em;" />
 </p>
 
 <p>
-You should see several default panels which you can customize.
+Now you should see your new dashboard with several default panels of different type, such as query, hits, filtering, and table.
 </p>
 
 <p>
-<img src="../images/banana-4.png" style="width:60em;" />
+<img src="../images/banana-new-db-3.png" style="width:60em;" />
 </p>
 
+<p>
+The panel type is shown in the upper right corner of each panel. The "EVENTS" panel should display conents of "registry" collection.
+You can customize existing panel, delete or add new panels.
+</p>
 
+<p>
+To create a new panel, click the plus sign next to the filtering panel. Select "terms" panel type. 
+This panel type will use faceted query to group data by a field given in "field" text box. Enter "product_class" in this box.
+Also select "pie" style to create a pie chart. You can also check "Donut" checkbox to create a "donut" chart.
+Click "Add Panel".
+</p>
 
 <p>
 <img src="../images/banana-pie-1.png" style="width:50em;" />
+</p>
+
+<p>
+You should see a new panel similar to this.
 </p>
 
 <p>
