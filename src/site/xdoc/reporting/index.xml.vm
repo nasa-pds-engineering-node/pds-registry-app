@@ -55,7 +55,7 @@ There is almost no documentation or other online resources to get any help from.
 </p>
 
 <p style="color:red;">
-<b>Security Warning:</b> Banana is a JavaScript application which requires direct access to Solr APIs.
+<b>Security WARNING:</b> Banana is a JavaScript application which requires direct access to Solr APIs.
 Run it only on a private LAN.
 </p>
 
@@ -102,9 +102,8 @@ and <i>/solr</i> urls are available on the same host.
 </p>
 
 <p style="color:red;">
-<b>WARNING:</b>This configuration gives both read and write access to all Solr APIs.
+<b>Security WARNING:</b>In this configuration, all Solr APIs are accessible through <i>/solr/</i> URL.
 </p>
-
 
 <source>
 http {
@@ -129,13 +128,62 @@ http {
 }
 </source>
 
-</subsection>
+<p>
+<b>Step 4: Test Installation</b>
+</p>
 
-<subsection name="Banana UI">
-
+<p>
+In a web browser go to <i>/banana</i> URL on your NGINX server, for example, <i>http://www.test.local/banana</i>.
+You should see a web page similar to this.
+</p>
 <p>
 <img src="../images/banana-1.png" style="width:55em;" />
 </p>
+
+</subsection>
+
+<subsection name="Banana UI Quick Start">
+<p>
+To create new dashboard, click "New" icon in the top menu, then select "Non time-series dashboard".
+</p>
+
+<p>
+<img src="../images/banana-2.png" style="width:30em;" />
+</p>
+
+<p>
+On the next screen enter Solr URL "/solr/" and collection name "registry".
+</p>
+
+<p>
+NOTE: Because we are using NGINX reverse proxy, we entered relative URL "/solr/".
+You can enter any URL, such as "http://my-solr.my-site.com/solr/", 
+but it will only work if CORS is enabled for that URL (there should be the following header in each Solr response: 
+'Access-Control-Allow-Origin' = '*').
+</p>
+
+<p>
+<img src="../images/banana-3.png" style="width:50em;" />
+</p>
+
+<p>
+You should see several default panels which you can customize.
+</p>
+
+<p>
+<img src="../images/banana-4.png" style="width:60em;" />
+</p>
+
+
+
+<p>
+<img src="../images/banana-pie-1.png" style="width:50em;" />
+</p>
+
+<p>
+<img src="../images/banana-pie-2.png" style="width:30em;" />
+</p>
+
 
 </subsection>
 
