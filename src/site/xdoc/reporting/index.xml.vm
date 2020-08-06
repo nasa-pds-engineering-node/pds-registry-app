@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Copyright 2019, California Institute of Technology ("Caltech").
+  U.S. Government sponsorship acknowledged.
+  
+  All rights reserved.
+  
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions are met:
+  
+  * Redistributions of source code must retain the above copyright notice,
+  this list of conditions and the following disclaimer.
+  * Redistributions must reproduce the above copyright notice, this list of
+  conditions and the following disclaimer in the documentation and/or other
+  materials provided with the distribution.
+  * Neither the name of Caltech nor its operating division, the Jet Propulsion
+  Laboratory, nor the names of its contributors may be used to endorse or
+  promote products derived from this software without specific prior written
+  permission.
+  
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<document>
+<properties>
+  <title>Reporting</title>
+</properties>
+
+<body>
+
+<section name="Reporting &amp; Visualization">
+
+<p>
+<ul>
+  <li><a href="#Banana">Lucidworks Banana</a></li>
+  <ul>
+    <li><a href="#Installation">Installation</a></li>
+    <li><a href="#UI">UI Quick Start</a></li>
+  </ul>
+  <li><a href="#BananaKibana">Banana vs Kibana</a></li>
+</ul>
+</p>
+
+<p>
+Current version of PDS Registry uses Apache Solr to store data.
+To create simple reports and visualizations you can utilize 
+<a href="https://github.com/lucidworks/banana" target="_blank">Lucidworks Banana</a>.
+</p>
+</section>
+
+<section name="Lucidworks Banana" id="Banana">
+<p>
+Banana is an open source project forked from an old Kibana version. 
+</p>
+<p>
+NOTE: The project is in maintenance mode. 
+There is almost no documentation or other online resources to get any help.
+</p>
+
+<p style="color:red;">
+<b>Security WARNING:</b> Banana is a JavaScript application which requires direct access to Solr APIs.
+Run it only on a private LAN.
+</p>
+
+<subsection name="Installation in NGINX" id="Installation">
+<p>
+Banana is a JavaScript application writtent in AngularJS v1.0.8 and can be installen in any web server.
+The following instructions are for NGINX server.
+</p>
+
+<p>
+<b>Step 1: Download and install Banana web app</b> 
+</p>
+<p>
+Download <a href="https://github.com/lucidworks/banana/releases/tag/v1.6.26">latest source release</a>
+and extract it to some folder such as <i>/tmp</i>. 
+</p>
+<p>
+Create a directory for Banana web application, such as <i>/opt/nginx/apps/banana</i>.
+</p>
+<p>
+Copy content of <i>/tmp/banana-1.6.26/src</i> directory to <i>/opt/nginx/apps/banana</i>.
+</p>
+
+<p>
+<b>Step 2: Configure Solr</b>
+</p>
+
+<p>
+Create "banana-int" collection for storing Banana dashboards in Solr.
+</p>
+<source>
+$SOLR_HOME/bin/solr create -c banana-int
+</source>
+
+<p>
+<b>Step 3: Configure NGINX</b>
+</p>
+
+<p>
+NOTE: Banana is calling Solr APIs directly from a web browser.
+For this to work, you either have to enable cross-origin resource sharing (CORS) for Solr or use a reverse proxy.
+In the following example we configured reverse proxy for <i>/solr</i> location, so both <i>/banana</i>
+and <i>/solr</i> urls are available on the same host.
+</p>
+
+<p style="color:red;">
+<b>Security WARNING:</b>In this configuration, all Solr APIs are accessible through <i>/solr/</i> URL.
+</p>
+
+<source>
+http {
+    ...
+    upstream solr-app {
+        server localhost:8983;
+    }
+
+    server {
+        listen       80;
+        server_name  _;
+
+        location /solr {
+            proxy_pass http://solr-app/solr;
+        }
+
+        location /banana {
+            root   /opt/nginx/apps;
+            index  index.html;
+        }
+    }
+}
+</source>
+
+<p>
+<b>Step 4: Test Installation</b>
+</p>
+
+<p>
+In a web browser go to <i>/banana</i> URL on your NGINX server, for example, <i>http://www.test.local/banana</i>.
+You should see a web page similar to this.
+</p>
+<p>
+<img src="../images/banana-new.png" style="width:55em;" />
+</p>
+
+<p>
+<b>Troubleshooting</b>
+</p>
+
+<p>
+Banana is a JavaScript application. You can see error messages in your web browser "developer console".
+</p>
+
+</subsection>
+
+<!-- ======================================================== -->
+
+<subsection name="Banana UI Quick Start" id="UI">
+<p>
+To create new dashboard, click "New" icon in the top menu, then select "Non time-series dashboard".
+</p>
+
+<p>
+<img src="../images/banana-new-db-1.png" style="width:30em;" />
+</p>
+
+<p>
+On the next screen enter Solr URL "/solr/" and collection name "registry".
+</p>
+
+<p>
+NOTE: Because we are using NGINX reverse proxy, we entered relative URL "/solr/".
+You can enter any URL, such as "http://my-solr.my-site.com/solr/", 
+but it will only work if CORS is enabled for that URL (there should be the following header in each Solr response: 
+'Access-Control-Allow-Origin' = '*').
+</p>
+
+<p>
+<img src="../images/banana-new-db-2.png" style="width:50em;" />
+</p>
+
+<p>
+Now you should see your new dashboard with several default panels of different type, such as query, hits, filtering, and table.
+</p>
+
+<p>
+<img src="../images/banana-new-db-3.png" style="width:60em;" />
+</p>
+
+<p>
+The panel type is shown in the upper right corner of each panel. The "EVENTS" panel should display conents of "registry" collection.
+You can customize existing panel, delete or add new panels.
+</p>
+
+<p>
+To create a new panel, click the plus sign next to the filtering panel. Select "terms" panel type. 
+This panel type will use faceted query to group data by a field given in "field" text box. Enter "product_class" in this box.
+Also select "pie" style to create a pie chart. You can also check "Donut" checkbox to create a "donut" chart.
+Click "Add Panel".
+</p>
+
+<p>
+<img src="../images/banana-pie-1.png" style="width:50em;" />
+</p>
+
+<p>
+You should see a new panel similar to this.
+</p>
+
+<p>
+<img src="../images/banana-pie-2.png" style="width:30em;" />
+</p>
+
+</subsection>
+
+<!-- ===================================================== -->
+
+<subsection name="Banana vs Kibana" id="BananaKibana">
+
+<h4>Sumary</h4>
+
+<table>
+<tr>
+  <th>Feature</th><th>Banana</th><th>Kibana</th>
+</tr>
+<tr>
+  <td>Supported backends</td>
+  <td>Solr</td>
+  <td>Elasticsearch</td>
+</tr>
+<tr>
+  <td>Architecture</td>
+  <td>Web browser UI (JavaScript) directly calling Solr APIs. <br/>This creates cross-origin resource sharing (CORS) and Solr security issues.</td>
+  <td>Kibana web UI and Kibana server. <br/>Kibana server is calling Elasticsearch APIs.</td>
+</tr>
+<tr>
+  <td>Popularity</td>
+  <td>Not popular. Project is in maintenance mode.</td>
+  <td>Very popular. New features are released regularly. Commercial support is available.</td>
+</tr>
+<tr>
+  <td>Documentation</td>
+  <td>Almost no documentation or other online resources.</td>
+  <td>Good documentation on Elastic web site, blogs, forums and other resources.</td>
+</tr>
+<tr>
+  <td>Usability, Look and Feel</td>
+  <td>Outdated UI. Frequent JavaScript errors. Without documentation it is very hard to figure out 
+which visualizations are available and how to use them. Basic charts look good. 
+Long labels are not truncated and values (e.g., counts) can be shown in legends.</td>
+  <td>In general, Kibana has mothern UI which is easy to use, but I didn't like chart look and feel. 
+Long labels are truncated in legends and in pie charts.</td>
+</tr>
+<tr>
+  <td>Customization</td>
+  <td>Easy to customize colors, legend location, number precision.</td>
+  <td>I didn't find how to change chart colors. It is very hard to change number format / precision.</td>
+</tr>
+<tr>
+  <td>Extensibility</td>
+  <td>Banana is a simple (small) AngularJS 1.0 application. You can write custom panels / visualizations in JavaScript (AngularJS).</td>
+  <td>Kibana plugin interface is available, but it changes frequently. A plugin version should match Kibana version.</td>
+</tr>
+<tr>
+  <td>Application Size</td>
+  <td>Very small - 7MB</td>
+  <td>Huge - 1GB+</td>
+</tr>
+</table>
+
+<h4>Sample Visualizations</h4>
+
+<table>
+<tr>
+  <th>Banana</th><th>Kibana</th>
+</tr>
+<tr>
+  <td><img src="../images/banana-pie-2.png" style="width:30em;" /></td>
+  <td><img src="../images/es-pie-1.png" style="width:30em;" /></td>
+</tr>
+<tr>
+  <td><img src="../images/banana-bar-2.png" style="width:30em;" /></td>
+  <td><img src="../images/es-bar-2.png" style="width:30em;" /></td>
+</tr>
+</table>
+
+
+</subsection>
+
+</section>
+
+</body>
+</document>

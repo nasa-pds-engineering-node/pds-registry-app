@@ -85,6 +85,8 @@
         <item name="ZooKeeper" href="security/zk.html"/>
         <item name="Solr" href="security/solr.html"/>
       </item>
+      <item name="Reporting &amp; Visualization" href="reporting/index.html">
+      </item>
       <item name="Support" href="index.html#Support" />
     </menu>
     
