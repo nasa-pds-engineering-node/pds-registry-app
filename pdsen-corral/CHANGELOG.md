@@ -6,29 +6,28 @@
 
 **Improvements:**
 
-- Design and document Registry cluster expansion approach [\#30](https://github.com/NASA-PDS/pds-registry-app/issues/30)
-- Design and implement Multi-Node Deployment capability [\#8](https://github.com/NASA-PDS/pds-registry-app/issues/8)
+- Analyse migration cost vs visualization tool benefit if we use elasticSearch/Kibana \(instead of solr/banana\) [\#35](https://github.com/NASA-PDS/pds-registry-app/issues/35)
 
-**Closed issues:**
-
-- Update documentation with different options for sharding and multiple nodes [\#24](https://github.com/NASA-PDS/pds-registry-app/issues/24)
-
-## [0.2.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/0.2.0-SNAPSHOT) (2020-07-27)
+## [0.2.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/0.2.0-SNAPSHOT) (2020-08-06)
 
 [Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v0.1.1...0.2.0-SNAPSHOT)
 
 **Improvements:**
 
+- Design and document Registry cluster expansion approach [\#30](https://github.com/NASA-PDS/pds-registry-app/issues/30)
 - Enhance documentation for PDS4 Attribute Search deployment and customization [\#22](https://github.com/NASA-PDS/pds-registry-app/issues/22)
 - Design and Implement capability to handle archive\_status [\#16](https://github.com/NASA-PDS/pds-registry-app/issues/16)
 - Develop ability to deploy Test vs Operations Registry environments [\#15](https://github.com/NASA-PDS/pds-registry-app/issues/15)
+- Develop Registry reporting / visualization component [\#11](https://github.com/NASA-PDS/pds-registry-app/issues/11)
 - Develop capability for handling multiple product versions [\#10](https://github.com/NASA-PDS/pds-registry-app/issues/10)
 - Design and implement Security and Authorization component [\#9](https://github.com/NASA-PDS/pds-registry-app/issues/9)
+- Design and implement Multi-Node Deployment capability [\#8](https://github.com/NASA-PDS/pds-registry-app/issues/8)
 
 **Closed issues:**
 
 - Research and document Application Security [\#29](https://github.com/NASA-PDS/pds-registry-app/issues/29)
 - Research and document Server Security [\#28](https://github.com/NASA-PDS/pds-registry-app/issues/28)
+- Update documentation with different options for sharding and multiple nodes [\#24](https://github.com/NASA-PDS/pds-registry-app/issues/24)
 
 ## [v0.1.1](https://github.com/NASA-PDS/pds-registry-app/tree/v0.1.1) (2020-05-22)
 
