@@ -1,19 +1,12 @@
 # Changelog
 
-## [Unreleased](https://github.com/NASA-PDS/pds-registry-app/tree/HEAD)
+## [0.1.2](https://github.com/NASA-PDS/pds-registry-app/tree/0.1.2) (2020-08-13)
 
-[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/0.2.0-SNAPSHOT...HEAD)
+[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v0.1.1...0.1.2)
 
 **Improvements:**
 
 - Complete revised trade study on Solr vs ElasticSearch [\#38](https://github.com/NASA-PDS/pds-registry-app/issues/38)
-
-## [0.2.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/0.2.0-SNAPSHOT) (2020-08-13)
-
-[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v0.1.1...0.2.0-SNAPSHOT)
-
-**Improvements:**
-
 - Analyse migration cost vs visualization tool benefit if we use elasticSearch/Kibana \(instead of solr/banana\) [\#35](https://github.com/NASA-PDS/pds-registry-app/issues/35)
 - Design and document Registry cluster expansion approach [\#30](https://github.com/NASA-PDS/pds-registry-app/issues/30)
 - Enhance documentation for PDS4 Attribute Search deployment and customization [\#22](https://github.com/NASA-PDS/pds-registry-app/issues/22)
