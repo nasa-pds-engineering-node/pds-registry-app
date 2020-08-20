@@ -50,61 +50,39 @@ We will call this directory <i>ELASTIC_SEARCH_HOME</i> throughout the rest of th
 </p>
 
 <p>
+Open Command Prompt / Terminal / PowerShell.
+</p>
+<p>
 Go to <i>ELASTIC_SEARCH_HOME/bin</i> and run <i>elasticsearch.bat</i> on Windows or <i>elasticsearch</i> on Linux or Mac.
 </p>
 
 <p>
   <b>Step 3: Check that Elasticsearch server started</b>
 </p>
-<p>
-  <b>Option 1: Solr Admin UI</b>
-</p>
-<p>
-Open a web browser and go to <i>http://localhost:8983/solr/</i> or <i>http://127.0.0.1:8983/solr/</i>.
-You should see a page similar to this.
-</p>
-<p>
-  <img src="../images/solr-adm1.jpg" style="width:80em;" />
-</p>
-<p>
-Check that <i>Cloud</i> menu item is available on the left. Click it. You should see a page similar to this.
-</p>
-<p>
-  <img src="../images/solr-adm2.jpg" style="width:70em;" />
-</p>
 
 <p>
-  <b>Option 2: Command-line</b>
-</p>
-<p>
-Go to <i>SOLR_HOME/bin</i> and run following command
-</p>
-<source>
-# Mac
-./solr status
-
-# Windows
-solr.cmd status
-</source>
-
-<p>
-You should get a message similar to this
+Either go to <i>http://localhost:9200</i> in a web browser or use <i>curl</i> command.
+You should get a response similar to this.
 </p>
 
 <source>
-Found 1 Solr nodes:
-
-Solr process 55672 running on port 8983
 {
-"solr_home":"/opt/solr-8.4.1/server/solr",
-"version":"8.4.1 832bf13dd9187095831caf69783179d41059d013 - ishan - 2020-01-10 13:40:28",
-"startTime":"2020-04-11T01:48:15.071Z",
-"uptime":"0 days, 0 hours, 2 minutes, 23 seconds",
-"memory":"91.7 MB (%17.9) of 512 MB",
-"cloud":{
-"ZooKeeper":"localhost:9983",
-"liveNodes":"1",
-"collections":"0"}}
+  "name" : "HOST-1234",
+  "cluster_name" : "elasticsearch",
+  "cluster_uuid" : "JJn5eqoGS3-qg03QX-Jb4w",
+  "version" : {
+    "number" : "7.8.1",
+    "build_flavor" : "default",
+    "build_type" : "zip",
+    "build_hash" : "b5ca9c58fb664ca8bf9e4057fc229b3396bf3a89",
+    "build_date" : "2020-07-21T16:40:44.668009Z",
+    "build_snapshot" : false,
+    "lucene_version" : "8.5.1",
+    "minimum_wire_compatibility_version" : "6.8.0",
+    "minimum_index_compatibility_version" : "6.0.0-beta1"
+  },
+  "tagline" : "You Know, for Search"
+}
 </source>
 
 </subsection>
@@ -113,21 +91,22 @@ Solr process 55672 running on port 8983
 
 <subsection name="Using Docker">
 <p>
-You can run Solr in Docker or Podman. 
-
-<ul>
-<li>Use the official Solr image from DockerHub (solr:8.4).</li>
-<li>Map both ZooKeeper (9983) and Solr (8983) ports. You would need access to ZooKeeper to upload PDS registry collection configset.</li>
-<li>Do not forget to pass <b>-cloud</b> parameter to start Solr in cloud mode.</li>
-</ul>
+You can run Elasticsearch in Docker or Podman. The Elasticsearch images are based on CentOS 7.
 </p>
-
 <p>
-The following example is for CentOS 8 / RHEL 8 which has Podman in the AppStream (standard repo).
-If your system has Docker, use <i>docker</i> command with the same parameters.
+First, pull Elasticsearch from Elastic Docker registry.
 </p>
 <source>
-podman run -p 8983:8983 -p 9983:9983 -d --name solr -t solr:8.4 -cloud
+docker pull docker.elastic.co/elasticsearch/elasticsearch:7.8.1
+</source>
+<p>
+To start a single-node Elasticsearch cluster for development or testing, run the following command
+</p>
+<source>
+docker run -d --name elasticsearch \
+  -p 9200:9200 -p 9300:9300 \
+  -e "discovery.type=single-node" \
+  docker.elastic.co/elasticsearch/elasticsearch:7.8.1
 </source>
 </subsection>
 
@@ -135,7 +114,7 @@ podman run -p 8983:8983 -p 9983:9983 -d --name solr -t solr:8.4 -cloud
 
 <subsection name="Next Steps">
 <p>
-Your Solr server is ready. You should now deploy the <a href="tools.html">tools</a> 
+Your Elasticsearch server is ready. You should now deploy the <a href="tools.html">tools</a> 
 to harvest metadata and manage your registry.
 </p>
 </subsection>
@@ -144,14 +123,15 @@ to harvest metadata and manage your registry.
 
 <subsection name="Common Errors">
 <p>
-If you could not start Solr or access the Admin UI
+If you could not start Elasticsearch or access it
 </p>
 
 <ul>
-  <li>Check logs in <i>SOLR_HOME/server/logs</i> directory.</li>
-  <li>If running in a VM or container, make sure that port 8983 is open or mapped.</li>
-  <li>Try replacing localhost with the hostname / IP of your machine.</li>
-  <li>Check if another application is using port 8983. Make sure you don't have another Solr instance or docker container running.</li>
+  <li>Check logs in <i>ELASTIC_SEARCH_HOME/logs</i> directory.</li>
+  <li>If running in a VM or container, make sure that ports 9200 and 9300 are open or mapped.</li>
+  <li>Try replacing localhost with the hostname or IP of your machine.</li>
+  <li>Check if another application is using ports 9200 or 9300. 
+Make sure you don't have another Elasticsearch instance or docker container running.</li>
 </ul>
 
 </subsection>

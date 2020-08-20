@@ -71,7 +71,7 @@ or
 
       <ul>
         <li><b>registry-$context.get("registry.version")/</b><br />
-          <p>This directory contains tools which initiate the registry collections in solr</p>
+          <p>This directory contains tools which initiate the registry index in Elasticsearch</p>
         </li>
           <li><b>harvest-$context.get("harvest.version")/</b><br />
           <p>This directory contains harvest tool package.</p>
@@ -112,12 +112,11 @@ export PATH=${PATH}:/path/to/${project.artifactId}-${project.version}/harvest-$c
 set PATH=%PATH%;C:\path\to\${project.artifactId}-${project.version}\harvest-$context.get("harvest.version")\bin;C:\path\to\${project.artifactId}-${project.version}\registry-manager-$context.get("registry.version")\bin;%PATH%
       </source>
       
-      
     </section>
 
     <section name="Next Steps">
-      <p>The registry application requirements (java, Solr) are ready. The registry tools are deployed. You can now <a href="initialize.html">initialize</a> your registry.</p>
-	</section>
+      <p>The registry tools are deployed. You can now <a href="initialize.html">initialize</a> your registry.</p>
+    </section>
     
 
   </body>
