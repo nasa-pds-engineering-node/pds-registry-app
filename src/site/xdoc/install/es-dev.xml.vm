@@ -2,11 +2,11 @@
 
 <document>
 <properties>
-  <title>Apache Solr</title>
+  <title>Elasticsearch</title>
 </properties>
 
 <body>
-<section name="Apache Solr - Quick Start">
+<section name="Elasticsearch - Quick Start">
   
 <ul>
   <li><a href="#Overview">Overview</a></li>
@@ -17,23 +17,13 @@
 </ul>
 
 <subsection name="Overview">
-
 <p>
-PDS Registry requires <a href="https://lucene.apache.org/solr/" target="_blank">Apache Solr</a>.
-Solr has to be installed and started in cloud mode before running PDS Registry.
-
-PDS Registry has been tested with Solr version $context.get("solr.version").
+PDS Registry requires <a href="https://www.elastic.co/elasticsearch/" target="_blank">Elasticsearch</a>.
 </p>
-
 <p>
-Solr can run in two modes: 
-<ul>
-  <li><b>SolrCloud - this is the only mode supported by the PDS EN Registry tools.</b> 
-You can learn more about SolrCloud in <a href="../prod/solrcloud.html">this section</a>.</li>
-  <li>Standalone (legacy mode) - this is the default mode. Make sure you don't start Solr in this mode by mistake.</li> 
-</ul>
+To install Elasticsearch on a developer laptop follow instructions below.
+For production deployment, see <a href="../prod/index.html">this section</a>.
 </p>
-
 </subsection>
 
 <!-- ======================================================== -->
@@ -41,45 +31,30 @@ You can learn more about SolrCloud in <a href="../prod/solrcloud.html">this sect
 <subsection name="Installation">
 
 <p>
-To install Apache Solr on a developer laptop follow instructions below.
-For production deployment, see <a href="../prod/index.html">this section</a>.
+  <b>Step 1: Download and extract Elasticsearch</b>
 </p>
 
 <p>
-  <b>Step 1: Download and extract Solr ZIP or TGZ archive</b>
+Download Elasticsearch ${context.get('es.version')} from
+<a href="https://www.elastic.co/downloads/past-releases/elasticsearch-7-8-1" target="_blank">Elastic website</a>.
+There are ZIP (recommended) and MSI files for Windows, TAR.GZ for MacOS, TAR.GZ, RPM and DEB files for Linux.
 </p>
 
 <p>
-Download Solr ${context.get('solr.version')} 
-<a href="http://archive.apache.org/dist/lucene/solr/${context.get('solr.version')}/solr-${context.get('solr.version')}.zip">ZIP</a> 
-or <a href="http://archive.apache.org/dist/lucene/solr/${context.get('solr.version')}/solr-${context.get('solr.version')}.tgz">TGZ</a> 
-from apache archive.
+If you're using ZIP or TAR.GZ file, extract the archive to any directory, for example, <i>/opt/elasticsearch-${context.get('es.version')}</i>.
+We will call this directory <i>ELASTIC_SEARCH_HOME</i> throughout the rest of this documentation.
 </p>
 
 <p>
-Extract the archive to any directory, for example, <i>/opt/${context.get('solr.version')}</i>.
-We will call this directory <i>SOLR_HOME</i> throughout the rest of this documentation.
+  <b>Step 2: Start Elasticsearch</b>
 </p>
 
 <p>
-  <b>Step 2: Start Solr in cloud mode</b>
+Go to <i>ELASTIC_SEARCH_HOME/bin</i> and run <i>elasticsearch.bat</i> on Windows or <i>elasticsearch</i> on Linux or Mac.
 </p>
 
 <p>
-Go to <i>SOLR_HOME/bin</i> and run <i>solr.cmd</i> on Windows or <i>solr</i> on Unix or Mac.
-Pass <b>start</b> and <b>-cloud</b> parameters to start Solr in cloud mode.
-</p>
-
-<source>
-# Mac
-./solr start -cloud
-
-# Windows
-solr.cmd start -cloud
-</source>
-
-<p>
-  <b>Step 3: Check that Solr server started in cloud mode</b>
+  <b>Step 3: Check that Elasticsearch server started</b>
 </p>
 <p>
   <b>Option 1: Solr Admin UI</b>

@@ -61,11 +61,10 @@
       <item name="About PDS Registry Application" href="index.html"/>
       <item name="Installation" href="install/index.html">
         <item name="Java" href="install/java.html"/>
-        <item name="Solr - Quick Start" href="install/solr.html"/>
+        <item name="Elasticsearch - Quick Start" href="install/es-dev.html"/>
         <item name="Tools (Manager, Harvest)" href="install/tools.html"/>
         <item name="Initialize the Registry" href="install/initialize.html"/>
-        <item name="Test your deployment" href="install/test.html"/>
-        
+        <item name="Test your deployment" href="install/test.html"/>        
       </item>
       <item name="Operation" href="operate/index.html">
         <item name="Common Operations" href="operate/common-ops.html"/>

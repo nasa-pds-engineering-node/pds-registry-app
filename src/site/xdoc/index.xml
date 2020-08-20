@@ -43,12 +43,12 @@
 <p>
 PDS Registry provides functionality for tracking, searching, auditing, locating, and maintaining artifacts within the system. 
 These artifacts can range from data files and label files, schemas, dictionary definitions for objects and elements, services, etc. 
-The core functionality for this component is satisfied by <a href="https://lucene.apache.org/solr/">Apache Solr</a>.
+The core functionality for this component is satisfied by <a href="https://www.elastic.co/" target="_blank">Elasticsearch</a>.
 </p>
 
 <p>
 For Build 9b (June 2019), the Registry and Search components of the PDS4 system received a major upgrade 
-and significant re-design to greater leverage the power of Apache Solr. 
+and significant re-design to greater leverage the power of Elasticsearch. 
 We are continuing to improve our documentation, but please do not hesitate to send questions, comments, 
 change requests and bug reports to the <a href="mailto:pds_operator@jpl.nasa.gov">PDS Operator</a> 
 at pds_operator@jpl.nasa.gov and we would be happy to help work through any issues you are having.
@@ -58,20 +58,20 @@ at pds_operator@jpl.nasa.gov and we would be happy to help work through any issu
 <section name="PDS Registry and Related Software">
 <p>
 <ul>
-  <li><b>Java</b> is required to run Solr, Harvest, Registry Manager and other tools.</li>
-  <li>Registry data is stored in <b>Apache Solr</b>.</li>
+  <li><b>Java</b> is required to run Elasticsearch, Harvest, Registry Manager and other tools.</li>
+  <li>Registry data is stored in <b>Elasticsearch</b>.</li>
   <li><b>Registry Manager</b> command-line tool is designed to load, delete and export registry data. 
-It can also create and delete registry collection in Solr.</li>
+It can also create and delete registry index in Elasticsearch.</li>
   <li><b>Harvest</b> is a tool to crawl and extract metadata from PDS4 files.
-Extracted metadata is stored in an "intermediate" XML file which can be loaded into Solr 
-by Registry Manager or Solr post tool.</li>
+Extracted metadata is stored in an "intermediate" JSON or XML file which can be loaded into Elasticsearch 
+or Solr by Registry Manager or other tools.</li>
 </ul>
 </p>
 
 <p>
 The high level architecture of PDS Registry and its main components is shown below.
 </p>
-<img src="images/registry-harvest.jpg" width="35%" />
+<img src="images/registry-harvest.png" style="width:30em;" />
 
 </section>
 
