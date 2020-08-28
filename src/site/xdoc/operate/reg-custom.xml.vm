@@ -13,15 +13,14 @@
 
 <subsection name="Default Configuration Overview">
 <p>
-By default, PDS Registry stores its data in Apache Solr collection called "registry".
-Registry Manager comes with default "configset", consisting of two files, <i>managed-schema</i> 
-and <i>solrconfig.xml</i>, located in <i>REGISTRY_HOME/solr/collections/registry</i> folder.
-<i>REGISTRY_HOME</i> is a directory where you installed Registry Manager, for example
-<i>/home/pds/registry</i>.
+By default, PDS Registry stores its data in Elasticsearch index called "registry".
+Registry Manager comes with default Elasticsearch schema <i>REGISTRY_HOME/elastic/registry.json</i>.
+(<i>REGISTRY_HOME</i> is a directory where you installed Registry Manager, for example
+<i>/home/pds/registry</i>).
 </p>
 
 <p>
-Default <i>managed-schema</i> file defines few common fields such as 
+Default schema file defines few common fields such as 
 <ul>
 <li>lid</li>
 <li>vid</li>
@@ -44,27 +43,29 @@ and basic file information, such as
 
 <p>
 Also, there is a binary field to store the whole label as a BLOB.
-<source>
-&lt;field name="_file_blob" type="binary" indexed="false" stored="true" required="false" multiValued="false" /&gt;
-</source>
 </p>
 
 <p>
-Lidvid is a primary key. If you load the same Harvest-generated "intermediate" data file multiple times,
-existing Solr documents will be replaced with new documents with the same lidvid. 
-<source>
-&lt;field name="lidvid" type="string" indexed="true" stored="true" required="true" multiValued="false" /&gt;
-&lt;uniqueKey&gt;lidvid&lt;/uniqueKey&gt;
-</source>
+Lidvid is a primary key. If you load the same Harvest-generated data file multiple times,
+existing Elasticsearch documents will be replaced with new documents with the same lidvid. 
 </p>
 
 <p>
-When you load data, unknown (undefined) fields are ignored.
-<source>
-&lt;dynamicField name="*" type="ignored" /&gt;
-&lt;fieldType name="ignored" stored="false" indexed="false" multiValued="true" class="solr.StrField" /&gt;
-</source>
+Dynamic field mapping is disabled.
 </p>
+<source>
+...
+"mappings": {
+    "dynamic": false, 
+...
+}
+</source>
+
+<p>
+When you load data, fields not defined in Elasticsearch schema are not indexed, 
+but they are available in "_source" field.
+</p>
+
 </subsection>
 
 <!-- ========================================================== -->
@@ -72,8 +73,9 @@ When you load data, unknown (undefined) fields are ignored.
 <subsection name="Customization Overview">
 <h4>Adding More Fields</h4>
 <p>
-Default configuration defines just a few common fields. To add more fields, you have to change Solr schema. 
-Solr supports both static (changing configuration files) and dynamic (calling API) schema configuration.
+Default configuration defines just a few common fields and dynamic field mapping is disabled. 
+You could either enable dynamic mapping or add more fields to the schema.
+Note that by default you could not have more than 1000 fields per index. 
 </p>
 
 <h4>Using Multiple Collections</h4>
@@ -84,8 +86,8 @@ In addition to that you could have "search" collection with more fields and only
 
 <h4>Full Text Search Customization</h4>
 <p>
-To optimize full text search, you may want to customize Solr index and query-time analyzers (filters, tokenizers),
-define Solr copy fields or configure Harvest to merge multiple fields.
+To optimize full text search, you may want to customize Elasticsearch index and query-time analyzers (filters, tokenizers),
+define Elasticsearch copy fields or configure Harvest to merge multiple fields.
 </p>
 </subsection>
  	
@@ -94,86 +96,89 @@ define Solr copy fields or configure Harvest to merge multiple fields.
 <subsection name="Adding More Fields">
 
 <p>
-Detailed information about Solr fields and schema design is available at 
-<a href="https://lucene.apache.org/solr/guide/8_4/documents-fields-and-schema-design.html" target="_blank">Solr website</a>.
+Detailed information about Elasticsearch fields and schema design is available at 
+<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping.html" target="_blank">Elastic website</a>.
 </p>
 
 <!-- ============= -->
 
-<h4>Manually editing managed-schema file</h4>
+<h4>Manually editing schema file</h4>
 
 <p>
-Either edit <i>managed-schema</i> file in <i>REGISTRY_HOME/solr/collections/registry</i> folder or copy
-all files from <i>REGISTRY_HOME/solr/collections/registry</i> to another folder and edit <i>managed-schema</i> file there.
+Either edit default <i>REGISTRY_HOME/elastic/registry.json</i> file or create a copy.
 </p>
 
 <p>
-For example, copy the following XML to <i>managed-schema</i> file to add 
-<i>start_date_time</i> and <i>stop_date_time</i> fields to the registry collection.
+The following example shows how to add <i>start_date_time</i> and <i>stop_date_time</i> fields.
 <source>
-&lt;field name="start_date_time" type="pdate" indexed="true" stored="true" multiValued="true"/&gt;
-&lt;field name="stop_date_time" type="pdate" indexed="true" stored="true" multiValued="true"/&gt;
+{
+...
+  "mappings": {
+...
+    "properties": {
+...
+      "start_date_time": { "type": "date" },
+      "stop_date_time": { "type": "date" }
+    }
+  }
+}
 </source>
 </p>
 
 <p>
-To apply the changes you have to delete the registry collection and all its data! 
+To apply the changes you have to delete the registry index and all its data! 
 <source>
 registry-manager delete-registry
 </source>
 </p>
 
 <p>
-and then recreate the collection.
+and then recreate the index.
 <source>
 registry-manager create-registry
 </source>
 </p>
 
 <p>
-If you copied default configset from <i>REGISTRY_MANAGER_HOME/solr/collections/registry</i> to some other
-directory, for example <i>/tmp/reg</i>, pass <i>-configDir</i> flag to Registry Manager.
+If you copied default schema file, pass new file name in <i>-schema</i> parameter to Registry Manager.
 </p>
 <source>
-registry-manager create-registry -configDir /tmp/reg
+registry-manager create-registry -schema /my-folder/test.json
 </source>
 
 <p>
-You can also customize collection name and Solr / Zookeeper URL.
+You can also customize index name and Elasticsearch URL.
 </p>
 <source>
-registry-manager create-registry -configDir /tmp/reg -collection test1 -solrUrl http://myhost:8983/solr
+registry-manager create-registry -index /tmp/test.json -index test1 -es https://myhost:9200
 </source>
 
 <!-- ============= -->
 
 <h4>Adding fields dynamically</h4>
+
 <p>
-You can add and delete fields dynamically by calling Solr Schema API. 
-For example, to add <i>start_date_time</i> field call this API:
+You can add and delete fields dynamically by calling Elasticsearch mapping API. 
+For example, to add <i>start_date_time</i> field call
 <source>
-curl http://localhost:8983/solr/registry/schema -X POST -H 'content-type:application/json' --data-binary '{
-  "add-field": {
-     "name":"start_date_time",
-     "type":"pdate",
-     "indexed":true,
-     "stored":true,
-     "multiValued":true
+curl -X PUT "localhost:9200/registry/_mapping?pretty" -H 'Content-Type: application/json' -d'
+{
+  "properties": {
+    "start_date_time": { "type": "date" }
   }
-}'
+}
+'
 </source>
 </p>
 
 <!-- ============= -->
 
-<h4>Generating Solr fields from PDS4 data dictionaries</h4>
+<h4>Generating Elasticsearch fields from PDS4 data dictionaries</h4>
 <p>
-Registry manager can generate Solr field definitions from one or more PDS4 data dictionaries.
+Registry manager can generate Elasticsearch schema from one or more PDS4 data dictionaries.
 Only data dictionaries in JSON format are supported.
 Latest versions of PDS4 data dictionaries in different formates are available at 
 <a href="https://pds.nasa.gov/datastandards/dictionaries/" target="_blank">PDS website</a>.
-Generated Solr field definitions are stored in an XML file and have to be manually copied to
-<i>managed-schema</i> file.
 </p>
 
 <h5>Getting Started</h5>
@@ -216,58 +221,96 @@ Note that class name includes <i>img</i> namespace.
 </p>
 
 <p>
-Run <i>generate-solr-schema</i> registry manager command to generate Solr field definitions.
+Run <i>generate-schema</i> registry manager command to generate Elasticsearch schema.
 </p>
 <source>
-registry-manager generate-solr-schema -config /tmp/example.xml
+registry-manager generate-schema -config /tmp/example.xml
 </source>
 
 <p>
-By default, generated field definitions are saved in <i>/tmp/registry/solr-fields.xml</i> file. 
-You can change default output directory by providing <i>-outDir</i> parameter. For example,
+By default, generated schema is saved in <i>/tmp/registry/schema.json</i> file. 
+You can change default location by providing <i>-file</i> parameter. For example,
 </p>
 <source>
-registry-manager generate-solr-schema -config /tmp/example.xml -outDir /home/pds4/schema
+registry-manager generate-schema -config /tmp/example.xml -file /home/pds4/my-schema.json
 </source>
 
 <p>
-Example <i>solr-fields.xml</i> file is shown below.
+Example <i>schema.json</i> file is shown below.
 <source>
-&lt;fields&gt;
-&lt;field name="img.Autoexposure.img.auto_exposure_data_cut" type="pint" indexed="true" stored="true" multiValued="true" required="false" /&gt;
-&lt;field name="img.Autoexposure.img.active_flag" type="boolean" indexed="true" stored="true" multiValued="true" required="false" /&gt;
-&lt;field name="img.Autoexposure.img.auto_exposure_percent" type="pdouble" indexed="true" stored="true" multiValued="true" required="false" /&gt;
-&lt;field name="img.Autoexposure.img.processing_venue" type="string" indexed="true" stored="true" multiValued="true" required="false" /&gt;
-&lt;field name="img.Autoexposure.img.auto_exposure_pixel_fraction" type="pdouble" indexed="true" stored="true" multiValued="true" required="false" /&gt;
-&lt;field name="img.Autoexposure.img.processing_algorithm" type="string" indexed="true" stored="true" multiValued="true" required="false" /&gt;
-&lt;field name="img.Autoexposure.img.max_auto_exposure_iteration_count" type="pint" indexed="true" stored="true" multiValued="true" required="false" /&gt;
-&lt;field name="img.Autoexposure.img.sequence_number" type="string" indexed="true" stored="true" multiValued="true" required="false" /&gt;
-&lt;/fields&gt;
+{
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 0
+  },
+  "mappings": {
+    "properties": {
+      "img/Autoexposure/img/auto_exposure_data_cut": {
+        "type": "integer"
+      },
+      "img/Autoexposure/img/active_flag": {
+        "type": "boolean"
+      },
+      "img/Autoexposure/img/auto_exposure_percent": {
+        "type": "double"
+      },
+      "img/Autoexposure/img/processing_venue": {
+        "type": "keyword"
+      },
+      "img/Autoexposure/img/auto_exposure_pixel_fraction": {
+        "type": "double"
+      },
+      "img/Autoexposure/img/processing_algorithm": {
+        "type": "keyword"
+      },
+      "img/Autoexposure/img/max_auto_exposure_iteration_count": {
+        "type": "integer"
+      },
+      "img/Autoexposure/img/sequence_number": {
+        "type": "keyword"
+      }
+    }
+  }
+}
 </source>
 </p>
 
 <p>
-The following naming convention is used for generated Solr fields:
+The following naming convention is used for generated Elasticsearch fields:
 <source>
-&lt;namespace&gt;.&lt;class name&gt;.&lt;namespace&gt;.&lt;attribute name&gt;
+&lt;namespace&gt;/&lt;class name&gt;/&lt;namespace&gt;/&lt;attribute name&gt;
 </source>
 </p>
+
+<p>
+Note that data dictionaries and class filters in configuration files use '.' as a separator between a namespace 
+and a class name, for example,
+</p>
+<source>
+img.Autoexposure
+</source>
+
+<p>
+In Elasticsearch dots in field names represent nested object types. 
+Therefore we had to use '/' as a separator to define simple "flat" fields.
+</p>
+
 
 <h5>Data Type Map</h5>
 
 <p>
 You might have noticed few warnings when running registry manager.
 <source>
-[WARN] No PDS to Solr data type mapping for 'pds.ASCII_Integer'. Will use 'pint'
-[WARN] No PDS to Solr data type mapping for 'pds.ASCII_Boolean'. Will use 'boolean'
-[WARN] No PDS to Solr data type mapping for 'pds.ASCII_Real'. Will use 'pdouble'
-[WARN] No PDS to Solr data type mapping for 'pds.ASCII_Short_String_Collapsed'. Will use 'string'
+[WARN] No PDS to Elasticsearch data type mapping for 'pds.ASCII_Integer'. Will use 'integer'
+[WARN] No PDS to Elasticsearch data type mapping for 'pds.ASCII_Boolean'. Will use 'boolean'
+[WARN] No PDS to Elasticsearch data type mapping for 'pds.ASCII_Real'. Will use 'double'
+[WARN] No PDS to Elasticsearch data type mapping for 'pds.ASCII_Short_String_Collapsed'. Will use 'keyword'
 </source>
 </p>
 
 <p>
 Attributes in data dictionary files have PDS data types, such as <i>pds.ASCII_Integer</i>.
-Registry manager will try to convert PDS data types to Solr data types automatically.
+Registry manager will try to convert PDS data types to Elasticsearch data types automatically.
 You can also provide your own mappings.
 </p>
 
@@ -283,10 +326,10 @@ Add the following section in the configuration file (<i>/tmp/example.xml</i>):
 <p>
 And another file, <i>/tmp/schema/data-types.cfg</i> with mappings.
 <source>
-pds.ASCII_Integer = pint
+pds.ASCII_Integer = integer
 pds.ASCII_Boolean = boolean
-pds.ASCII_Real = pdouble
-pds.ASCII_Short_String_Collapsed = string
+pds.ASCII_Real = double
+pds.ASCII_Short_String_Collapsed = keyword
 </source>
 </p>
 
@@ -294,12 +337,12 @@ pds.ASCII_Short_String_Collapsed = string
 The format of this file is very simle:
 </p>
 <source>
-&lt;PDS data type with namespace&gt; = &lt;Solr data type&gt;
+&lt;PDS data type with namespace&gt; = &lt;Elasticsearch data type&gt;
 </source>
 
 <h5>Custom Generators</h5>
 <p>
-Instead of automatically generating Solr fields from data dictionary class attributes, you can define
+Instead of automatically generating Elasticsearch fields from data dictionary class attributes, you can define
 custom generators per data dictionary class.
 </p>
 <p>
@@ -373,30 +416,30 @@ The following custom fields will be generated:
 
 <!-- ============= -->
 
-<h4>Updating Solr schema from PDS4 data dictionaries</h4>
+<h4>Updating Elasticsearch schema from PDS4 data dictionaries</h4>
 
 <p>
-To updates Solr schema dynamically, by calling Solr schema API, run the following Registry Manager command:
+To update Elasticsearch schema dynamically, by calling Elasticsearch schema API, run the following Registry Manager command:
 </p>
 <source>
-registry-manager update-solr-schema -config /tmp/example.xml
+registry-manager update-schema -config /tmp/example.xml
 </source>
 
 <p>
-This command uses the same configuration file as <i>generate-solr-schema</i> command described in previous section.
+This command uses the same configuration file as <i>generate-schema</i> command described in previous section.
 </p>
 
 <p>
-By default, <i>"registry"</i> collection of local Solr instance <i>http://localhost:8983/solr</i> is updated.
-Both collection name and Solr / ZooKeeper URL are configurable as shown below:
+By default, <i>"registry"</i> index of local Elasticsearch instance <i>http://localhost:9200</i> is updated.
+Both index name and Elasticsearch URL are configurable as shown below:
 </p>
 
 <source>
-registry-manager update-solr-schema -config /tmp/example.xml -collection test1 -solrUrl http://myhost:8983/solr
+registry-manager update-schema -config /tmp/example.xml -index test1 -es https://myhost:9200
 </source>
 
 <p>
-Solr collection must exist, before calling <i>update-solr-schema</i> command.
+Elasticsearch index must exist, before calling <i>update-schema</i> command.
 </p>
 </subsection>
 </section>
