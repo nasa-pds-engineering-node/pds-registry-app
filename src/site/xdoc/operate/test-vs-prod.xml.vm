@@ -49,38 +49,38 @@ This section describes few Test vs Production use cases
 
 <subsection name="Use a test environment to play around with registry data">
 <p>
-Install Solr, Registry Manager and Harvest on your laptop as described in <a href="../install/index.html">Installation</a> section.
+Install Elasticsearch, Registry Manager and Harvest on your laptop as described in <a href="../install/index.html">Installation</a> section.
 </p>
 
 <p>
-You can use multiple collections at the same time. It doesn't have to be default 'registry' collection.
+You can use multiple Elasticsearch indices at the same time. It doesn't have to be default 'registry' index.
 </p>
 
 <p>
-The following example will create 3 collections, test1, test2, and test3.
+The following example will create 3 indices, test1, test2, and test3.
 </p>
 <source>
-registry-manager create-registry -collection test1
-registry-manager create-registry -collection test2
-registry-manager create-registry -collection test3
+registry-manager create-registry -index test1
+registry-manager create-registry -index test2
+registry-manager create-registry -index test3
 </source>
 
 <p>
-You can customize individual collections as described in <a href="../operate/reg-custom.html">Registry Customization</a>
+You can customize individual indices as described in <a href="../operate/reg-custom.html">Registry Customization</a>
 </p>
 
 <p>
-For example, to create collection test1 from customized Solr config set stored in /tmp/test1 directory, call this command
+For example, to create index test1 from custom Elasticsearch schema, call this command
 </p>
 <source>
-registry-manager create-registry -configDir /tmp/test1 -collection test1
+registry-manager create-registry -schema /tmp/test-schema.json -index test1
 </source>
 
 <p>
-You can easily delete any of your test collections and start over. For example,
+You can easily delete any of your test indices and start over. For example,
 </p>
 <source>
-registry-manager delete-registry -collection test1
+registry-manager delete-registry -index test1
 </source>
 
 
@@ -91,29 +91,21 @@ registry-manager delete-registry -collection test1
 <subsection name="Swap all test data into operations">
 
 <p>
-Extract all data from a test collection into an XML file, as shown below
+Extract all data from a test index into a JSON file, as shown below
 </p>
 <source>
-registry-manager export-data -file /tmp/mydata.xml -all -collection test1
+registry-manager export-data -file /tmp/mydata.json -all -index test1
 </source>
 
 <p>
-Then load the XML file into production environment. 
-In the following example 3-node ZooKeeper cluster is used to load data into multi-node production cluster.
+Then load the JSON file into production environment. 
 </p>
 <source>
-registry-manager load-data -file /tmp/mydata.xml -zkHost zk1.prod.local:2181,zk2.prod.local:2181,zk3.prod.local:2181/solr
+registry-manager load-data -file /tmp/mydata.json -es https://es1.prod.local:9200
 </source>
 
 <p>
-Instead of ZooKeeper connection string you can also use a URL of a Solr node.
-</p>
-<source>
-registry-manager load-data -file /tmp/mydata.xml -solrUrl http://my.prod.local:8983/solr
-</source>
-
-<p>
-NOTE: You may need to copy (FTP) your XML file into production environment.
+NOTE: You may need to copy (FTP) your JSON file into production environment.
 </p>
 
 </subsection>
@@ -124,17 +116,17 @@ NOTE: You may need to copy (FTP) your XML file into production environment.
 <subsection name="Swap a subset of test data into operations">
 
 <p>
-Extract a subset of data by packageId from a test collection into an XML file, as shown below
+Extract a subset of data by packageId from a test index into a JSON file, as shown below
 </p>
 <source>
-registry-manager export-data -file /tmp/mydata.xml -packageId 8d8ae96d-044e-473d-a278-62635b1c5977 -collection test1
+registry-manager export-data -file /tmp/mydata.json -packageId 8d8ae96d-044e-473d-a278-62635b1c5977 -index test1
 </source>
 
 <p>
-Then load the XML file into production environment. 
+Then load the JSON file into production environment. 
 </p>
 <source>
-registry-manager load-data -file /tmp/mydata.xml -solrUrl http://my.prod.local:8983/solr
+registry-manager load-data -file /tmp/mydata.json -es https://es1.prod.local:9200
 </source>
 
 </subsection>
@@ -144,12 +136,12 @@ registry-manager load-data -file /tmp/mydata.xml -solrUrl http://my.prod.local:8
 <subsection name="Rollback changes made in operations">
 
 <p>
-Each time you run Harvest tool, it generates unique packageId (UUID) and stores it in each Solr document ("_package_id" field). 
+Each time you run Harvest tool, it generates unique packageId (UUID) and stores it in each Elasticsearch document ("_package_id" field). 
 If you loaded some data and want to delete it, find out the packageId from Harvest generated file. 
 Then run the following command to delete all documents by that packageId,
 </p>
 <source>
-registry-manager delete-data -packageId 8d8ae96d-044e-473d-a278-62635b1c5977 -solrUrl http://my.prod.local:8983/solr
+registry-manager delete-data -packageId 8d8ae96d-044e-473d-a278-62635b1c5977 -es https://es1.prod.local:9200
 </source>
 
 <p>

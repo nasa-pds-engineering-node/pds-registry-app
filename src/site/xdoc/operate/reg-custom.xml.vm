@@ -15,7 +15,7 @@
 <p>
 By default, PDS Registry stores its data in Elasticsearch index called "registry".
 Registry Manager comes with default Elasticsearch schema <i>REGISTRY_HOME/elastic/registry.json</i>.
-(<i>REGISTRY_HOME</i> is a directory where you installed Registry Manager, for example
+(Where <i>REGISTRY_HOME</i> is a directory where you installed Registry Manager, for example
 <i>/home/pds/registry</i>).
 </p>
 
@@ -76,12 +76,6 @@ but they are available in "_source" field.
 Default configuration defines just a few common fields and dynamic field mapping is disabled. 
 You could either enable dynamic mapping or add more fields to the schema.
 Note that by default you could not have more than 1000 fields per index. 
-</p>
-
-<h4>Using Multiple Collections</h4>
-<p>
-You could store original PDS labels (in a BLOB field) and some basic metadata in the "registry" collection.
-In addition to that you could have "search" collection with more fields and only the latest version of the labels.
 </p>
 
 <h4>Full Text Search Customization</h4>
@@ -221,7 +215,7 @@ Note that class name includes <i>img</i> namespace.
 </p>
 
 <p>
-Run <i>generate-schema</i> registry manager command to generate Elasticsearch schema.
+Run <i>generate-schema</i> Registry Manager command to generate Elasticsearch schema.
 </p>
 <source>
 registry-manager generate-schema -config /tmp/example.xml
@@ -360,18 +354,18 @@ First, let's use a configuration file without custom generators (/tmp/example.xm
 </source>
 
 <p>
-If you run Solr schema generator
+If you run schema generator
 </p>
 <source>
-registry-manager generate-solr-schema -config /tmp/example.xml
+registry-manager generate-schema -config /tmp/example.xml
 </source>
 
 <p>
 The following fields will be generated:
 <source>
-&lt;field name="pds.Observing_System_Component.pds.name" type="string" indexed="true" stored="true" multiValued="true" required="false" /&gt;
-&lt;field name="pds.Observing_System_Component.pds.type" type="string" indexed="true" stored="true" multiValued="true" required="false" /&gt;
-&lt;field name="pds.Observing_System_Component.pds.description" type="text_general" indexed="true" stored="true" multiValued="true" required="false" /&gt;
+"pds/Observing_System_Component/pds/name": { "type": "keyword" },
+"pds/Observing_System_Component/pds/type": { "type": "keyword" },
+"pds/Observing_System_Component/pds/description": { "type": "text" }
 </source>
 </p>
 
@@ -396,21 +390,21 @@ spacecraft_name = string
 The format of this file is very simle:
 </p>
 <source>
-&lt;Solr field name&gt; = &lt;Solr data type&gt;
+&lt;Elasticsearch field name&gt; = &lt;Elasticsearch data type&gt;
 </source>
 
 <p>
-If you run Solr schema generator
+If you run schema generator
 </p>
 <source>
-registry-manager generate-solr-schema -config /tmp/example.xml
+registry-manager generate-schema -config /tmp/example.xml
 </source>
 
 <p>
 The following custom fields will be generated:
 <source>
-&lt;field name="instrument_name" type="string" indexed="true" stored="true" multiValued="true" required="false" /&gt;
-&lt;field name="spacecraft_name" type="string" indexed="true" stored="true" multiValued="true" required="false" /&gt;
+"instrument_name": { "type": "keyword" },
+"spacecraft_name": { "type": "keyword" }
 </source>
 </p>
 

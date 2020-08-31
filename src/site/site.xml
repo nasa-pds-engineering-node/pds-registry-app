@@ -72,7 +72,6 @@
         <item name="Harvest" href="operate/harvest.html"/>
         <item name="Registry Manager" href="operate/reg-manager.html"/>
         <item name="Registry Customization" href="operate/reg-custom.html"/>
-        <item name="Solr Tools" href="operate/solr-tools.html"/>
       </item>
       <item name="Production Deployment" href="prod/index.html">
         <item name="SolrCloud" href="prod/solrcloud.html"/>
