@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document>
+<properties>
+  <title>Elasticsearch - VM</title>
+</properties>
+
+<body>
+
+<section name="Running Elasticsearch in a VM">
+
+<p>
+This document describes installation and configuration of Elasticsearch in a VM running CentOS 8.
+</p>
+
+<p>
+<ul>
+  <li><a href="#Create_CentOS_VM">Create CentOS VM</a></li>
+  <li><a href="#Install_Java">Install Java</a></li>
+  <li><a href="#Install_ES">Install Elasticsearch</a></li>
+  <li><a href="#Firewall_Configuration">Firewall Configuration</a></li>
+  <li><a href="#Trouble">Troubleshooting</a></li>
+  <li><a href="#3-Node_Cluster">3-Node Cluster</a></li>
+</ul>
+</p>
+
+<!-- ================================================== -->
+
+<subsection name="Create CentOS VM">
+
+<p>
+Create new VM and install minimal CentOS 8 server without GUI. Configure static IP.
+</p>
+
+<table>
+<tr><td>Min RAM</td><td>2GB</td></tr>
+<tr><td>Min CPU</td><td>1</td></tr>
+<tr><td>Min HDD</td><td>20GB</td></tr>
+<tr><td>Operating System</td><td>CentOS 8</td></tr>
+<tr><td>NIC</td><td>Static IP</td></tr>
+</table>
+
+</subsection>
+
+<!-- ================================================== -->
+
+<subsection name="Install Java">
+
+<p>
+Install Java and 'lsof'.
+</p>
+
+<source>
+yum install java-11-openjdk
+yum install lsof
+</source>
+
+</subsection>
+
+<!-- ================================================== -->
+
+<subsection name="Install Elasticsearch" id="Install_ES">
+<p>
+  <b>Step 1: Download and install Elasticsearch RPM</b>
+</p>
+
+<p>
+Download and install <a href="https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.8.1-x86_64.rpm">Elasticsearch RPM</a>
+</p>
+<source>
+yum install ./elasticsearch-7.8.1-x86_64.rpm
+</source>
+
+<p>
+Reload systemd daemon
+</p>
+<source>
+systemctl daemon-reload
+</source>
+
+<p>
+  <b>Step 2: Edit Elasticsearch configuration file</b>
+</p>
+<p>
+Set following propeerties in <i>/etc/elasticsearch/elasticsearch.yml</i> file. Adjust values for your environment.
+</p>
+<source>
+# Should be unique on your LAN. 
+# If you're running ELK on the same LAN, make sure that ELK and PDS Registy use different cluster names.
+cluster.name: pds-registry
+
+# Can be any name, but we used the server DNS name
+node.name: es1.test.local
+
+# Can be "0.0.0.0" to listen on all network interfaces, DNS name or IP address
+network.host: 0.0.0.0
+
+# A list of nodes in the cluster. Enter DNS name or IP address.
+discovery.seed_hosts: ["es1.test.local"]
+cluster.initial_master_nodes: ["es1.test.local"]
+</source>
+
+<p>
+  <b>Step 3: Start and test the service</b>
+</p>
+
+<p>
+Start the service:
+</p>
+<source>
+systemctl start elasticsearch
+</source>
+
+<p>
+Check the service status:
+</p>
+<source>
+systemctl status elasticsearch
+</source>
+
+<p>
+Check Elasticsearch cluster status
+</p>
+<source>
+curl localhost:9200
+</source>
+
+<p>
+You should get a message similar to this
+</p>
+<source>
+{
+  "name" : "es1.test.local",
+  "cluster_name" : "pds-registry",
+  "cluster_uuid" : "OpWsTs1rRxq390Ljjoqv0Q",
+  "version" : {
+    "number" : "7.8.1",
+    "build_flavor" : "default",
+    "build_type" : "rpm",
+    "build_hash" : "b5ca9c58fb664ca8bf9e4057fc229b3396bf3a89",
+    "build_date" : "2020-07-21T16:40:44.668009Z",
+    "build_snapshot" : false,
+    "lucene_version" : "8.5.1",
+    "minimum_wire_compatibility_version" : "6.8.0",
+    "minimum_index_compatibility_version" : "6.0.0-beta1"
+  },
+  "tagline" : "You Know, for Search"
+}
+</source>
+
+</subsection>
+
+<!-- ================================================================ -->
+
+<subsection name="Firewall Configuration">
+
+<p>
+To open Elasticsearch port (9200), run the following commands
+</p>
+<source>
+firewall-cmd --zone=public --add-port=9200/tcp --permanent
+firewall-cmd --reload
+firewall-cmd --zone=public --list-ports
+</source>
+
+</subsection>
+
+
+<!-- ================================================================ -->
+
+<subsection name="Troubleshooting" id="Trouble">
+<p>
+Check logs in <i>/var/log/elasticsearch</i>.
+</p>
+</subsection>
+
+
+<!-- ================================================================ -->
+
+
+<subsection name="3-Node Cluster">
+
+<p>
+  <b>Step 1: Install Elasticsearch</b>
+</p>
+
+<p>
+Create 3 VMs and install Java and Elasticsearch RPM on each node as described above.
+In this tutorial we are using 3 VMs with the following IPs and host names:
+</p>
+<source>
+192.168.75.11   es1.test.local
+192.168.75.12   es2.test.local
+192.168.75.13   es3.test.local
+</source>
+
+<p>
+  <b>Step 2: Configure DNS</b>
+</p>
+
+<p>
+Add the following entries in <i>/etc/hosts</i> or configure a DNS server.
+</p>
+<source>
+192.168.75.11   es1.test.local
+192.168.75.12   es2.test.local
+192.168.75.13   es3.test.local
+</source>
+
+<p>
+  <b>Step 3: Configure firewall</b>
+</p>
+
+<p>
+Open two Elasticsearch ports:
+<ul>
+  <li>9200 - clients connect to this port</li>
+  <li>9300 - Elasticsearch nodes communicate over this port</li>
+</ul>
+</p>
+
+<p>
+Run the following commands to open ports:
+</p>
+
+<source>
+firewall-cmd --zone=public --add-port=9200/tcp --permanent
+firewall-cmd --zone=public --add-port=9300/tcp --permanent
+firewall-cmd --reload
+firewall-cmd --zone=public --list-ports
+</source>
+
+<p>
+  <b>Step 4: Edit Elasticsearch configuration file</b>
+</p>
+
+<p>
+Set following propeerties in <i>/etc/elasticsearch/elasticsearch.yml</i> file on each node. 
+Adjust values for your environment and each node.
+</p>
+
+<source>
+# Should be unique on your LAN. 
+# If you're running ELK on the same LAN, make sure that ELK and PDS Registy use different cluster names.
+cluster.name: pds-registry
+
+# Each node should have different name
+node.name: es1.test.local
+
+# Listen on all network interfaces
+network.host: 0.0.0.0
+
+# List all elasticsearch nodes
+discovery.seed_hosts: ["es1.test.local", "es2.test.local", "es3.test.local"]
+cluster.initial_master_nodes: ["es1.test.local", "es2.test.local", "es3.test.local"]
+
+# To prevent network partitioning, require 2 masters (out of 3) to form the cluster
+# before accepting user requests
+discovery.zen.minimum_master_nodes: 2
+</source>
+
+
+<p>
+  <b>Step 5: Start and test elasticsearch service on all nodes</b>
+</p>
+
+<p>
+Start the service:
+</p>
+<source>
+systemctl start elasticsearch
+</source>
+
+<p>
+Test the service:
+</p>
+<source>
+systemctl status elasticsearch
+</source>
+
+<p>
+  <b>Step 6: List all nodes</b>
+</p>
+
+<p>
+Call the following API on one of elasticsearch nodes (e.g., <i>es1.test.local</i>):
+</p>
+<source>
+curl "http://es1.test.local:9200/_cat/nodes?v"
+</source>
+
+<p>
+You should see a response similar to this. Make sure all 3 nodes joined the cluster.
+</p>
+<source>
+ip            heap.percent ram.percent cpu load_1m load_5m load_15m node.role master name
+192.168.75.13           20          96   1    0.04    0.08     0.09 dilmrt    -      es3.test.local
+192.168.75.11           22          93   1    0.08    0.04     0.04 dilmrt    *      es1.test.local
+192.168.75.12           53          96   1    0.09    0.08     0.05 dilmrt    -      es2.test.local
+</source>
+
+</subsection>
+
+
+</section>
+
+
+</body>
+</document>
