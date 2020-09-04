@@ -74,15 +74,11 @@
         <item name="Registry Customization" href="operate/reg-custom.html"/>
       </item>
       <item name="Production Deployment" href="prod/index.html">
-        <item name="SolrCloud" href="prod/solrcloud.html"/>
         <item name="Elasticsearch (VM)" href="prod/es-vm.html"/>
       </item>
       <item name="Security" href="security/index.html">
         <item name="Load Balancer &amp; Proxy" href="security/proxy.html"/>
-        <item name="ZooKeeper" href="security/zk.html"/>
-        <item name="Solr" href="security/solr.html"/>
-      </item>
-      <item name="Reporting &amp; Visualization" href="reporting/index.html">
+        <item name="Elasticsearch" href="security/es.html"/>
       </item>
       <item name="Support" href="index.html#Support" />
     </menu>

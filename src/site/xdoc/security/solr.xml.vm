@@ -34,12 +34,12 @@
 
 <document>
 <properties>
-  <title>Solr Security</title>
+  <title>Elasticsearch Security</title>
 </properties>
 
 <body>
 
-<section name="Solr Security">
+<section name="Elasticsearch Security">
 
 <p>
 <ul>
@@ -52,6 +52,26 @@
 </ul>
 </p>
 
+
+<subsection name="Overview">
+
+<source>
+drwxr-sr-x. 2 root elasticsearch    43 Sep  3 20:50 ssl
+</source>
+
+<source>
+openssl req -x509 -newkey rsa:4096 -keyout es-key.pem -out es-cert.pem -days 365 -subj '/CN=*.test.local' -nodes
+</source>
+
+
+
+<source>
+xpack.security.enabled: true
+xpack.security.transport.ssl.enabled: true
+</source>
+
+
+</subsection>
 
 <subsection name="Mutual TLS Authentication" id="mTLS">
 
