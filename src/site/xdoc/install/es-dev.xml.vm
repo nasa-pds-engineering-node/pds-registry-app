@@ -35,13 +35,13 @@ For production deployment, see <a href="../prod/index.html">this section</a>.
 </p>
 
 <p>
-Download Elasticsearch ${context.get('es.version')} from
+Download Elasticsearch 7.8.1 from
 <a href="https://www.elastic.co/downloads/past-releases/elasticsearch-7-8-1" target="_blank">Elastic website</a>.
 There are ZIP (recommended) and MSI files for Windows, TAR.GZ for MacOS, TAR.GZ, RPM and DEB files for Linux.
 </p>
 
 <p>
-If you're using ZIP or TAR.GZ file, extract the archive to any directory, for example, <i>/opt/elasticsearch-${context.get('es.version')}</i>.
+If you're using ZIP or TAR.GZ file, extract the archive to any directory, for example, <i>/opt/elasticsearch-7.8.1</i>.
 We will call this directory <i>ELASTIC_SEARCH_HOME</i> throughout the rest of this documentation.
 </p>
 

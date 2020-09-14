@@ -79,6 +79,7 @@
       <item name="Security" href="security/index.html">
         <item name="Load Balancer &amp; Proxy" href="security/proxy.html"/>
         <item name="Elasticsearch" href="security/es.html"/>
+        <item name="Registry Manager" href="security/reg-mgr.html"/>
       </item>
       <item name="Support" href="index.html#Support" />
     </menu>

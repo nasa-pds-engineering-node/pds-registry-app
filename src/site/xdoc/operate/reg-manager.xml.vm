@@ -128,6 +128,7 @@ Required parameters, one of:
   -packageId &lt;id&gt;   Delete data by package id
   -all              Delete all data
 Optional parameters:
+  -auth &lt;file&gt;      Authentication config file
   -es &lt;url&gt;         Elasticsearch URL. Default is http://localhost:9200
   -index &lt;name&gt;     Elasticsearch index name. Default is 'registry'
 </source>
@@ -153,6 +154,7 @@ Usage: registry-manager create-registry &lt;options&gt;
 Create registry index
 
 Optional parameters:
+  -auth &lt;file&gt;         Authentication config file
   -es &lt;url&gt;            Elasticsearch URL. Default is http://localhost:9200
   -index &lt;name&gt;        Elasticsearch index name. Default is 'registry'
   -schema &lt;path&gt;       Elasticsearch index schema (JSON file)
@@ -179,6 +181,7 @@ Usage: registry-manager delete-registry &lt;options&gt;
 Delete registry index and all its data
 
 Optional parameters:
+  -auth &lt;file&gt;    Authentication config file
   -es &lt;url&gt;       Elasticsearch URL. Default is http://localhost:9200
   -index &lt;name&gt;   Elasticsearch index name. Default is 'registry'
 </source>
@@ -203,7 +206,8 @@ Load data into registry index
 Required parameters:
   -file &lt;path&gt;    A JSON file or a directory to load.
 Optional parameters:
-  -url &lt;url&gt;      Elasticsearch URL. Default is http://localhost:9200
+  -auth &lt;file&gt;    Authentication config file
+  -es &lt;url&gt;       Elasticsearch URL. Default is http://localhost:9200
   -index &lt;name&gt;   Elasticsearch index name. Default is 'registry'
 </source>
 
@@ -235,6 +239,7 @@ Required parameters, one of:
   -packageId &lt;id&gt;   Delete data by package id
   -all              Delete all data
 Optional parameters:
+  -auth &lt;file&gt;      Authentication config file
   -es &lt;url&gt;         Elasticsearch URL. Default is http://localhost:9200
   -index &lt;name&gt;     Elasticsearch index name. Default is 'registry'
 </source>
@@ -270,6 +275,7 @@ Required parameters:
   -packageId &lt;id&gt;   Export data by package id
   -all              Export all data
 Optional parameters:
+  -auth &lt;file&gt;      Authentication config file
   -es &lt;url&gt;         Elasticsearch URL. Default is http://localhost:9200
   -index &lt;name&gt;     Elasticsearch index name. Default is 'registry'
 </source>
@@ -319,6 +325,7 @@ Required parameters:
   -lidvid &lt;id&gt;       Update archive status of a document with given lidvid, or
   -packageId &lt;id&gt;    Update archive status of all documents with given package id
 Optional parameters:
+  -auth &lt;file&gt;       Authentication config file
   -es &lt;url&gt;          Elasticsearch URL. Default is http://localhost:9200
   -index &lt;name&gt;      Elasticsearch index name. Default is 'registry'
 </source>
@@ -350,6 +357,7 @@ Required parameters:
   -lidvid &lt;id&gt;    Lidvid of a file to export from blob storage
   -file &lt;path&gt;    Output file path
 Optional parameters:
+  -auth &lt;file&gt;    Authentication config file
   -es &lt;url&gt;       Elasticsearch URL. Default is http://localhost:9200
   -index &lt;name&gt;   Elasticsearch index name. Default is 'registry'
 </source>
@@ -406,6 +414,7 @@ Update Elasticsearch schema from one or more PDS data dictionaries.
 Required parameters:
   -config &lt;path&gt;   Configuration file.
 Optional parameters:
+  -auth &lt;file&gt;     Authentication config file
   -es &lt;url&gt;        Elasticsearch URL. Default is http://localhost:9200
   -index &lt;name&gt;    Elasticsearch index name. Default is 'registry'
 </source>
