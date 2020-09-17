@@ -61,11 +61,10 @@
       <item name="About PDS Registry Application" href="index.html"/>
       <item name="Installation" href="install/index.html">
         <item name="Java" href="install/java.html"/>
-        <item name="Solr - Quick Start" href="install/solr.html"/>
+        <item name="Elasticsearch - Quick Start" href="install/es-dev.html"/>
         <item name="Tools (Manager, Harvest)" href="install/tools.html"/>
         <item name="Initialize the Registry" href="install/initialize.html"/>
-        <item name="Test your deployment" href="install/test.html"/>
-        
+        <item name="Test your deployment" href="install/test.html"/>        
       </item>
       <item name="Operation" href="operate/index.html">
         <item name="Common Operations" href="operate/common-ops.html"/>
@@ -73,19 +72,14 @@
         <item name="Harvest" href="operate/harvest.html"/>
         <item name="Registry Manager" href="operate/reg-manager.html"/>
         <item name="Registry Customization" href="operate/reg-custom.html"/>
-        <item name="Solr Tools" href="operate/solr-tools.html"/>
       </item>
       <item name="Production Deployment" href="prod/index.html">
-        <item name="SolrCloud" href="prod/solrcloud.html"/>
-        <item name="ZooKeeper Installation (VM)" href="prod/zookeeper-vm.html"/>
-        <item name="Solr Installation (VM)" href="prod/solr-vm.html"/>
+        <item name="Elasticsearch (VM)" href="prod/es-vm.html"/>
       </item>
       <item name="Security" href="security/index.html">
         <item name="Load Balancer &amp; Proxy" href="security/proxy.html"/>
-        <item name="ZooKeeper" href="security/zk.html"/>
-        <item name="Solr" href="security/solr.html"/>
-      </item>
-      <item name="Reporting &amp; Visualization" href="reporting/index.html">
+        <item name="Elasticsearch" href="security/es.html"/>
+        <item name="Registry Manager" href="security/reg-mgr.html"/>
       </item>
       <item name="Support" href="index.html#Support" />
     </menu>

@@ -34,85 +34,97 @@
 
 <document>
 <properties>
-  <title>Security</title>
+  <title>Elasticsearch Security</title>
 </properties>
 
 <body>
 
-<section name="Security Overview">
-
-<p>
-You can implement both network and application security. 
-For most deployments, network security with public access to read-only APIs 
-provided by application servers (API nodes) should be enough.
-</p>
-
-
-<subsection name="Network Security">
+<section name="Elasticsearch Security">
 
 <p>
 <ul>
-  <li>All public traffic is routed through a load balancer / proxy server.</li>
-  <li>Only HTTPS protocol is available on public LAN.</li>
-  <li>Admin APIs are only available on private LAN.</li>
-  <li>It is not recommended to expose any Elasticsearch APIs to the public.</li>
-  <li>All public read-only APIs are provided by application servers (API nodes).</li>
+  <li><a href="basic">Enable SSL and Basic Authentication</a></li>
 </ul>
 </p>
 
-<img src="../images/network-prod.png" style="width:50em;" />
-
-<h4>Ports</h4>
+<subsection name="Enable SSL and Basic Authentication" id="basic">
 
 <p>
-If you run a firewall, the following ports have to be open on private LAN:
+<b>Step 1: Generate server keys and self-signed certificate</b>
 </p>
 
 <p>
-<b>Elasticsearch nodes:</b>
+Create <i>/etc/elasticsearch/ssl</i> directory. Make sure it has the following permissions and ownership.
 </p>
+<source>
+drwxr-sr-x. 2 root elasticsearch    43 Sep  3 20:50 ssl
+</source>
+
 <p>
-<ul>
-  <li><b>9200</b> - Elasticsearch clients connect to this port</li>
-  <li><b>9300</b> - Elasticsearch nodes communicate over this port</li>
-</ul>
+Generate keys and self-signed certificate in <i>/etc/elasticsearch/ssl</i> directory.
+</p>
+<source>
+openssl req -x509 -newkey rsa:4096 -keyout es-key.pem -out es-cert.pem \
+  -days 365 -subj '/CN=*.test.local' -nodes
+</source>
+
+<p>
+Make sure it has the following permissions and ownership.
+</p>
+<source>
+-rw-r--r--. 1 root elasticsearch 1814 Sep  3 20:32 es-cert.pem
+-rw-r--r--. 1 root elasticsearch 3272 Sep  3 20:32 es-key.pem
+</source>
+
+<p>
+<b>Step 2: Edit Elasticsearch configuration file</b>
 </p>
 
 <p>
-<b>API nodes:</b>
+Add following properties in <i>/etc/elasticsearch/elasticsearch.yml</i>
 </p>
+
+<source>
+xpack.security.enabled: true
+xpack.security.transport.ssl.enabled: true
+
+xpack.security.http.ssl.enabled: true
+xpack.security.http.ssl.key: "/etc/elasticsearch/ssl/es-key.pem"
+xpack.security.http.ssl.certificate: "/etc/elasticsearch/ssl/es-cert.pem"
+</source>
+
 <p>
-<ul>
-  <li><b>8000</b> - API clients connect to this port</li>
-</ul>
+<b>Step 3: Restart Elasticsearch</b>
 </p>
 
-</subsection>
+<source>
+systemctl stop elasticsearch
+systemctl start elasticsearch
+</source>
 
-<!-- ================================================= -->  
-
-<subsection name="Elasticsearch">
-
-<h4>Authentication</h4>
 <p>
-Elasticsearch supports multiple authentication schemes, such as
-</p>
-<p>
-<ul>
-  <li>Basic</li>
-  <li>Mutual TLS</li>
-  <li>OpenID Connect</li>
-  <li>LDAP / Active Directory</li>
-  <li>Custom</li>
-</ul>
+<b>Step 4: Setup passwords for built-in users</b>
 </p>
 
-<h4>Authorization</h4>
 <p>
-<ul>
-  <li>Role Based</li>
-</ul>
+Run the following command and enter passwords for built-in users.
 </p>
+<source>
+/usr/share/elasticsearch/bin/elasticsearch-setup-passwords interactive
+</source>
+
+<p>
+<b>Step 5: Test SSL and basic authentication</b>
+</p>
+
+<p>
+Test HTTPS connection and basic authentication. 
+Use built-in admin user "elastic" and the password you set in step 4.
+</p>
+
+<source>
+curl -k -u elastic https://es1.test.local:9200
+</source>
 
 </subsection>
 

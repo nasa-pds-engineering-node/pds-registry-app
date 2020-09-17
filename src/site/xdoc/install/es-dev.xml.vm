@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document>
+<properties>
+  <title>Elasticsearch</title>
+</properties>
+
+<body>
+<section name="Elasticsearch - Quick Start">
+  
+<ul>
+  <li><a href="#Overview">Overview</a></li>
+  <li><a href="#Installation">Installation</a></li>
+  <li><a href="#Using_Docker">Using Docker</a></li>
+  <li><a href="#Next_Steps">Next Steps</a></li>
+  <li><a href="#Common Errors">Common Errors</a></li>
+</ul>
+
+<subsection name="Overview">
+<p>
+PDS Registry requires <a href="https://www.elastic.co/elasticsearch/" target="_blank">Elasticsearch</a>.
+</p>
+<p>
+To install Elasticsearch on a developer laptop follow instructions below.
+For production deployment, see <a href="../prod/index.html">this section</a>.
+</p>
+</subsection>
+
+<!-- ======================================================== -->
+
+<subsection name="Installation">
+
+<p>
+  <b>Step 1: Download and extract Elasticsearch</b>
+</p>
+
+<p>
+Download Elasticsearch 7.8.1 from
+<a href="https://www.elastic.co/downloads/past-releases/elasticsearch-7-8-1" target="_blank">Elastic website</a>.
+There are ZIP (recommended) and MSI files for Windows, TAR.GZ for MacOS, TAR.GZ, RPM and DEB files for Linux.
+</p>
+
+<p>
+If you're using ZIP or TAR.GZ file, extract the archive to any directory, for example, <i>/opt/elasticsearch-7.8.1</i>.
+We will call this directory <i>ELASTIC_SEARCH_HOME</i> throughout the rest of this documentation.
+</p>
+
+<p>
+  <b>Step 2: Start Elasticsearch</b>
+</p>
+
+<p>
+Open Command Prompt / Terminal / PowerShell.
+</p>
+<p>
+Go to <i>ELASTIC_SEARCH_HOME/bin</i> and run <i>elasticsearch.bat</i> on Windows or <i>elasticsearch</i> on Linux or Mac.
+</p>
+
+<p>
+  <b>Step 3: Check that Elasticsearch server started</b>
+</p>
+
+<p>
+Either go to <i>http://localhost:9200</i> in a web browser or use <i>curl</i> command.
+You should get a response similar to this.
+</p>
+
+<source>
+{
+  "name" : "HOST-1234",
+  "cluster_name" : "elasticsearch",
+  "cluster_uuid" : "JJn5eqoGS3-qg03QX-Jb4w",
+  "version" : {
+    "number" : "7.8.1",
+    "build_flavor" : "default",
+    "build_type" : "zip",
+    "build_hash" : "b5ca9c58fb664ca8bf9e4057fc229b3396bf3a89",
+    "build_date" : "2020-07-21T16:40:44.668009Z",
+    "build_snapshot" : false,
+    "lucene_version" : "8.5.1",
+    "minimum_wire_compatibility_version" : "6.8.0",
+    "minimum_index_compatibility_version" : "6.0.0-beta1"
+  },
+  "tagline" : "You Know, for Search"
+}
+</source>
+
+</subsection>
+
+<!-- ===================================== -->
+
+<subsection name="Using Docker">
+<p>
+You can run Elasticsearch in Docker or Podman. The Elasticsearch images are based on CentOS 7.
+</p>
+<p>
+First, pull Elasticsearch from Elastic Docker registry.
+</p>
+<source>
+docker pull docker.elastic.co/elasticsearch/elasticsearch:7.8.1
+</source>
+<p>
+To start a single-node Elasticsearch cluster for development or testing, run the following command
+</p>
+<source>
+docker run -d --name elasticsearch \
+  -p 9200:9200 -p 9300:9300 \
+  -e "discovery.type=single-node" \
+  docker.elastic.co/elasticsearch/elasticsearch:7.8.1
+</source>
+</subsection>
+
+<!-- ======================================================= -->
+
+<subsection name="Next Steps">
+<p>
+Your Elasticsearch server is ready. You should now deploy the <a href="tools.html">tools</a> 
+to harvest metadata and manage your registry.
+</p>
+</subsection>
+  
+<!-- ======================================================= -->
+
+<subsection name="Common Errors">
+<p>
+If you could not start Elasticsearch or access it
+</p>
+
+<ul>
+  <li>Check logs in <i>ELASTIC_SEARCH_HOME/logs</i> directory.</li>
+  <li>If running in a VM or container, make sure that ports 9200 and 9300 are open or mapped.</li>
+  <li>Try replacing localhost with the hostname or IP of your machine.</li>
+  <li>Check if another application is using ports 9200 or 9300. 
+Make sure you don't have another Elasticsearch instance or docker container running.</li>
+</ul>
+
+</subsection>
+
+</section>
+
+</body>
+</document>

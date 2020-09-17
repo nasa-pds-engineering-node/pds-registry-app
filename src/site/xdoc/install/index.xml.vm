@@ -42,7 +42,7 @@
 <p>
 The high level architecture of PDS Registry and its main components is shown below.
 </p>
-<img src="../images/registry-harvest.jpg" width="35%" />
+<img src="../images/registry-harvest.png" style="width:30em;" />
 <p>
 You can run all components on your laptop or install some or all of them on a server.
 </p>
@@ -55,15 +55,15 @@ If you do not already hava Java Runtime Environment (JRE) or Java Development Ki
 install it as described in <a href="java.html">Java Installation</a> section.
 </p>
 <p>
-You will need Java to run Registry Manager, Harvest and Apache Solr.
+You will need Java to run Registry Manager, Harvest and Elasticsearch.
 </p>
 </subsection>
 
-<subsection name="Apache Solr">
+<subsection name="Elasticsearch">
 <p>
-Apache Solr running in cloud mode is required to store PDS Registry data. 
-It can be installed on a developer laptop as described in <a href="solr.html">Solr - Quick Start</a> section.
-For production deployment see <a href="../solr-cloud/index.html">SolrCloud</a> section.
+Elasticsearch is required to store PDS Registry data. 
+It can be installed on a developer laptop as described in <a href="es-dev.html">Elasticsearch - Quick Start</a> section.
+For production deployment see <a href="../prod/index.html">Elasticsearch in Production</a> section.
 </p>
 </subsection>
 
@@ -71,7 +71,7 @@ For production deployment see <a href="../solr-cloud/index.html">SolrCloud</a> s
 
 <subsection name="Registry Tools">
 <p>
-The installation of Registry Manager and Harvest is described in <a href="tools.html">this section</a>.
+The installation of Registry Manager and Harvest is described in <a href="tools.html">Tools section</a>.
 </p>
 </subsection>
 

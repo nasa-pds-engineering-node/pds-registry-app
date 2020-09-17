@@ -8,25 +8,22 @@
 
 <body>
 
-<section name="Registry Collection">
+<section name="Registry Index">
 
 <p>
-Registry stores its data in Apache Solr. You must create registry collection in Solr before loading the data.
+PDS Registry stores its data in Elasticsearch. You must create registry index in Elasticsearch before loading the data.
 </p>
 
 <p>
-Registry manager comes with default registry "configset" located in <i>&lt;wherever you deployed the package&gt;/registry-$context.get("registry.version")/solr/collections/registry</i> 
-directory.
-
-The default registry configset consists of two files, <i>managed-schema</i> and <i>solrconfig.xml</i>.
-You may want to add more fields to default schema or change default Solr configuration.
+Registry Manager comes with default Elasticsearch registry schema located in 
+<i>&lt;wherever you deployed the package&gt;/registry-$context.get("registry.version")/elastic/registry.json</i>.
+You may want to add more fields to default schema or change default configuration.
 </p>
 
-<subsection name="Create Collection">
+<subsection name="Create Elasticsearch Index">
 
 <p>
-To create registry collection in Solr from default configset with one shard and one replica,
-run the following Registry Manager command
+To create registry index in Elasticsearch from default schema run the following Registry Manager command
 </p>
 <source>
 registry-manager create-registry
@@ -43,39 +40,27 @@ registry-manager create-registry -help
 
 <p>
 To check that registry collection was created open the following URL in 
-a browser: <i>http://localhost:8983/solr/registry/schema</i> or use <i>curl</i>
-if it is available on your system (Linux, Mac)
+a browser: <i>http://localhost:9200/_cat/indices/registry</i> or use <i>curl</i>.
+</p>
 <source>
-curl 'http://localhost:8983/solr/registry/schema'
+curl "http://localhost:9200/_cat/indices/registry"
 </source>
-</p>
 
 <p>
-You can also go to Solr admin UI at <i>http://localhost:8983/solr/</i> and select 
-registry collection from a dropdown on the left as shown below.
+The response should look similar to this. Make sure that index status is "green". 
 </p>
-<img src="../images/solr-collection.jpg" width="60%" />
+<source>
+green open registry u05gqL5FSHKhF-lnG_bf_A 1 0   0  0 208b   208b
+</source>
+
 </subsection>
-
-<br/>
-<p>
-<b>NOTE:</b> If you run Solr in Docker / Podman, make sure that Solr started in cloud mode 
-and ZooKeeper port (9983) is mapped. 
-</p>
-<p>
-You can connect to remote ZooKeeper (and Solr) cluster by passing <i>-zkHost</i> parameter.
-</p>
-<p>
-You can also use standard ZooKeeper and Solr tools instead of Registry Manager to create 
-and manage registry collection.
-</p>
 
 <!-- ====================================================== -->
 
-<subsection name="Delete Collection">
+<subsection name="Delete Elasticsearch Index">
 
 <p>
-To delete registry collection from Solr run the following command.
+To delete registry index from Elasticsearch run the following command.
 <source>
 registry-manager delete-registry
 </source>
@@ -91,10 +76,8 @@ See <a href="../operate/reg-manager.html">Registry Manager Help</a> for more inf
 
 <subsection name="Customization">
 <p>
-You may want to add more fields to default schema or change default Solr configuration.
-See <a href="../operate/reg-collection.html">Registry Collection Configuration</a> and
-<a href="https://lucene.apache.org/solr/guide/8_4/documents-fields-and-schema-design.html" target="_blank">Solr Documentation</a>
-for more information.
+You may want to add more fields to default schema or change default configuration.
+See <a href="../operate/reg-custom.html">Registry Customization</a> for more information.
 </p>
 </subsection>
 

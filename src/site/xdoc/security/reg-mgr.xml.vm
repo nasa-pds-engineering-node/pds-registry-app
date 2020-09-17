@@ -34,85 +34,44 @@
 
 <document>
 <properties>
-  <title>Security</title>
+  <title>Registry Manager Security</title>
 </properties>
 
 <body>
 
-<section name="Security Overview">
+<section name="Registry Manager Security">
 
 <p>
-You can implement both network and application security. 
-For most deployments, network security with public access to read-only APIs 
-provided by application servers (API nodes) should be enough.
+Registry manager supports HTTPS connections to Elasticsearch and Basic Authentication.
+We may add more authentication schemes in future releases.
 </p>
 
-
-<subsection name="Network Security">
-
-<p>
-<ul>
-  <li>All public traffic is routed through a load balancer / proxy server.</li>
-  <li>Only HTTPS protocol is available on public LAN.</li>
-  <li>Admin APIs are only available on private LAN.</li>
-  <li>It is not recommended to expose any Elasticsearch APIs to the public.</li>
-  <li>All public read-only APIs are provided by application servers (API nodes).</li>
-</ul>
-</p>
-
-<img src="../images/network-prod.png" style="width:50em;" />
-
-<h4>Ports</h4>
+<subsection name="Basic Authentication">
 
 <p>
-If you run a firewall, the following ports have to be open on private LAN:
+To enable Basic Authentication, create a configuration file in your home directory or another secure location. 
+In this example we called the file <i>es-auth.cfg</i>, but you can use another name.
 </p>
 
 <p>
-<b>Elasticsearch nodes:</b>
-</p>
-<p>
-<ul>
-  <li><b>9200</b> - Elasticsearch clients connect to this port</li>
-  <li><b>9300</b> - Elasticsearch nodes communicate over this port</li>
-</ul>
+Provide user name, password, and optionally "trust.self-signed" flag, if your Elasticsearch server is using 
+self-signed certificate for HTTPS connections.
 </p>
 
-<p>
-<b>API nodes:</b>
-</p>
-<p>
-<ul>
-  <li><b>8000</b> - API clients connect to this port</li>
-</ul>
-</p>
+<source>
+trust.self-signed = true
+user = elastic
+password = mypassword
+</source>
 
-</subsection>
-
-<!-- ================================================= -->  
-
-<subsection name="Elasticsearch">
-
-<h4>Authentication</h4>
 <p>
-Elasticsearch supports multiple authentication schemes, such as
-</p>
-<p>
-<ul>
-  <li>Basic</li>
-  <li>Mutual TLS</li>
-  <li>OpenID Connect</li>
-  <li>LDAP / Active Directory</li>
-  <li>Custom</li>
-</ul>
+Pass security configuration file to a Registry Manager command in "-auth" command-line parameter.
+For example,
 </p>
 
-<h4>Authorization</h4>
-<p>
-<ul>
-  <li>Role Based</li>
-</ul>
-</p>
+<source>
+registry-manager create-registry -es https://myserver.com:9200 -index test1 -auth /home/user1/es-auth.cfg
+</source>
 
 </subsection>
 

@@ -44,7 +44,6 @@
 <p>
 <ul>
   <li><a href="#Overview">Overview</a></li>
-  <li><a href="#Kubernetes">Kubernetes</a></li>
   <li><a href="#VMs">VMs</a></li>
   <li><a href="#Ports">Ports</a></li>
 </ul>
@@ -55,31 +54,23 @@
 <p>
 Main components of multi-node cluster:
 <ul>
-  <li><b>ZooKeeper</b> nodes - provide cluster configuration and coordination.</li>
-  <li><b>Solr</b> nodes - store PDS data and provide low level search API. </li>
+  <li><b>Elasticsearch</b> nodes - store PDS data and provide low level search API. </li>
   <li><b>API</b> nodes - provide PDS registry API. Only API nodes are exposed to public network.</li>
   <li><b>Load balancer / proxy server</b> - forwards user requests to API servers. Provides public HTTPS access point.</li>
 </ul>
 </p>
 
-<img src="../images/network-prod.png" style="width:50em;" />
+<img src="../images/network-prod.png" style="width:45em;" />
 
 <p>
 Nodes can be deployed in containers (Kubernetes) or VMs. 
 </p>
 
-<h4>Kubernetes</h4>
-<p>
-<ul>
-  <li>3 ZooKeeper nodes are deployed as a StatefulSet.</li>
-  <li>2+ Solr nodes are deployed as a StatefulSet.</li>
-  <li>2+ API nodes are deployed as a ReplicaSet (stateless).</li>
-</ul>
-</p>
+<!-- ===================================== -->
 
 <h4>VMs</h4>
 <p>
-To reduce VM overhead you can deploy multiple nodes of different type (ZooKeeper, Solr, API) in the same VM.  
+To reduce VM overhead you can deploy multiple nodes of different type (Elasticsearch, API) in the same VM.  
 It is recommended to have 3 VMs for HA setup.
 </p>
 
@@ -93,14 +84,14 @@ Minimal non-HA configuration can be deployed in a single VM.
 
 </subsection>
 
+<!-- ===================================== -->
+
 <subsection name="Ports">
 <p>
 <ul>
-  <li><b>2181</b> - ZooKeeper clients connect to this port</li>
-  <li><b>2888</b> - ZooKeeper follower nodes use this port to connect to the ZooKeeper leader</li>
-  <li><b>3888</b> - This port is used for ZooKeeper leader election</li>
   <li><b>8000</b> - API clients connect to this port</li>
-  <li><b>8983</b> - Solr clients connect to this port</li>
+  <li><b>9200</b> - Elasticsearch clients connect to this port</li>
+  <li><b>9300</b> - Elasticsearch nodes communicate over this port</li>
 </ul>
 </p>
 

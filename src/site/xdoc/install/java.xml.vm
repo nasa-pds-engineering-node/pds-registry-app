@@ -11,7 +11,7 @@
 <section name="Java Runtime Environment">
 
 <p>
-Both Apache Solr and PDS Registry tools require Java Runtime Environment to run. 
+Elasticsearch and PDS Registry tools require Java Runtime Environment to run. 
 Recommended version of Java is 11.
 </p>
 
@@ -55,7 +55,7 @@ and manually unzip them. Then you can set JAVA_HOME environment variable to choo
 </section>
 
 <section name="Next steps">
-<p>Java is now available in your environment, you should now deploy the <a href="solr.html">Solr</a> server.</p>
+<p>Java is now available in your environment, you should now deploy <a href="es-dev.html">Elasticsearch</a> server.</p>
 </section>
 
 </body>
