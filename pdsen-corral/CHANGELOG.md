@@ -1,8 +1,25 @@
 # Changelog
 
-## [0.2.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/0.2.0-SNAPSHOT) (2020-08-13)
+## [Unreleased](https://github.com/NASA-PDS/pds-registry-app/tree/HEAD)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/0.2.0-SNAPSHOT...HEAD)
+
+**Closed issues:**
+
+- Update Registry App documentation per ES refactor [\#43](https://github.com/NASA-PDS/pds-registry-app/issues/43)
+
+## [0.2.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/0.2.0-SNAPSHOT) (2020-09-17)
 
 [Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/0.1.2...0.2.0-SNAPSHOT)
+
+**Improvements:**
+
+- Have a blob store in Elastic Registry for pds labels [\#44](https://github.com/NASA-PDS/pds-registry-app/issues/44)
+- Refactor Registry Manager and Harvest to use ElasticSearch tech stack [\#37](https://github.com/NASA-PDS/pds-registry-app/issues/37)
+
+**Closed issues:**
+
+- Tag pds-registry-app for last Solr build [\#39](https://github.com/NASA-PDS/pds-registry-app/issues/39)
 
 ## [0.1.2](https://github.com/NASA-PDS/pds-registry-app/tree/0.1.2) (2020-08-13)
 
