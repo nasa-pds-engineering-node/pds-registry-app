@@ -9,45 +9,43 @@
 
 <section name="Registry Customization">
 
+
+<p>
+<ul>
+  <li><a href="#Overview">Overview</a></li>
+  <li><a href="#DD">Data Dictionary</a></li>
+</ul>
+</p>
+
 <!-- ========================================================== -->
 
-<subsection name="Default Configuration Overview">
+<subsection name="Overview" id="Overview">
 <p>
-By default, PDS Registry stores its data in Elasticsearch index called "registry".
-Registry Manager comes with default Elasticsearch schema <i>REGISTRY_HOME/elastic/registry.json</i>.
-(Where <i>REGISTRY_HOME</i> is a directory where you installed Registry Manager, for example
-<i>/home/pds/registry</i>).
+When you create a registry
 </p>
 
-<p>
-Default schema file defines few common fields such as 
-<ul>
-<li>lid</li>
-<li>vid</li>
-<li>lidvid</li>
-<li>title</li>
-<li>product_class</li>
-<li>internal refrences</li>
-</ul> 
-</p>
+<source>
+registry-manager create-registry
+</source>
 
 <p>
-and basic file information, such as 
+two Elasticsearch indices are created
 <ul>
-<li>file name</li>
-<li>file type</li>
-<li>file size</li>
-<li>MD5 hash</li>
+<li><i>registry</i> - main index for PDS4 product metadata.</li>
+<li><i>registry-dd</i> - data dictionary, a list of searchable fields that main registry index can have.</li>
 </ul>
 </p>
 
 <p>
-Also, there is a binary field to store the whole label as a BLOB.
+Default Elasticsearch schemas for these indices (<i>registry.json</i> and <i>data-dic.json</i>) 
+are located in <i>REGISTRY_HOME/elastic/</i> directory.
+Where <i>REGISTRY_HOME</i> is a directory where you installed Registry Manager, for example
+<i>/home/pds/registry</i>.
 </p>
 
 <p>
-Lidvid is a primary key. If you load the same Harvest-generated data file multiple times,
-existing Elasticsearch documents will be replaced with new documents with the same lidvid. 
+Default registry schema defines few common fields such as lid, vid, title, internal refrences and basic file information.
+Also, there is a binary field to store the whole PDS label as a BLOB. Lidvid is a primary key.
 </p>
 
 <p>
@@ -62,379 +60,137 @@ Dynamic field mapping is disabled.
 </source>
 
 <p>
-When you load data, fields not defined in Elasticsearch schema are not indexed, 
-but they are available in "_source" field.
+After running Harvest, the output folder (default is /tmp/harvest/out/) will have two files
+<ul>
+<li><i>es-docs.json</i> - metadata extracted from PDS4 labels, stored in Newline-delimited JSON (NJSON) format.</li>
+<li><i>fields.txt</i> - a list of field names extracted from PDS4 labels.</li>
+</ul>
+</p>
+
+<p>
+When you load data
+</p>
+
+<source>
+registry-manager load-data -file /home/pds/harvest/out/es-docs.json
+</source>
+
+<p>
+by default, registry manager will try to update registry schema (add more fields) from <i>fields.txt</i> file.
+Those fields must exist in the data dictionary index. You can disable schema update by passing extra parameter 
+</p>
+
+<source>
+registry-manager load-data -file /home/pds/harvest/out/es-docs.json -updateSchema n
+</source>
+
+<p>
+If you do that, fields not in Elasticsearch schema are not indexed, but they are still available in "_source" field.
 </p>
 
 </subsection>
 
 <!-- ========================================================== -->
 
-<subsection name="Customization Overview">
-<h4>Adding More Fields</h4>
-<p>
-Default configuration defines just a few common fields and dynamic field mapping is disabled. 
-You could either enable dynamic mapping or add more fields to the schema.
-Note that by default you could not have more than 1000 fields per index. 
-</p>
-
-<h4>Full Text Search Customization</h4>
-<p>
-To optimize full text search, you may want to customize Elasticsearch index and query-time analyzers (filters, tokenizers),
-define Elasticsearch copy fields or configure Harvest to merge multiple fields.
-</p>
-</subsection>
- 	
-<!-- ========================================================== -->
-
-<subsection name="Adding More Fields">
+<subsection name="Data Dictionary" index="DD">
 
 <p>
-Detailed information about Elasticsearch fields and schema design is available at 
-<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping.html" target="_blank">Elastic website</a>.
-</p>
-
-<!-- ============= -->
-
-<h4>Manually editing schema file</h4>
-
-<p>
-Either edit default <i>REGISTRY_HOME/elastic/registry.json</i> file or create a copy.
-</p>
-
-<p>
-The following example shows how to add <i>start_date_time</i> and <i>stop_date_time</i> fields.
-<source>
-{
-...
-  "mappings": {
-...
-    "properties": {
-...
-      "start_date_time": { "type": "date" },
-      "stop_date_time": { "type": "date" }
-    }
-  }
-}
-</source>
-</p>
-
-<p>
-To apply the changes you have to delete the registry index and all its data! 
-<source>
-registry-manager delete-registry
-</source>
-</p>
-
-<p>
-and then recreate the index.
-<source>
-registry-manager create-registry
-</source>
-</p>
-
-<p>
-If you copied default schema file, pass new file name in <i>-schema</i> parameter to Registry Manager.
-</p>
-<source>
-registry-manager create-registry -schema /my-folder/test.json
-</source>
-
-<p>
-You can also customize index name and Elasticsearch URL.
-</p>
-<source>
-registry-manager create-registry -index /tmp/test.json -index test1 -es https://myhost:9200
-</source>
-
-<!-- ============= -->
-
-<h4>Adding fields dynamically</h4>
-
-<p>
-You can add and delete fields dynamically by calling Elasticsearch mapping API. 
-For example, to add <i>start_date_time</i> field call
-<source>
-curl -X PUT "localhost:9200/registry/_mapping?pretty" -H 'Content-Type: application/json' -d'
-{
-  "properties": {
-    "start_date_time": { "type": "date" }
-  }
-}
-'
-</source>
-</p>
-
-<!-- ============= -->
-
-<h4>Generating Elasticsearch fields from PDS4 data dictionaries</h4>
-<p>
-Registry manager can generate Elasticsearch schema from one or more PDS4 data dictionaries.
-Only data dictionaries in JSON format are supported.
+When registry is created, the data dictionary is populated with fields (attributes) from 
+PDS common and few discipline dictionaries.
 Latest versions of PDS4 data dictionaries in different formates are available at 
 <a href="https://pds.nasa.gov/datastandards/dictionaries/" target="_blank">PDS website</a>.
 </p>
 
-<h5>Getting Started</h5>
-
 <p>
-Let's extract autoexposure fields from imaging data dictionary, <i>PDS4_IMG_1D00_1700.JSON</i>.
+The following naming convention is used for Elasticsearch fields:
 </p>
-
-<p>
-First, create a configuration file and save it as <i>/tmp/example.xml</i>.
-<source>
-&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-
-&lt;schemaGen&gt;
-
-  &lt;dataDictionary baseDir="/tmp/schema"&gt;
-    &lt;file&gt;PDS4_IMG_1D00_1700.JSON&lt;/file&gt;
-  &lt;/dataDictionary&gt;
-
-  &lt;classFilters&gt;
-    &lt;include&gt;img.Autoexposure&lt;/include&gt;
-  &lt;/classFilters&gt;
-
-&lt;/schemaGen&gt;
-</source>
-</p>
-
-<p>
-The file has several sections. Data dictionary sections lists all dictionary files to be processed.
-This section is required and should contain one or more data dictionary files.
-In this example, imaging data dictionary <i>PDS4_IMG_1D00_1700.JSON</i> is located in <i>/tmp/schema</i> folder.
-If you want to use different folder or file, adjust your configuration file accordingly.
-</p>
-
-<p>
-Class filter section is optional. Without this section, all classes and its attributes from data dictionary will be
-processed. You can limit number of classes by providing either include or exclude filters, but not both.
-In this example only <i>img.Autoexposure</i> class and its attributes will be processed.
-Note that class name includes <i>img</i> namespace.
-</p>
-
-<p>
-Run <i>generate-schema</i> Registry Manager command to generate Elasticsearch schema.
-</p>
-<source>
-registry-manager generate-schema -config /tmp/example.xml
-</source>
-
-<p>
-By default, generated schema is saved in <i>/tmp/registry/schema.json</i> file. 
-You can change default location by providing <i>-file</i> parameter. For example,
-</p>
-<source>
-registry-manager generate-schema -config /tmp/example.xml -file /home/pds4/my-schema.json
-</source>
-
-<p>
-Example <i>schema.json</i> file is shown below.
-<source>
-{
-  "settings": {
-    "number_of_shards": 1,
-    "number_of_replicas": 0
-  },
-  "mappings": {
-    "properties": {
-      "img/Autoexposure/img/auto_exposure_data_cut": {
-        "type": "integer"
-      },
-      "img/Autoexposure/img/active_flag": {
-        "type": "boolean"
-      },
-      "img/Autoexposure/img/auto_exposure_percent": {
-        "type": "double"
-      },
-      "img/Autoexposure/img/processing_venue": {
-        "type": "keyword"
-      },
-      "img/Autoexposure/img/auto_exposure_pixel_fraction": {
-        "type": "double"
-      },
-      "img/Autoexposure/img/processing_algorithm": {
-        "type": "keyword"
-      },
-      "img/Autoexposure/img/max_auto_exposure_iteration_count": {
-        "type": "integer"
-      },
-      "img/Autoexposure/img/sequence_number": {
-        "type": "keyword"
-      }
-    }
-  }
-}
-</source>
-</p>
-
-<p>
-The following naming convention is used for generated Elasticsearch fields:
 <source>
 &lt;namespace&gt;/&lt;class name&gt;/&lt;namespace&gt;/&lt;attribute name&gt;
 </source>
-</p>
 
 <p>
-Note that data dictionaries and class filters in configuration files use '.' as a separator between a namespace 
-and a class name, for example,
+For example,
 </p>
 <source>
-img.Autoexposure
+disp/Display_Direction/disp/vertical_display_direction
+geom/Articulation_Device_Parameters/geom/device_id
+pds/XML_Schema/pds/name
+proc/Software_Program/proc/name
 </source>
 
 <p>
-In Elasticsearch dots in field names represent nested object types. 
-Therefore we had to use '/' as a separator to define simple "flat" fields.
+You can load more data dictionaries in following formats: 
+<ul>
+<li>Standard PDS4 data dictionary JSON file, for example, <i>orex_ldd_OREX_1300.JSON</i></li>
+<li>Data dump created by 'export-dd' command (NJSON)</li>
+<li>Custom CSV file</li>
+</ul>
 </p>
-
-
-<h5>Data Type Map</h5>
-
 <p>
-You might have noticed few warnings when running registry manager.
+For example,
+</p>
 <source>
-[WARN] No PDS to Elasticsearch data type mapping for 'pds.ASCII_Integer'. Will use 'integer'
-[WARN] No PDS to Elasticsearch data type mapping for 'pds.ASCII_Boolean'. Will use 'boolean'
-[WARN] No PDS to Elasticsearch data type mapping for 'pds.ASCII_Real'. Will use 'double'
-[WARN] No PDS to Elasticsearch data type mapping for 'pds.ASCII_Short_String_Collapsed'. Will use 'keyword'
+registry-manager load-dd -dd /home/pds/schema/orex_ldd_OREX_1300.JSON
 </source>
+
+<p>
+Elasticsearch data dictionary schema has following fields.
+<ul>
+<li><i>class_ns</i> - class namespace, e.g., "pds"</li>
+<li><i>class_name</i> - class name, e.g., "Element_Array"</li>
+<li><i>attr_ns</i> - attribute namespace, e.g., "pds"</li>
+<li><i>attr_name</i> - attribute name, e.g., "scaling_factor"</li>
+<li><i>data_type</i> - PDS data type, e.g., "ASCII_Real"</li>
+<li><i>description</i> - field description</li>
+<li><i>es_field_name</i> - Elasticsearch field name, e.g., "pds/Element_Array/pds/scaling_factor"</li>
+<li><i>es_data_type</i> - Elasticsearch data type, e.g., "double"</li>
+</ul>
 </p>
 
 <p>
-Attributes in data dictionary files have PDS data types, such as <i>pds.ASCII_Integer</i>.
-Registry manager will try to convert PDS data types to Elasticsearch data types automatically.
-You can also provide your own mappings.
+If you load standard PDS JSON data dictionary, all these fields are populated automatically.
+If you use custom CSV file, "es_field_name" and "es_data_type" are required and other fields are optional.
+The CSV file must have a header with field names, for example,
 </p>
 
-<p>
-Add the following section in the configuration file (<i>/tmp/example.xml</i>):
 <source>
-  &lt;dataTypes baseDir="/tmp/schema"&gt;
-    &lt;file&gt;data-types.cfg&lt;/file&gt;
-  &lt;/dataTypes&gt;
+es_field_name,es_data_type
+my_namespace/My_Model_Parameter/my_namespace/parameterA,keyword
+my_namespace/My_Model_Parameter/my_namespace/parameterB,integer
+my_namespace/My_Model_Parameter/my_namespace/parameterC,double
 </source>
+
+<!-- ==================================================== -->
+
+<h4>PDS to Elasticsearch Data Type Mapping</h4>
+
+<p>
+If you load standard PDS JSON data dictionary, PDS data types, such as <i>pds.ASCII_Real</i>
+are automatically mapped to Elasticsearch data types, such as <i>double</i>.
+The mappings are stored in <i>REGISTRY_HOME/elastic/data-dic-types.cfg</i> file.
+You can modify this file, to add more mappings or change default values.
 </p>
 
 <p>
-And another file, <i>/tmp/schema/data-types.cfg</i> with mappings.
+The file has the following format:
+</p>
+<source>
+&lt;PDS data type&gt; = &lt;Elasticsearch data type&gt;
+</source>
+
+<p>
+For example,
+</p>
+
 <source>
 pds.ASCII_Integer = integer
 pds.ASCII_Boolean = boolean
 pds.ASCII_Real = double
 pds.ASCII_Short_String_Collapsed = keyword
-</source>
-</p>
-
-<p>
-The format of this file is very simle:
-</p>
-<source>
-&lt;PDS data type with namespace&gt; = &lt;Elasticsearch data type&gt;
+...
 </source>
 
-<h5>Custom Generators</h5>
-<p>
-Instead of automatically generating Elasticsearch fields from data dictionary class attributes, you can define
-custom generators per data dictionary class.
-</p>
-<p>
-First, let's use a configuration file without custom generators (/tmp/example.xml):
-</p>
-<source>
-&lt;schemaGen&gt;
-  &lt;dataDictionary baseDir="/tmp/schema"&gt;
-    &lt;file&gt;PDS4_PDS_JSON_1D00.JSON&lt;/file&gt;
-  &lt;/dataDictionary&gt;
-  &lt;classFilters&gt;
-    &lt;include&gt;pds.Observing_System_Component&lt;/include&gt;
-  &lt;/classFilters&gt;
-&lt;/schemaGen&gt;
-</source>
 
-<p>
-If you run schema generator
-</p>
-<source>
-registry-manager generate-schema -config /tmp/example.xml
-</source>
-
-<p>
-The following fields will be generated:
-<source>
-"pds/Observing_System_Component/pds/name": { "type": "keyword" },
-"pds/Observing_System_Component/pds/type": { "type": "keyword" },
-"pds/Observing_System_Component/pds/description": { "type": "text" }
-</source>
-</p>
-
-<p>
-Now, let's add the following section to the main configuration file (<i>/tmp/example.xml</i>)
-<source>
-&lt;customGenerators baseDir="/tmp/schema"&gt;
-  &lt;class name="pds.Observing_System_Component" file="Observing_System_Component.cfg" /&gt;
-&lt;/customGenerators&gt;
-</source>
-</p>
-
-<p>
-and another custom generator file, <i>/tmp/schema/Observing_System_Component.cfg</i>
-<source>
-instrument_name = string
-spacecraft_name = string
-</source>
-</p>
-
-<p>
-The format of this file is very simle:
-</p>
-<source>
-&lt;Elasticsearch field name&gt; = &lt;Elasticsearch data type&gt;
-</source>
-
-<p>
-If you run schema generator
-</p>
-<source>
-registry-manager generate-schema -config /tmp/example.xml
-</source>
-
-<p>
-The following custom fields will be generated:
-<source>
-"instrument_name": { "type": "keyword" },
-"spacecraft_name": { "type": "keyword" }
-</source>
-</p>
-
-<!-- ============= -->
-
-<h4>Updating Elasticsearch schema from PDS4 data dictionaries</h4>
-
-<p>
-To update Elasticsearch schema dynamically, by calling Elasticsearch schema API, run the following Registry Manager command:
-</p>
-<source>
-registry-manager update-schema -config /tmp/example.xml
-</source>
-
-<p>
-This command uses the same configuration file as <i>generate-schema</i> command described in previous section.
-</p>
-
-<p>
-By default, <i>"registry"</i> index of local Elasticsearch instance <i>http://localhost:9200</i> is updated.
-Both index name and Elasticsearch URL are configurable as shown below:
-</p>
-
-<source>
-registry-manager update-schema -config /tmp/example.xml -index test1 -es https://myhost:9200
-</source>
-
-<p>
-Elasticsearch index must exist, before calling <i>update-schema</i> command.
-</p>
 </subsection>
 </section>
 
