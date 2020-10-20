@@ -6,7 +6,8 @@
 
 **Other closed issues:**
 
-- Update Registry App documentation per ES refactor [\#43](https://github.com/NASA-PDS/pds-registry-app/issues/43)
+- Complete documentation for dynamic schema management [\#95](https://github.com/NASA-PDS/pds-registry-app/issues/95)
+- Download large data set for testing [\#84](https://github.com/NASA-PDS/pds-registry-app/issues/84)
 
 ## [0.2.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/0.2.0-SNAPSHOT) (2020-09-17)
 
@@ -19,6 +20,7 @@
 **Other closed issues:**
 
 - Have a blob store in Elastic Registry for pds labels [\#44](https://github.com/NASA-PDS/pds-registry-app/issues/44)
+- Update Registry App documentation per ES refactor [\#43](https://github.com/NASA-PDS/pds-registry-app/issues/43)
 - Tag pds-registry-app for last Solr build [\#39](https://github.com/NASA-PDS/pds-registry-app/issues/39)
 
 ## [0.1.2](https://github.com/NASA-PDS/pds-registry-app/tree/0.1.2) (2020-08-13)
