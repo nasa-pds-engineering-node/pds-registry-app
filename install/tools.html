@@ -28,7 +28,7 @@
           <ul class="breadcrumb">
         <li id="publishDate">Last Published: 2020-10-26<span class="divider">|</span>
 </li>
-          <li id="projectVersion">Version: 0.3.0</li>
+          <li id="projectVersion">Version: 0.2.0</li>
       <li class="pull-right"><a href="https://github.com/NASA-PDS/pds-registry-app" class="externalLink" title="Registry App Github Repo">Registry App Github Repo</a></li>
           </ul>
         </div>
@@ -67,8 +67,8 @@
      </ul></li>
     <li><a href="../index.html#Support" title="Support"><span class="none"></span>Support</a></li>
    <li class="nav-header">Downloads</li>
-    <li><a href="https://github.com/NASA-PDS/pds-registry-app/releases/download/0.3.0/pds-registry-app-0.3.0-bin.tar.gz" class="externalLink" title="Current Release (tar.gz)"><span class="none"></span>Current Release (tar.gz)</a></li>
-    <li><a href="https://github.com/NASA-PDS/pds-registry-app/releases/download/0.3.0/pds-registry-app-0.3.0-bin.zip" class="externalLink" title="Current Release (zip)"><span class="none"></span>Current Release (zip)</a></li>
+    <li><a href="https://github.com/NASA-PDS/pds-registry-app/releases/download/0.2.0/pds-registry-app-0.2.0-bin.tar.gz" class="externalLink" title="Current Release (tar.gz)"><span class="none"></span>Current Release (tar.gz)</a></li>
+    <li><a href="https://github.com/NASA-PDS/pds-registry-app/releases/download/0.2.0/pds-registry-app-0.2.0-bin.zip" class="externalLink" title="Current Release (zip)"><span class="none"></span>Current Release (zip)</a></li>
     <li><a href="https://pds-engineering.jpl.nasa.gov/content/pds4-software" class="externalLink" title="Past Releases"><span class="none"></span>Past Releases</a></li>
    <li class="nav-header">Change Log</li>
     <li><a href="../" title="TBD"><span class="none"></span>TBD</a></li>
@@ -114,15 +114,15 @@
     <section>
 <h2><a name="Download_and_unpack_the_package"></a>Download and unpack the package</h2>
       
-<p>Download the <i>pds-registry-app</i> package from Github (<a class="externalLink" href="https://github.com/NASA-PDS/pds-registry-app/releases/download/0.3.0/pds-registry-app-0.3.0-bin.tar.gz" target="_blank">TAR.GZ</a> 
-      <a class="externalLink" href="https://github.com/NASA-PDS/pds-registry-app/releases/download/0.3.0/pds-registry-app-0.3.0-bin.tar.gz" target="_blank">ZIP</a>). The binary distribution is available in identical zip or tar/gzip packages. The installation directory may vary from environment to environment but in UNIX-based environments it is typical to install software packages in the <i>/home/pds</i> directory and in Windows-based environments it is typical to install software packages in the <i>C:\Program Files</i> directory. Unpack the selected binary distribution file with one of the following commands:
+<p>Download the <i>pds-registry-app</i> package from Github (<a class="externalLink" href="https://github.com/NASA-PDS/pds-registry-app/releases/download/0.2.0/pds-registry-app-0.2.0-bin.tar.gz" target="_blank">TAR.GZ</a> 
+      <a class="externalLink" href="https://github.com/NASA-PDS/pds-registry-app/releases/download/0.2.0/pds-registry-app-0.2.0-bin.tar.gz" target="_blank">ZIP</a>). The binary distribution is available in identical zip or tar/gzip packages. The installation directory may vary from environment to environment but in UNIX-based environments it is typical to install software packages in the <i>/home/pds</i> directory and in Windows-based environments it is typical to install software packages in the <i>C:\Program Files</i> directory. Unpack the selected binary distribution file with one of the following commands:
       </p>
 
       
 <div class="source"><pre class="prettyprint">
-% unzip pds-registry-app-0.3.0-bin.zip
+% unzip pds-registry-app-0.2.0-bin.zip
 or
-% tar -xzvf pds-registry-app-0.3.0-bin.tar.gz
+% tar -xzvf pds-registry-app-0.2.0-bin.tar.gz
       </pre></div>
 
       
@@ -130,7 +130,7 @@ or
       </p>
 
       
-<p>The commands above result in the creation of the <i>pds-registry-app-0.3.0</i> directory with the following directory structure:
+<p>The commands above result in the creation of the <i>pds-registry-app-0.2.0</i> directory with the following directory structure:
       </p>
 
       
@@ -141,7 +141,7 @@ or
 <p>This directory contains tools which initiate the registry index in Elasticsearch</p>
         </li>
           
-<li><b>harvest-3.2.2/</b><br />
+<li><b>harvest-3.3.0/</b><br />
           
 <p>This directory contains harvest tool package.</p>
         </li>
@@ -178,7 +178,7 @@ or
 <p>The registry resources are located in sub-directory <i>registry-4.0.0</i>.</p>
       
       
-<p>The harvest tools are located in subdirectory <i>harvest-3.2.2</i></p>
+<p>The harvest tools are located in subdirectory <i>harvest-3.3.0</i></p>
       
       
 <p>To enable these tools, add the following to your PATH:</p>
@@ -187,14 +187,14 @@ or
 <p>For a UNIX environment, add the following to your .bash_profile (NOTE: May differ for other Unix shells). Replace $(pwd) as needed for the location of your software.</p>
       
 <div class="source"><pre class="prettyprint">
-export PATH=${PATH}:/path/to/pds-registry-app-0.3.0/harvest-3.2.2/bin:/path/to/pds-registry-app-0.3.0/registry-manager-4.0.0/bin
+export PATH=${PATH}:/path/to/pds-registry-app-0.2.0/harvest-3.3.0/bin:/path/to/pds-registry-app-0.2.0/registry-manager-4.0.0/bin
       </pre></div>
       
       
 <p>For a Windows environment:</p>
       
 <div class="source"><pre class="prettyprint">
-set PATH=%PATH%;C:\path\to${project.artifactId}-0.3.0\harvest-3.2.2\bin;C:\path\to${project.artifactId}-0.3.0\registry-manager-4.0.0\bin;%PATH%
+set PATH=%PATH%;C:\path\to${project.artifactId}-0.2.0\harvest-3.3.0\bin;C:\path\to${project.artifactId}-0.2.0\registry-manager-4.0.0\bin;%PATH%
       </pre></div>
       
     </section>
