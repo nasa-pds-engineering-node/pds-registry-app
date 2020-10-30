@@ -53,7 +53,7 @@ POSSIBILITY OF SUCH DAMAGE.
   </parent>
   
   <properties>
-     <registry.version>4.0.0</registry.version>
+     <registry.version>4.0.1</registry.version>
      <harvest.version>3.3.0</harvest.version>
   </properties>
 
