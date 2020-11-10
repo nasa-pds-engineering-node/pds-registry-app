@@ -53,8 +53,8 @@ POSSIBILITY OF SUCH DAMAGE.
   </parent>
   
   <properties>
-     <registry.version>4.0.0</registry.version>
-     <harvest.version>3.3.0</harvest.version>
+     <registry.version>4.1.0-SNAPSHOT</registry.version>
+     <harvest.version>3.4.0-SNAPSHOT</harvest.version>
   </properties>
 
   <build>
