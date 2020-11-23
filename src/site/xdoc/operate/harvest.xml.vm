@@ -218,10 +218,10 @@ product filter in Harvest configuration file:
 
 <section name="Extracting More Metadata" id="Extract">
 
-<subsection name="Basic File Information" id="FileInfo">
+<subsection name="Label and Data File Information" id="FileInfo">
 
 <p>
-To extracts basic file information, such as file name, type, size, and MD5 hash, 
+To extracts label and data file information, such as file name, mime type, size, and MD5 hash, 
 include the following section in the configuration file.
 <source>
 &lt;fileInfo /&gt;
@@ -229,14 +229,41 @@ include the following section in the configuration file.
 </p>
 
 <p>
-Now if you run Harvest, the following fields will be extracted in addition to other fields discussed above.
-<source>
-  "_file_name":"bundle_ladee_ldex.xml",
-  "_file_type":"application/xml",
-  "_file_size":5735,
-  "_file_md5":"zlYAt05W/Ag6Qy4HlNYy+g=="
-</source>
+Now if you run Harvest, both the label file information
 </p>
+<source>
+"ops/Label_File_Info/ops/creation_date_time":"2020-11-18T22:25:05Z",
+"ops/Label_File_Info/ops/file_name":"naif0012.xml",
+"ops/Label_File_Info/ops/file_ref":"/C:/tmp/d5/naif0012.xml",
+"ops/Label_File_Info/ops/file_size":"3398",
+"ops/Label_File_Info/ops/md5_checksum":"69ea2974a93854d90399b8b8fc3d1334"
+</source>
+
+<p>
+and data file information
+</p>
+
+<source>
+"ops/Data_File_Info/ops/creation_date_time":"2020-11-18T22:25:17Z",
+"ops/Data_File_Info/ops/file_name":"naif0012.tls",
+"ops/Data_File_Info/ops/file_ref":"/C:/tmp/d5/naif0012.tls",
+"ops/Data_File_Info/ops/file_size":"5257",
+"ops/Data_File_Info/ops/md5_checksum":"25a2fff30b0dedb4d76c06727b1895b1",
+"ops/Data_File_Info/ops/mime_type":"text/plain",
+</source>
+
+<p>
+will be extracted.
+</p>
+
+<p>
+If you don't want to process data files, add the following flag in Harvest configuration file.
+</p>
+
+<source>
+&lt;fileInfo processDataFiles="false" /&gt;
+</source>
+
 </subsection>
 
 <!-- =========== -->
@@ -245,16 +272,14 @@ Now if you run Harvest, the following fields will be extracted in addition to ot
 
 <p>
 You can store whole PDS product labels as BLOBs (Binary Large OBjects). 
-To enable this feature modify <i>fileInfo</i> section in Harvest configuration file.
-<source>
-&lt;fileInfo&gt;
-  &lt;blobStorage type="embedded" /&gt;
-&lt;/fileInfo&gt;
-</source>
+To enable this feature, modify <i>fileInfo</i> section in Harvest configuration file.
 </p>
+<source>
+&lt;fileInfo storeLabels="true" /&gt;
+</source>
 
 <p>
-After running Harvest, <i>es-docs.json</i> file will have <i>_file_blob</i> field with compressed product label. 
+After running Harvest, <i>es-docs.json</i> file will have <i>"ops/Label_File_Info/ops/blob"</i> field with compressed product label. 
 You can expect up to 900% compression rate for some files. 
 For example, many LADEE housekeeping labels are about 45KB. Compressed BLOB size is about 5KB.
 For smaller files, such as collection labels, compression rate is about 350% (5.5KB file is compressed to 1.6KB).
@@ -274,34 +299,37 @@ registry-manager export-file -lidvid urn:nasa:pds:ladee_ldex:data_calibrated::1.
 
 <subsection name="File Reference / Access URL" id="FileRef">
 <p>
-To store full path of a product label file, add the following section in Harvest configuration file.
-<source>
-&lt;fileRef/&gt;
-</source>
+Harvest extracts absolute paths of product and label files, such as
 </p>
-<p>
-After running Harvest, you should see <i>_file_ref</i> field added to each Elasticsearch document:
+
 <source>
-"_file_ref":"/C:/data/LADEE/ldex_20161118/bundle_ladee_ldex.xml"
+"ops/Label_File_Info/ops/file_ref":"/tmp/d5/naif0012.xml",
+"ops/Data_File_Info/ops/file_ref":"/tmp/d5/naif0012.tls",
 </source>
-</p>
+
 <p>
 Note that on Windows, backslashes are replaced with forward slashes and disk letter is included.
 </p>
 
-<p>
-To replace file path prefix with another value, let's change &lt;fileRef/&gt; tag in Harvest configuration file:
 <source>
-&lt;fileRef&gt;
-  &lt;replace prefix="/C:/data/LADEE/" replacement="https://pds.nasa.gov/data/pds4/" /&gt;
-&lt;/fileRef&gt;
+"ops/Label_File_Info/ops/file_ref":"C:/tmp/d4/bundle_orex_spice_v009.xml",
+</source>
+
+
+<p>
+To replace a file path prefix with another value, such as a URL, add &lt;fileRef/&gt; tag in Harvest configuration file:
+<source>
+&lt;fileInfo&gt;
+  &lt;fileRef replacePrefix="/C:/tmp/d4/" with="https://naif.jpl.nasa.gov/pub/naif/pds/pds4/orex/orex_spice/" /&gt;
+&lt;/fileInfo&gt;
 </source>
 </p>
 
 <p>
-Now, after running Harvest, you shoul see different <i>_file_ref</i> value:
+After running Harvest, you should get different <i>file_ref</i> value:
 <source>
-"_file_ref":"https://pds.nasa.gov/data/pds4/ldex_20161118/bundle_ladee_ldex.xml",
+"ops/Label_File_Info/ops/file_ref":
+    "https://naif.jpl.nasa.gov/pub/naif/pds/pds4/orex/orex_spice/bundle_orex_spice_v009.xml"
 </source>
 </p>
 

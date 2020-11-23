@@ -93,7 +93,7 @@ If you do that, fields not in Elasticsearch schema are not indexed, but they are
 
 <!-- ========================================================== -->
 
-<subsection name="Data Dictionary" index="DD">
+<subsection name="Data Dictionary" id="DD">
 
 <p>
 When registry is created, the data dictionary is populated with fields (attributes) from 
