@@ -93,7 +93,7 @@ If you do that, fields not in Elasticsearch schema are not indexed, but they are
 
 <!-- ========================================================== -->
 
-<subsection name="Data Dictionary" index="DD">
+<subsection name="Data Dictionary" id="DD">
 
 <p>
 When registry is created, the data dictionary is populated with fields (attributes) from 
@@ -127,8 +127,9 @@ You can load more data dictionaries in following formats:
 <li>Custom CSV file</li>
 </ul>
 </p>
+
 <p>
-For example,
+For example, to load standard PDS4 data dictionary, run the following command:
 </p>
 <source>
 registry-manager load-dd -dd /home/pds/schema/orex_ldd_OREX_1300.JSON
@@ -151,15 +152,23 @@ Elasticsearch data dictionary schema has following fields.
 <p>
 If you load standard PDS JSON data dictionary, all these fields are populated automatically.
 If you use custom CSV file, "es_field_name" and "es_data_type" are required and other fields are optional.
-The CSV file must have a header with field names, for example,
+The CSV file must have a header with data dictionary field names, for example,
 </p>
 
 <source>
 es_field_name,es_data_type
-my_namespace/My_Model_Parameter/my_namespace/parameterA,keyword
-my_namespace/My_Model_Parameter/my_namespace/parameterB,integer
-my_namespace/My_Model_Parameter/my_namespace/parameterC,double
+my_namespace/My_Class/my_namespace/parameter_a,keyword
+my_namespace/My_Class/my_namespace/parameter_b,integer
+my_namespace/My_Class/my_namespace/parameter_c,double
 </source>
+
+<p>
+To load custom CSV file, run the following command:
+</p>
+<source>
+registry-manager load-dd -csv /home/pds/schema/my-fields.csv
+</source>
+
 
 <!-- ==================================================== -->
 
@@ -198,7 +207,7 @@ pds.ASCII_Short_String_Collapsed = keyword
 <subsection name="Registry Schema Update" id="SchemaUpdate">
 
 <p>
-As described in Overview section, registry schema is updated automatically when tou load data.
+As described in Overview section, registry schema is updated automatically when you load data.
 You can disable schema update by passing extra parameter to <i>load-data</i> command:
 </p>
 

@@ -1,6 +1,6 @@
 # pds-registry-app
 
-![Maven Package](https://github.com/NASA-PDS/pds-registry-app/workflows/Maven%20Package/badge.svg)
+![🤪 Unstable integration & delivery](https://github.com/NASA-PDS/pds-registry-app/workflows/%F0%9F%A4%AA%20Unstable%20integration%20&%20delivery/badge.svg) ![😌 Stable integration & delivery](https://github.com/NASA-PDS/pds-registry-app/workflows/%F0%9F%98%8C%20Stable%20integration%20&%20delivery/badge.svg)
 
 This application enables a PDS node to register all its data products for long term preservation and sharing with the rest of the PDS system.
 
