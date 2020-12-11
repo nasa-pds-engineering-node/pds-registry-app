@@ -57,7 +57,7 @@
     </p>
     <subsection name="harvest">
 	    <p>To run this command we need a <b>configuration</b> file to reference the data source. </p>
-	    <p>Edit the example file provided in <i>harvest-$context.get("harvest.version")/conf/examples/minimal.xml</i></p>
+	    <p>Edit the example file provided in <i>harvest-$context.get("harvest.version")/conf/examples/registry.xml</i></p>
 	    <p>Update the following section with the path of the test dataset in the package, you may use your own dataset, that is even better:</p>
 	    
 
@@ -71,6 +71,14 @@ Specify the top level directory / bundle for Harvest to crawl for products to re
     <include>*.xml</include>
   </fileFilter>
 </directories>
+]]></source>
+
+<p>Remove also the following section, the configuration will not work on the example given below otherwise:</p>
+
+<source><![CDATA[
+<fileInfo processDataFiles="true" storeLabels="false">
+  <fileRef replacePrefix="/C:/tmp/" with="/"/>
+</fileInfo>
 ]]></source>
 
 <p>See details on the harvest configuration on <a href="../operate/harvest.html">operate harvest</a></p>

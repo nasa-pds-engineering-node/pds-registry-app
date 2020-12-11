@@ -26,6 +26,7 @@ You may want to add more fields to default schema or change default configuratio
 To create registry index in Elasticsearch from default schema run the following Registry Manager command
 </p>
 <source>
+export REGISTRY_MANAGER_HOME=&lt;path to where registry mgr is deployed&gt;
 registry-manager create-registry
 </source>
 
