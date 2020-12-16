@@ -54,11 +54,11 @@
       <lineEnding>keep</lineEnding>
     </fileSet>
     <fileSet>
-      <directory>target/V11300</directory>
+      <directory>target/V11400</directory>
       <outputDirectory>test</outputDirectory>
-      <includes>
-      	<include>**/*.xml</include>
-      </includes>
+      <excludes>
+      	<exclude>**/*.img</exclude>
+      </excludes>
       <fileMode>664</fileMode>
       <lineEnding>keep</lineEnding>
     </fileSet>

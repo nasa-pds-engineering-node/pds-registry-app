@@ -103,10 +103,10 @@ POSSIBILITY OF SUCH DAMAGE.
 				<goal>wget</goal>
 			</goals>
 			<configuration>
-				<url>https://pds.nasa.gov/datastandards/documents/examples/v1/DPH_Examples_V11300.zip</url>
+				<url>https://pds.nasa.gov/datastandards/documents/examples/v1/DPH_Examples_V11400.zip</url>
 				<unpack>true</unpack>
-				<outputDirectory>${project.build.directory}</outputDirectory>
-				<md5>471c865358aae0e69216738607186ab3</md5>
+				<outputDirectory>${project.build.directory}/v11400</outputDirectory>
+				<md5>f63879feecf50fc60e083b92c3f6354b</md5>
 			</configuration>
 		</execution>
 	</executions>
