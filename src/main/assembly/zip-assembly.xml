@@ -58,6 +58,7 @@
       <outputDirectory>test</outputDirectory>
       <excludes>
       	<exclude>**/*.img</exclude>
+      	<exclude>**/Table_Character_draft1.xml</exclude>
       </excludes>
       <fileMode>664</fileMode>
       <lineEnding>keep</lineEnding>

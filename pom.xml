@@ -37,7 +37,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
   <groupId>gov.nasa.pds</groupId>
   <artifactId>pds-registry-app</artifactId>
-  <version>0.2.2</version>
+  <version>0.2.3</version>
   <packaging>jar</packaging>
 
   <name>Registry Application</name>
@@ -54,7 +54,7 @@ POSSIBILITY OF SUCH DAMAGE.
   
   <properties>
      <registry.version>4.0.2</registry.version>
-     <harvest.version>3.3.1</harvest.version>
+     <harvest.version>3.3.2</harvest.version>
   </properties>
 
   <build>
