@@ -73,14 +73,6 @@ Specify the top level directory / bundle for Harvest to crawl for products to re
 </directories>
 ]]></source>
 
-<p>Remove also the following section, the configuration will not work on the example given below otherwise:</p>
-
-<source><![CDATA[
-<fileInfo processDataFiles="true" storeLabels="false">
-  <fileRef replacePrefix="/C:/tmp/" with="/"/>
-</fileInfo>
-]]></source>
-
 <p>See details on the harvest configuration on <a href="../operate/harvest.html">operate harvest</a></p>
 	    
 	    <p>We now need an <b>output directory</b> where the registry records will be created, for example, on unix, <i>~/tmp</i></p>
