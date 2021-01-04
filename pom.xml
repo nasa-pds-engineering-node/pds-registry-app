@@ -121,7 +121,7 @@ POSSIBILITY OF SUCH DAMAGE.
               <goal>execute</goal>
             </goals>
             <configuration>
-              <source>${project.basedir}/src/main/script/truncate_test_data_files.gvy</source>
+              <source>src/main/script/truncate_test_data_files.gvy</source>
             </configuration>
           </execution>
         </executions>
