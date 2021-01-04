@@ -57,6 +57,7 @@ jobs:
                 uses: NASA-PDS/roundup-action@master
                 with:
                     assembly: stable
+                    maven-stable-artifact-phases: clean,install,site,deploy
                 env:
                     ossrh_username: ${{secrets.OSSRH_USERNAME}}
                     ossrh_password: ${{secrets.OSSRH_PASSWORD}}

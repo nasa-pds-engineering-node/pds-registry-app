@@ -120,11 +120,11 @@ POSSIBILITY OF SUCH DAMAGE.
             <goals>
               <goal>execute</goal>
             </goals>
-            <configuration>
-              <source>${project.basedir}/src/main/script/truncate_test_data_files.gvy</source>
-            </configuration>
           </execution>
         </executions>
+        <configuration>
+           <source>${project.basedir}/src/main/script/truncate_test_data_files.gvy</source>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
