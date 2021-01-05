@@ -80,7 +80,7 @@ Specify the top level directory / bundle for Harvest to crawl for products to re
 	    
 	    <p>At last, <b>run</b> the harvest command</p>
 <source>
-harvest -c &lt;path to the package&gt;/harvest-$context.get("harvest.version")/conf/examples/minimal.xml -o ~/tmp
+harvest -c &lt;path to the package&gt;/harvest-$context.get("harvest.version")/conf/examples/registry.xml -o ~/tmp
 </source>
     
 	</subsection>
@@ -93,7 +93,7 @@ registry-manager load-data -file ~/tmp
 	</subsection>
 	
 	<subsection name="query the registry">
-		<p>Open in your browser: <a href="http://localhost:9200/registry/_search?q=*">http://localhost:9200/registry/_search?q=*</a></p>
+		<p>Open in your browser: <a target="_blank" href="http://localhost:9200/registry/_search?q=*">http://localhost:9200/registry/_search?q=*</a></p>
 	</subsection>
 	
 	
