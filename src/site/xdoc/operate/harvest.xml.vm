@@ -15,10 +15,9 @@
   <li><a href="#Quick_Start">Quick Start</a></li>
   <li><a href="#InputDirs">Input Directories and Filters</a></li>
   <ul>
-    <li><a href="#MultiDirs">Multiple Directories</a></li>
-    <li><a href="#FileFilter">Filtering Files</a></li>
-    <li><a href="#SubDirs">Excluding Sub-Directories</a></li>
-    <li><a href="#ProdFilter">Filtering Products</a></li>
+    <li><a href="#MultiDirs">Crawl Multiple Bundles</a></li>
+    <li><a href="#BundleVersions">Filtering Bundle Versions</a></li>
+    <li><a href="#ProdFilter">Filtering Products by Class</a></li>
   </ul>
   <li><a href="#Extract">Extract More Metadata</a></li>
   <ul>
@@ -73,12 +72,9 @@ will crawl and what data to extract. Very basic configuration is shown below.
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 
 &lt;harvest&gt;
-  &lt;directories&gt;
-    &lt;path&gt;/data/LADEE/ldex_20161118&lt;/path&gt;
-    &lt;fileFilter&gt;
-      &lt;include&gt;*.xml&lt;/include&gt;
-    &lt;/fileFilter&gt;
-  &lt;/directories&gt;
+  &lt;bundles&gt;
+    &lt;bundle dir="/data/LADEE/ldex_20161118" /&gt;
+  &lt;/bundles&gt;
 &lt;/harvest&gt;
 </source>
 </p>
@@ -137,75 +133,60 @@ deleted by this package id.
 
 <section name="Input Directories and Filters" id="InputDirs">
 
-<subsection name="Crawl Products from Multiple Directories" id="MultiDirs">
+<subsection name="Crawl Multiple Bundles" id="MultiDirs">
 <p>
-To process products from multiple directories, specify multiple &lt;path&gt; entries in Harvest configuration file:
+To process products from multiple bundles, specify multiple &lt;bundle&gt; entries in Harvest configuration file:
 <source>
 &lt;harvest&gt;
-  &lt;directories&gt;
-    &lt;path&gt;/data/LADEE/ldex_20161118/data_calibrated&lt;/path&gt;
-    &lt;path&gt;/data/LADEE/ldex_20161118/data_derived&lt;/path&gt;
-...
+  &lt;bundles&gt;
+    &lt;bundle dir="/data/geo/urn-nasa-pds-kaguya_grs_spectra" /&gt;
+    &lt;bundle dir="/data/geo/urn-nasa-pds-trang2020_moon_space_weathering" /&gt;
+  &lt;/bundles&gt;
 &lt;/harvest&gt;
 </source>
 </p>
 </subsection>
 
-<subsection name="Filtering Files" id="FileFilter">
+<subsection name="Filtering Bundle Versions" id="BundleVersions">
 <p>
-This feature has limited functionality since all PDS4 product labels are XML files and
-Harvest could not process other files. Usually you would include the following file filter in most 
-Harvest configuration files:
+Use "versions" attribute of the &lt;bundle&gt; tag to list versions of bundles to process.
+You can separate versions by comma, semicolon or space.
+</p>
+
 <source>
 &lt;harvest&gt;
-  &lt;directories&gt;
-...
-    &lt;fileFilter&gt;
-      &lt;include&gt;*.xml&lt;/include&gt;
-    &lt;/fileFilter&gt;
-  &lt;/directories&gt;
+  &lt;bundles&gt;
+    &lt;bundle dir="/data/OREX/orex_spice" versions="7.0;8.0" /&gt;
+  &lt;/bundles&gt;
 &lt;/harvest&gt;
 </source>
-If you don't provide any filters, Harvest will try to pocess every file and for non-XML files you will see
-"Unsupported MIME type" log messages.
-</p>
+
 <p>
-You can use one or more &lt;include&gt; filters or one or more &lt;exclude&gt; filters, but not both.
+To process all versions you can use either versions="all" or no versions attribute at all.
 </p>
+
+<source>
+&lt;harvest&gt;
+  &lt;bundles&gt;
+    &lt;bundle dir="/data/OREX/orex_spice" versions="all" /&gt;
+  &lt;/bundles&gt;
+&lt;/harvest&gt;
+</source>
 
 </subsection>
 
-<subsection name="Excluding Sub-Directories" id="SubDirs">
-<p>
-For example, to exclude <i>xml_schema</i> sub-folder, add a directory filter in Harvest configuration file:
-<source>
-&lt;harvest&gt;
-  &lt;directories&gt;
-...
-    &lt;directoryFilter&gt;
-      &lt;exclude&gt;xml_schema&lt;/exclude&gt;
-    &lt;/directoryFilter&gt;
-  &lt;/directories&gt;
-&lt;/harvest&gt;
-</source>
-There is no include option for sub-directories.
-</p>
 
-</subsection>
-
-<subsection name="Filtering Products" id="ProdFilter">
+<subsection name="Filtering Products by Class" id="ProdFilter">
 <p>
-You can include or exclude products. For example, to only process documents, add following 
+You can include or exclude products of a particular class. For example, to only process documents, add following 
 product filter in Harvest configuration file:
 </p>
 <source>
 &lt;harvest&gt;
-  &lt;directories&gt;
 ...
-    &lt;productFilter&gt;
-      &lt;include&gt;Product_Document&lt;/include&gt;
-    &lt;/productFilter&gt;
-  &lt;/directories&gt;
+  &lt;productFilter&gt;
+    &lt;include&gt;Product_Document&lt;/include&gt;
+  &lt;/productFilter&gt;
 &lt;/harvest&gt;
 </source>
 
@@ -232,11 +213,11 @@ include the following section in the configuration file.
 Now if you run Harvest, both the label file information
 </p>
 <source>
-"ops/Label_File_Info/ops/creation_date_time":"2020-11-18T22:25:05Z",
-"ops/Label_File_Info/ops/file_name":"naif0012.xml",
-"ops/Label_File_Info/ops/file_ref":"/C:/tmp/d5/naif0012.xml",
-"ops/Label_File_Info/ops/file_size":"3398",
-"ops/Label_File_Info/ops/md5_checksum":"69ea2974a93854d90399b8b8fc3d1334"
+"ops:Label_File_Info/ops:creation_date_time":"2020-11-18T22:25:05Z",
+"ops:Label_File_Info/ops:file_name":"naif0012.xml",
+"ops:Label_File_Info/ops:file_ref":"/C:/tmp/d5/naif0012.xml",
+"ops:Label_File_Info/ops:file_size":"3398",
+"ops:Label_File_Info/ops:md5_checksum":"69ea2974a93854d90399b8b8fc3d1334"
 </source>
 
 <p>
@@ -244,12 +225,12 @@ and data file information
 </p>
 
 <source>
-"ops/Data_File_Info/ops/creation_date_time":"2020-11-18T22:25:17Z",
-"ops/Data_File_Info/ops/file_name":"naif0012.tls",
-"ops/Data_File_Info/ops/file_ref":"/C:/tmp/d5/naif0012.tls",
-"ops/Data_File_Info/ops/file_size":"5257",
-"ops/Data_File_Info/ops/md5_checksum":"25a2fff30b0dedb4d76c06727b1895b1",
-"ops/Data_File_Info/ops/mime_type":"text/plain",
+"ops:Data_File_Info/ops:creation_date_time":"2020-11-18T22:25:17Z",
+"ops:Data_File_Info/ops:file_name":"naif0012.tls",
+"ops:Data_File_Info/ops:file_ref":"/C:/tmp/d5/naif0012.tls",
+"ops:Data_File_Info/ops:file_size":"5257",
+"ops:Data_File_Info/ops:md5_checksum":"25a2fff30b0dedb4d76c06727b1895b1",
+"ops:Data_File_Info/ops:mime_type":"text/plain",
 </source>
 
 <p>
@@ -303,8 +284,8 @@ Harvest extracts absolute paths of product and label files, such as
 </p>
 
 <source>
-"ops/Label_File_Info/ops/file_ref":"/tmp/d5/naif0012.xml",
-"ops/Data_File_Info/ops/file_ref":"/tmp/d5/naif0012.tls",
+"ops:Label_File_Info/ops:file_ref":"/tmp/d5/naif0012.xml",
+"ops:Data_File_Info/ops:file_ref":"/tmp/d5/naif0012.tls",
 </source>
 
 <p>
@@ -312,7 +293,7 @@ Note that on Windows, backslashes are replaced with forward slashes and disk let
 </p>
 
 <source>
-"ops/Label_File_Info/ops/file_ref":"C:/tmp/d4/bundle_orex_spice_v009.xml",
+"ops:Label_File_Info/ops:file_ref":"C:/tmp/d4/bundle_orex_spice_v009.xml",
 </source>
 
 
