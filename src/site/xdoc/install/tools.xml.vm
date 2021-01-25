@@ -54,7 +54,7 @@
     <hr/>
     <section name="Download and unpack the package">
       <p>Download the <i>${project.artifactId}</i> package from Github (<a href="https://github.com/NASA-PDS/${project.artifactId}/releases/download/v${project.version}/${project.artifactId}-${project.version}-bin.tar.gz" target="_blank">TAR.GZ</a> 
-      <a href="https://github.com/NASA-PDS/${project.artifactId}/releases/download/v${project.version}/${project.artifactId}-${project.version}-bin.tar.gz" target="_blank">ZIP</a>). The binary distribution is available in identical zip or tar/gzip packages. The installation directory may vary from environment to environment but in UNIX-based environments it is typical to install software packages in the <i>/home/pds</i> directory and in Windows-based environments it is typical to install software packages in the <i>C:\Program Files</i> directory. Unpack the selected binary distribution file with one of the following commands:
+      <a href="https://github.com/NASA-PDS/${project.artifactId}/releases/download/v${project.version}/${project.artifactId}-${project.version}-bin.zip" target="_blank">ZIP</a>). The binary distribution is available in identical zip or tar/gzip packages. The installation directory may vary from environment to environment but in UNIX-based environments it is typical to install software packages in the <i>/home/pds</i> directory and in Windows-based environments it is typical to install software packages in the <i>C:\Program Files</i> directory. Unpack the selected binary distribution file with one of the following commands:
       </p>
 
       <source>
