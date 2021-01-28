@@ -63,14 +63,11 @@
 
 <source><![CDATA[
 <!-- 
-Specify the top level directory / bundle for Harvest to crawl for products to register 
+Specify the PDS4 bundle directory for Harvest to crawl for products to register 
 -->
-<directories>
-  <path>{absolute path to the package}/test/dph_example_archive/</path>
-  <fileFilter>
-    <include>*.xml</include>
-  </fileFilter>
-</directories>
+<bundles>
+  <bundle dir="{absolute path to the package}/test/dph_example_archive/" />
+</bundles>
 ]]></source>
 
 <p>See details on the harvest configuration on <a href="../operate/harvest.html">operate harvest</a></p>
