@@ -17,7 +17,9 @@
   <ul>
     <li><a href="#MultiDirs">Crawl Multiple Bundles</a></li>
     <li><a href="#BundleVersions">Filtering Bundle Versions</a></li>
-    <li><a href="#ProdFilter">Filtering Products by Class</a></li>
+    <li><a href="#Collections">Filtering Collections</a></li>
+    <li><a href="#ProdDirs">Filtering Product Directories</a></li>
+    <li><a href="#ProdClass">Filtering Products by Class</a></li>
   </ul>
   <li><a href="#Extract">Extract More Metadata</a></li>
   <ul>
@@ -147,6 +149,8 @@ To process products from multiple bundles, specify multiple &lt;bundle&gt; entri
 </p>
 </subsection>
 
+<!-- ====================================================== -->
+
 <subsection name="Filtering Bundle Versions" id="BundleVersions">
 <p>
 Use "versions" attribute of the &lt;bundle&gt; tag to list versions of bundles to process.
@@ -175,8 +179,50 @@ To process all versions you can use either versions="all" or no versions attribu
 
 </subsection>
 
+<!-- ====================================================== -->
 
-<subsection name="Filtering Products by Class" id="ProdFilter">
+<subsection name="Filtering Collections" id="Collections">
+<p>
+By default Harvest will process all collection listed in &lt;Bundle_Member_Entry&gt;
+section of a bundle. To process a subset of collections you can provide a list of
+lids or lidvids as shown below.
+</p>
+
+<source>
+&lt;!-- Filter by collection LID --&gt;
+&lt;bundle dir="/data/OREX/orex_spice" versions="8.0" &gt;
+   &lt;collection lid="urn:nasa:pds:orex.spice:spice_kernels" /&gt;
+&lt;/bundle&gt;
+
+&lt;!-- Filter by collection LIDVID --&gt;
+&lt;bundle dir="/data/OREX/orex_spice" versions="8.0;7.0" &gt;
+   &lt;collection lidvid="urn:nasa:pds:orex.spice:spice_kernels::8.0" /&gt;
+   &lt;collection lidvid="urn:nasa:pds:orex.spice:spice_kernels::7.0" /&gt;
+&lt;/bundle&gt;
+</source>
+
+</subsection>
+
+<!-- ====================================================== -->
+
+<subsection name="Filtering Product Directories" id="ProdDirs">
+<p>
+By default Harvest will process all products listed in the collection inventory file.
+To process a subset of products you can provide a list of directories.
+</p>
+
+<source>
+&lt;bundle dir="/data/OREX/orex_spice" versions="8.0" &gt;
+    &lt;!-- Specify a substring in a relative (to the bundle root) directory name.  --&gt;
+    &lt;product dir="/fk/" /&gt;
+&lt;/bundle&gt;
+</source>
+
+</subsection>
+
+<!-- ====================================================== -->
+
+<subsection name="Filtering Products by Class" id="ProdClass">
 <p>
 You can include or exclude products of a particular class. For example, to only process documents, add following 
 product filter in Harvest configuration file:
