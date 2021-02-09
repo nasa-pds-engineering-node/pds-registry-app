@@ -33,3 +33,47 @@ Prepare the package:
     mvn github-release:github-release  ## publish the package on github  # TO BE DONE REPLACE WITH CONMAN or GITHUB ACTION
 
     
+# Docker
+
+## Build
+
+### Local git version
+
+```
+docker build --build-arg version_reg_app=$(git rev-parse HEAD) \
+             --file Dockerfile.local \
+             --tag pds_registry_app:$(git rev-parse HEAD) \
+             .
+```
+
+## Run
+
+### Elastic Search
+
+1. prepare `mkdir /tmp/es`
+1. fetch `docker pull elasticsearch:7.10.1`
+1. run  
+    ```
+    docker run --detach \
+               --env "discovery.type=single-node" \
+               --name es \
+               --network pds \
+               --publish 9200:9200 \
+               --publish 9300:9300 \
+               --rm \
+               --volume /tmp/es:/usr/share/elasticsearch/data \
+               elasticsearch:7.10.1
+    ```
+
+### Install test data
+
+```
+docker run --network pds --rm pds_registry_app:$(git rev-parse HEAD) \
+    registry-manager create-registry -es http://es:9200 \
+                                     -schema /var/local/registry/elastic/registry.json 
+```
+
+```
+docker run --network pds --rm pds_registry_app:$(git rev-parse HEAD) \         harvest -c /var/local/harvest/conf/examples/registry.xml \
+                 -o /var/local/harvest/output
+```

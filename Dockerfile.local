@@ -1,0 +1,49 @@
+FROM ubuntu:20.04
+
+# Get arguments from the build command line
+ARG version_reg_app
+ENV REGISTRY_MANAGER_HOME=/var/local/registry
+ENV VERSION_REG_APP=$version_reg_app
+
+# Build up the OS
+RUN export DEBIAN_FRONTEND=noninteractive && \
+    apt-get update && \
+    apt-get install -y curl \
+                       maven \
+                       openjdk-11-jdk-headless \
+                       tar
+
+# Make room for the app
+RUN mkdir /usr/local/registry-app-${VERSION_REG_APP}
+
+# Copy the data into the building container
+COPY LICENSE.txt /usr/local/registry-app-${VERSION_REG_APP}
+COPY NOTICE.txt /usr/local/registry-app-${VERSION_REG_APP}
+COPY README-PACKAGE.txt /usr/local/registry-app-${VERSION_REG_APP}
+COPY pom.xml /usr/local/registry-app-${VERSION_REG_APP}
+COPY settings.xml /usr/local/registry-app-${VERSION_REG_APP}
+COPY src /usr/local/registry-app-${VERSION_REG_APP}/src
+
+# Build the application and deploy it inside the container
+RUN cd /usr/local/registry-app-${VERSION_REG_APP} && \
+    mvn compile && \
+    mvn site && \
+    mvn package
+
+# Build up all of the bin files for general use
+RUN mkdir -p /usr/local/dist \
+             /var/local/registry/elastic \
+             /var/local/harvest/{archive,output} && \
+    cd /usr/local/registry-app-${VERSION_REG_APP} && \
+    cp target/harvest-*/bin/harvest \
+       target/registry-manager-*/bin/registry-manager \
+       /usr/local/bin/ && \
+    cp target/harvest-*/dist/* \
+       target/registry-manager-*/dist/* \
+       /usr/local/dist/ && \
+    cp target/registry-manager-4.0.2/elastic/* /var/local/registry/elastic/ && \
+    ln -s /var/local/registry/elastic /usr/local && \
+    cp -r target/harvest-*/conf /var/local/harvest/ && \
+    ( sed -e 's/\/path\/to\/archive/\/var\/local\/harvest\/archive/' \
+          target/harvest-*/conf/examples/registry.xml > \
+          /var/local/harvest/conf/examples/registry.xml )
