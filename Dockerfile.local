@@ -33,7 +33,8 @@ RUN cd /usr/local/registry-app-${VERSION_REG_APP} && \
 # Build up all of the bin files for general use
 RUN mkdir -p /usr/local/dist \
              /var/local/registry/elastic \
-             /var/local/harvest/{archive,output} && \
+             /var/local/harvest/archive \
+             /var/local/harvest/output && \
     cd /usr/local/registry-app-${VERSION_REG_APP} && \
     cp target/harvest-*/bin/harvest \
        target/registry-manager-*/bin/registry-manager \
@@ -46,4 +47,5 @@ RUN mkdir -p /usr/local/dist \
     cp -r target/harvest-*/conf /var/local/harvest/ && \
     ( sed -e 's/\/path\/to\/archive/\/var\/local\/harvest\/archive/' \
           target/harvest-*/conf/examples/registry.xml > \
-          /var/local/harvest/conf/examples/registry.xml )
+          /var/local/harvest/conf/examples/registry.xml ) && \
+    cp -r target/v11400/dph_example_archive/* /var/local/harvest/archive
