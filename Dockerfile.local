@@ -45,7 +45,7 @@ RUN mkdir -p /usr/local/dist \
     cp target/registry-manager-*/elastic/* /var/local/registry/elastic/ && \
     ln -s /var/local/registry/elastic /usr/local && \
     cp -r target/harvest-*/conf /var/local/harvest/ && \
-    ( sed -e 's/\/path\/to\/archive/\/var\/local\/harvest\/archive/' \
+    ( sed -e 's/\/path\/to\/bundle/\/var\/local\/harvest\/archive/' \
           target/harvest-*/conf/examples/registry.xml > \
           /var/local/harvest/conf/examples/registry.xml ) && \
     cp -r target/*/dph_example_archive/* /var/local/harvest/archive
