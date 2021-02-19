@@ -104,7 +104,7 @@ docker run --network pds \
            pds_registry_app:$(git rev-parse HEAD) \
            registry-manager load-data \
               -es http://es:9200 \
-              -file /var/local/harvest/output
+              -dir /var/local/harvest/output
 ```
 
 ### Verify it worked
