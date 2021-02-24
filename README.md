@@ -54,6 +54,7 @@ docker build --build-arg version_reg_app=$(git rev-parse HEAD) \
     These two directories are to store the data between steps. If there is an existng elastic search database or harvest working area, then there is no need for this step.
 1. fetch `docker pull elasticsearch:7.10.1`  
     Only need to fetch the image once.
+1. prepare a network with `docker network create pds` if not done previously
 1. run  
     ```
     docker run --detach \
@@ -104,7 +105,7 @@ docker run --network pds \
            pds_registry_app:$(git rev-parse HEAD) \
            registry-manager load-data \
               -es http://es:9200 \
-              -file /var/local/harvest/output
+              -dir /var/local/harvest/output
 ```
 
 ### Verify it worked
