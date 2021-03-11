@@ -95,6 +95,10 @@ registry-manager load-data -file ~/tmp
 	
 	
 	<subsection name="reset your registry">
+		<p>If you loaded test data in your production registry you MUST delete them, run</p>
+<source>
+registry-manager delete-data -all
+</source>
 		<p>To reset your registry and other common operations, see documentation on <a href="..//operate/reg-manager.html">registry manager</a></p>	
     </subsection>
 	

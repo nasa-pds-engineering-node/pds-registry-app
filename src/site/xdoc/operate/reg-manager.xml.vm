@@ -79,6 +79,9 @@ Registry Manager is a command-line tool which can perform following tasks:
   <li>Manage data dictionary.</li>
 </ul>
 </p>
+<p>
+<b>Note:</b> for elasticsearch available though defaults http ports (80, 443), explicit port is required whenever the -es option is used. e.g. `-es https//host:443` 
+</p>
 
 <p>
 Registry Manager executable scripts for Windows (<i>registry-manager.bat</i>) and Linux / Mac (<i>registry-manager</i>) 
