@@ -63,6 +63,7 @@
         <item name="Java" href="install/java.html"/>
         <item name="Elasticsearch - Quick Start" href="install/es-dev.html"/>
         <item name="Tools (Manager, Harvest)" href="install/tools.html"/>
+        <item name="API Server" href="install/api-server.html"/>
         <item name="Initialize the Registry" href="install/initialize.html"/>
         <item name="Test your deployment" href="install/test.html"/>        
       </item>

@@ -51,19 +51,19 @@ You can run all components on your laptop or install some or all of them on a se
 
 <subsection name="Java">
 <p>
-If you do not already hava Java Runtime Environment (JRE) or Java Development Kit (JDK),
-install it as described in <a href="java.html">Java Installation</a> section.
-</p>
-<p>
-You will need Java to run Registry Manager, Harvest and Elasticsearch.
+Java is required to run many Registry components and tools such as Harvest, 
+Registry Manager, API Server and Elasticsearch.
+Only <b>Java 11</b> is supported. Some applications, like Harvest or Registry Manager 
+will not run with <b>Java 1.8</b>. To install JDK 11 follow instructions in 
+<a href="java.html">Java Installation</a> section.
 </p>
 </subsection>
 
 <subsection name="Elasticsearch">
 <p>
-Elasticsearch is required to store PDS Registry data. 
-It can be installed on a developer laptop as described in <a href="es-dev.html">Elasticsearch - Quick Start</a> section.
-For production deployment see <a href="../prod/index.html">Elasticsearch in Production</a> section.
+Elasticsearch is required to store and search PDS metadata. 
+Elasticsearch can be installed on a developer laptop as described in <a href="es-dev.html">Elasticsearch - Quick Start</a> section.
+For production deployment see <a href="../prod/index.html">Production Deployment</a> section.
 </p>
 </subsection>
 
@@ -71,7 +71,31 @@ For production deployment see <a href="../prod/index.html">Elasticsearch in Prod
 
 <subsection name="Registry Tools">
 <p>
-The installation of Registry Manager and Harvest is described in <a href="tools.html">Tools section</a>.
+<b>Harvest</b> is a tool to crawl and extract metadata from PDS4 labels.
+Extracted metadata is stored in an "intermediate" JSON or XML data files. 
+JSON data files can be loaded into Elasticsearch by Registry Manager.
+</p>
+
+<p>
+<b>Registry Manager</b> is a tool to create Registry indices in Elasticsearch and 
+to load, delete and export registry data.
+</p>
+
+<p>
+The installation of Harvest and Registry Manager is described in <a href="tools.html">Tools</a> section.
+</p>
+</subsection>
+
+<!-- ============================================================== -->
+
+<subsection name="API Server">
+<p>
+<b>API Server</b> provides read-only REST APIs to search and access PDS data. 
+The APIs are standardized between different PDS nodes.
+</p>
+
+<p>
+The installation of API Server is described in <a href="api-server.html">API Server</a> section.
 </p>
 </subsection>
 
