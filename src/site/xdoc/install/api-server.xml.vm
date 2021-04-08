@@ -10,8 +10,89 @@
 
 <section name="API Server">
 
+<subsection name="Overview">
 <p>
+API Server provides read-only REST APIs to search and access PDS data. The APIs are standardized between different PDS nodes. 
+API Server is a Java application based on SpringBoot and Swagger frameworks.
 </p>
+</subsection>
+
+<!-- ======================================================== -->
+
+<subsection name="Installation">
+
+<p>
+  <b>Step 1: Install Java 11</b>
+</p>
+<p>
+Only Java 11 is supported. We recommend OpenJDK 11. 
+See <a href="java.html" target="_blank">this section</a> for installation instructions.
+</p>
+
+<p>
+  <b>Step 2: Download and extract API Server</b>
+</p>
+
+<p>
+Download latest release from
+<a href="https://github.com/NASA-PDS/registry-api-service/releases" target="_blank">GitHub</a>.
+There are ZIP files for Windows and TAR.GZ files for Linux and MacOS.
+</p>
+
+<p>
+Extract the archive to any directory, for example, <i>/opt/registry-api-service</i>.
+Check that <i>registry-api-service-x.y.z.jar</i> and <i>application.properties</i> were extracted.
+</p>
+
+<p>
+  <b>Step 3: Adjust configuration parameters</b>
+</p>
+
+<p>
+Adjust some configuration parameters in <i>application.properties</i> file.
+For example, API server port and Elasticsearch configuration.
+</p>
+
+<source>
+server.port=8080
+elasticSearch.host=localhost:9200
+</source>
+
+<p>
+  <b>Step 4: Start API Server</b>
+</p>
+
+<p>
+Open Command Prompt / Terminal / PowerShell.
+</p>
+<p>
+Go to the folder where you extracted the ZIP or TAR.GZ archive (Step 2).
+Make sure that correct version of <i>application.properties</i> is in that folder.
+</p>
+<p>
+Run the following command to start API Server. (NOTE: <i>x.y.z</i> is the release version.)
+</p>
+<source>
+java -jar registry-api-service-x.y.z.jar
+</source>
+
+<p>
+You should see some log messages followed by "Started SpringBootMain in X seconds".
+</p>
+
+<p>
+  <b>Step 5: Check that API Server has started</b>
+</p>
+
+<p>
+Open <i>http://localhost:8080</i> URL in a web browser.
+NOTE: If you changed API server port in <i>application.properties</i>, replace 8080 with your value.
+You should see a page similar to this.
+</p>
+
+<img src="../images/swagger-ui.png" style="width:50em;" />
+
+</subsection>
 
 </section>
 
