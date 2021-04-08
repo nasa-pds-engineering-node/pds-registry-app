@@ -160,6 +160,7 @@ One of the following values can be used:
   <li><b>PDS_SBN</b>  - Planetary Data System: Small Bodies Node at University of Maryland</li>
   <li><b>PSA</b>      - Planetary Science Archive</li>
   <li><b>JAXA</b>     - Japan Aerospace Exploration Agency</li>
+  <li><b>ROSCOSMOS</b> - Russian State Corporation for Space Activities</li>
 </ul>
 </p>
 
