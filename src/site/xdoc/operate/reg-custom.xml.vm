@@ -21,24 +21,22 @@
 <!-- ========================================================== -->
 
 <subsection name="Overview" id="Overview">
+
 <p>
-When you create a registry
+Registry uses following Elasticsearch indices:
 </p>
 
-<source>
-registry-manager create-registry
-</source>
-
-<p>
-two Elasticsearch indices are created
 <ul>
-<li><i>registry</i> - main index for PDS4 product metadata.</li>
-<li><i>registry-dd</i> - data dictionary, a list of searchable fields that main registry index can have.</li>
+<li><b>registry</b> - this index stores metadata extracted from PDS4 labels, one ES document per PDS label.</li>
+<li><b>registry-dd</b> - this index stores data dictionary - a list of searchable fields and its data types.
+When registry is created, the data dictionary is populated with fields (attributes) from PDS common and few discipline dictionaries.
+You can add more fields as described in <a href="reg-custom.html#DD">Data Dictionary</a> section.</li>
+<li><b>registry-refs</b> - this index stores product references extracted from collection inventory files.
+There could be 1 or more ES documents per inventory file.</li>
 </ul>
-</p>
 
 <p>
-Default Elasticsearch schemas for these indices (<i>registry.json</i> and <i>data-dic.json</i>) 
+Default Elasticsearch schemas for these indices (<i>registry.json</i>, <i>data-dic.json</i>, and <i>refs.json</i>) 
 are located in <i>REGISTRY_HOME/elastic/</i> directory.
 Where <i>REGISTRY_HOME</i> is a directory where you installed Registry Manager, for example
 <i>/home/pds/registry</i>.
@@ -50,7 +48,7 @@ Also, there is a binary field to store the whole PDS label as a BLOB. Lidvid is 
 </p>
 
 <p>
-Dynamic field mapping is disabled.
+Dynamic field mapping is disabled to prevent creation of fields not in the data dictionary.
 </p>
 <source>
 ...
@@ -61,9 +59,10 @@ Dynamic field mapping is disabled.
 </source>
 
 <p>
-After running Harvest, the output folder (default is /tmp/harvest/out/) will have two files
+After running Harvest, the output folder (default is /tmp/harvest/out/) will have several files
 <ul>
-<li><i>es-docs.json</i> - metadata extracted from PDS4 labels, stored in Newline-delimited JSON (NJSON) format.</li>
+<li><i>registry-docs.json</i> - metadata extracted from PDS4 labels, stored in Newline-delimited JSON (NJSON) format.</li>
+<li><i>refs-docs.json</i> - product references extracted from collection inventory files.</li>
 <li><i>fields.txt</i> - a list of field names extracted from PDS4 labels.</li>
 </ul>
 </p>
@@ -73,22 +72,33 @@ When you load data
 </p>
 
 <source>
-registry-manager load-data -file /home/pds/harvest/out/es-docs.json
+registry-manager load-data -dir /home/pds/harvest/out/
 </source>
 
 <p>
-by default, registry manager will try to update registry schema (add more fields) from <i>fields.txt</i> file.
-Those fields must exist in the data dictionary index. You can disable schema update by passing extra parameter 
+Registry Manager will try to update registry schema (add more fields) from <i>fields.txt</i> file.
+Those fields must exist in the data dictionary index. Otherwise you will get the following error:
+</p>
+<source>
+[ERROR] Could not find datatype for field '...'
+</source>
+
+<p>
+You can disable schema update by passing extra parameter, but it is not recommended.
 </p>
 
 <source>
-registry-manager load-data -file /home/pds/harvest/out/es-docs.json -updateSchema n
+registry-manager load-data -dir /home/pds/harvest/out -updateSchema n
 </source>
 
 <p>
-If you do that, fields not in Elasticsearch schema are not indexed, but they are still available in "_source" field.
+If you disable schema update, fields not in Elasticsearch schema are not indexed, 
+but they are still available in "_source" field.
 </p>
 
+<p>
+Next section describes how to manage registry data dictionary.
+</p>
 </subsection>
 
 <!-- ========================================================== -->
@@ -96,7 +106,7 @@ If you do that, fields not in Elasticsearch schema are not indexed, but they are
 <subsection name="Data Dictionary" id="DD">
 
 <p>
-When registry is created, the data dictionary is populated with fields (attributes) from 
+When a registry is created, the data dictionary is populated with fields (attributes) from 
 PDS common and few discipline dictionaries.
 Latest versions of PDS4 data dictionaries in different formates are available at 
 <a href="https://pds.nasa.gov/datastandards/dictionaries/" target="_blank">PDS website</a>.
@@ -106,25 +116,26 @@ Latest versions of PDS4 data dictionaries in different formates are available at
 The following naming convention is used for Elasticsearch fields:
 </p>
 <source>
-&lt;namespace&gt;/&lt;class name&gt;/&lt;namespace&gt;/&lt;attribute name&gt;
+namespace:Class_Name/namespace:attribute_name
 </source>
 
 <p>
 For example,
 </p>
 <source>
-disp/Display_Direction/disp/vertical_display_direction
-geom/Articulation_Device_Parameters/geom/device_id
-pds/XML_Schema/pds/name
-proc/Software_Program/proc/name
+disp:Display_Direction/disp:vertical_display_direction
+geom:Articulation_Device_Parameters/geom:device_id
+pds:XML_Schema/pds:name
+proc:Software_Program/proc:name
 </source>
 
+<h4>Loading Data Dictionaries</h4>
 <p>
-You can load more data dictionaries in following formats: 
+You can load data dictionaries in following formats: 
 <ul>
 <li>Standard PDS4 data dictionary JSON file, for example, <i>orex_ldd_OREX_1300.JSON</i></li>
-<li>Data dump created by 'export-dd' command (NJSON)</li>
 <li>Custom CSV file</li>
+<li>Data dump created by 'export-dd' command (NJSON)</li>
 </ul>
 </p>
 
@@ -157,9 +168,9 @@ The CSV file must have a header with data dictionary field names, for example,
 
 <source>
 es_field_name,es_data_type
-my_namespace/My_Class/my_namespace/parameter_a,keyword
-my_namespace/My_Class/my_namespace/parameter_b,integer
-my_namespace/My_Class/my_namespace/parameter_c,double
+my_namespace:My_Class/my_namespace:parameter_a,keyword
+my_namespace:My_Class/my_namespace:parameter_b,integer
+my_namespace:My_Class/my_namespace:parameter_c,double
 </source>
 
 <p>
