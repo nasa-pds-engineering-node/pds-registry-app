@@ -8,18 +8,27 @@
 
 <body>
 
-<section name="API Server">
+<section name="API Server Installation">
 
-<subsection name="Overview">
+<ul>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#install">Installation</a></li>
+<li><a href="#next">Next Steps</a></li>
+</ul>
+</section>
+
+<!-- ===================================================== -->
+
+<section id="overview" name="Overview">
 <p>
 API Server provides read-only REST APIs to search and access PDS data. The APIs are standardized between different PDS nodes. 
 API Server is a Java application based on SpringBoot and Swagger frameworks.
 </p>
-</subsection>
+</section>
 
 <!-- ======================================================== -->
 
-<subsection name="Installation">
+<section id="install" name="Installation">
 
 <p>
   <b>Step 1: Install Java 11</b>
@@ -92,9 +101,17 @@ You should see a page similar to this.
 
 <img src="../images/swagger-ui.png" style="width:50em;" />
 
-</subsection>
-
 </section>
+
+<!-- ===================================================== -->
+
+<section id="next" name="Next steps">
+<p>
+You might now want to quickly <a href="test.html">test</a> your set up 
+or directly <a href="../operate/index.html">operate</a> it with your own data.
+</p>
+</section>
+
 
 </body>
 
