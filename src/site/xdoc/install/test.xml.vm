@@ -46,12 +46,14 @@
 <li><a href="#harvest">Extract metadata from PDS4 labels</a></li>
 <li><a href="#create">Create Registry</a></li>
 <li><a href="#load">Load harvested data into Registry (Elasticsearch)</a></li>
-<li><a href="#query">Query Registry Elasticsearch</a></li>
+<li><a href="#query">Query Elasticsearch</a></li>
 <li><a href="#api">Use Registry API</a></li>
 </ul>
 
 <subsection id="overview" name="Overview">
-
+This document describes common tasks to do with the Registry, such as initializing your Registry, 
+extracting metadata from PDS4 labels and loading it into the Registry, querying Elasticsearch,
+and using Registry APIs.
 </subsection>
 
 <subsection id="harvest" name="Extract metadata from PDS4 labels">
@@ -213,13 +215,78 @@ before you can load the data.
 
 <!-- =================================================================== -->
 	
-<subsection id="query" name="Query Registry Elasticsearch">
-<p>Open in your browser: <a target="_blank" href="http://localhost:9200/registry/_search?q=*">http://localhost:9200/registry/_search?q=*</a></p>
+<subsection id="query" name="Query Elasticsearch">
+
+<p>
+You can query Registry indices in Elasticsearch by calling
+<a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.8/search-search.html" target="_blank">Elasticsearch Search API</a>.
+</p>
+
+
+
+<p>
+You can either use simple Lucene queries, passed in the URL:
+</p>
+<source>
+# Select all products
+curl "http://localhost:9200/registry/_search?q=*&amp;pretty"
+
+# Select only collections
+curl "http://localhost:9200/registry/_search?q=product_class:Product_Collection&amp;pretty"
+</source>
+
+<p>
+Or more advanced Elasticsearch queries defined in JSON and passed in the request body:
+</p>
+
+<source>
+curl -X GET "localhost:9200/registry/_search?pretty" -H 'Content-Type: application/json' -d'
+{
+  "query": {
+    "term": {
+      "product_class": "Product_Collection"
+    }
+  }
+}
+'
+</source>
+
 </subsection>
 
 <!-- =================================================================== -->
 
 <subsection id="api" name="Use Registry API">
+<h4>Swagger UI</h4>
+
+<p>
+Open <i>http://localhost:8080</i> URL in a web browser.
+You should see a page similar to this.
+</p>
+
+<img src="../images/swagger-ui.png" style="width:50em;" />
+
+<p>
+Select an API you want to call, for example <i>collections</i>
+</p>
+
+<img src="../images/swagger2.png" style="width:60em;" />
+
+<p>
+Select response content type "application/json" from a dropdown and click "Try it out!" button.
+You should see JSON response in "Response Body" section of the screen. 
+You might need to scroll down to see the results.
+</p>
+
+<h4>Curl</h4>
+
+<p>
+You can also use <i>curl</i> to call Registry API. For example,
+</p>
+
+<source>
+curl -X GET --header 'Accept: application/json' 'http://localhost:8000/collections?limit=10'
+</source>
+
 </subsection>
 	
         
