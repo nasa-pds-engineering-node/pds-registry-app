@@ -1,19 +1,16 @@
 # Changelog
 
+## [v0.4.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v0.4.0-SNAPSHOT) (2021-04-19)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v0.3.0...v0.4.0-SNAPSHOT)
+
 ## [v0.3.0](https://github.com/NASA-PDS/pds-registry-app/tree/v0.3.0) (2021-04-19)
 
-[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v0.3.0-SNAPSHOT...v0.3.0)
+[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v0.2.4...v0.3.0)
 
 **Requirements:**
 
 - As a node operator,  I want to be able to tag ingested data with the node it is ingested by. [\#147](https://github.com/NASA-PDS/pds-registry-app/issues/147)
-
-## [v0.3.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v0.3.0-SNAPSHOT) (2021-04-05)
-
-[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v0.2.4...v0.3.0-SNAPSHOT)
-
-**Requirements:**
-
 - As a developer, I want to include supplemental file data sizes in the registry [\#145](https://github.com/NASA-PDS/pds-registry-app/issues/145)
 - As a node operator, I want to ingest metadata regarding secondary collections that belong to a bundle. [\#144](https://github.com/NASA-PDS/pds-registry-app/issues/144)
 - As a node operator, I want to ingest metadata regarding secondary products that belong to a collection. [\#143](https://github.com/NASA-PDS/pds-registry-app/issues/143)
@@ -98,11 +95,12 @@
 
 ## [v0.2.2](https://github.com/NASA-PDS/pds-registry-app/tree/v0.2.2) (2020-12-03)
 
-[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/0.3.0-SNAPSHOT...v0.2.2)
+[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/0.2.1...v0.2.2)
 
 **Improvements:**
 
 - update registry-manager load-data to handle additional use cases [\#103](https://github.com/NASA-PDS/pds-registry-app/issues/103)
+- Beta test operational deployment [\#13](https://github.com/NASA-PDS/pds-registry-app/issues/13)
 
 **Defects:**
 
@@ -111,17 +109,6 @@
 **Other closed issues:**
 
 - Develop a version 0 API connected to ElasticSearch registry [\#99](https://github.com/NASA-PDS/pds-registry-app/issues/99)
-
-## [0.3.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/0.3.0-SNAPSHOT) (2020-11-09)
-
-[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/0.2.1...0.3.0-SNAPSHOT)
-
-**Improvements:**
-
-- Beta test operational deployment [\#13](https://github.com/NASA-PDS/pds-registry-app/issues/13)
-
-**Other closed issues:**
-
 - Research RDF technologies to handle pds4 label cross-references in the registry [\#97](https://github.com/NASA-PDS/pds-registry-app/issues/97)
 - Retrofit pds-registry-app CI to use roundup-action [\#94](https://github.com/NASA-PDS/pds-registry-app/issues/94)
 - Document performance benchmarks in registry app docs [\#85](https://github.com/NASA-PDS/pds-registry-app/issues/85)
@@ -146,7 +133,12 @@
 
 ## [0.3.0](https://github.com/NASA-PDS/pds-registry-app/tree/0.3.0) (2020-10-27)
 
-[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/0.2.0-SNAPSHOT...0.3.0)
+[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/0.1.2...0.3.0)
+
+**Improvements:**
+
+- Have a blob store in Elastic Registry for pds labels [\#44](https://github.com/NASA-PDS/pds-registry-app/issues/44)
+- Refactor Registry Manager and Harvest to use ElasticSearch tech stack [\#37](https://github.com/NASA-PDS/pds-registry-app/issues/37)
 
 **Defects:**
 
@@ -155,22 +147,10 @@
 **Other closed issues:**
 
 - Complete documentation for dynamic schema management [\#95](https://github.com/NASA-PDS/pds-registry-app/issues/95)
+- Download large data set for testing [\#84](https://github.com/NASA-PDS/pds-registry-app/issues/84)
 - Deploy and install multi-node ES [\#83](https://github.com/NASA-PDS/pds-registry-app/issues/83)
 - Update the index schema in ES dynamically when new record are ingested [\#61](https://github.com/NASA-PDS/pds-registry-app/issues/61)
 - Validate Elastic Search index configuration for attribute search [\#45](https://github.com/NASA-PDS/pds-registry-app/issues/45)
-
-## [0.2.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/0.2.0-SNAPSHOT) (2020-10-20)
-
-[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/0.1.2...0.2.0-SNAPSHOT)
-
-**Improvements:**
-
-- Have a blob store in Elastic Registry for pds labels [\#44](https://github.com/NASA-PDS/pds-registry-app/issues/44)
-- Refactor Registry Manager and Harvest to use ElasticSearch tech stack [\#37](https://github.com/NASA-PDS/pds-registry-app/issues/37)
-
-**Other closed issues:**
-
-- Download large data set for testing [\#84](https://github.com/NASA-PDS/pds-registry-app/issues/84)
 - Update Registry App documentation per ES refactor [\#43](https://github.com/NASA-PDS/pds-registry-app/issues/43)
 - Tag pds-registry-app for last Solr build [\#39](https://github.com/NASA-PDS/pds-registry-app/issues/39)
 
@@ -217,11 +197,7 @@
 
 ## [0.1.0](https://github.com/NASA-PDS/pds-registry-app/tree/0.1.0) (2020-03-31)
 
-[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/1.0.0-SNAPSHOT...0.1.0)
-
-## [1.0.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/1.0.0-SNAPSHOT) (2020-03-11)
-
-[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/nightly...1.0.0-SNAPSHOT)
+[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/nightly...0.1.0)
 
 ## [nightly](https://github.com/NASA-PDS/pds-registry-app/tree/nightly) (2020-03-11)
 
