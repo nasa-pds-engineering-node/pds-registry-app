@@ -21,7 +21,7 @@ Update the `pom.xml` with the version of the package (e.g. 1.0.0) and versions o
 
 Create a tag and publish it on github:
 
-    git tag 1.0.0
+    git tag v1.0.0
     git push origin --tags
     
 Prepare the package:
