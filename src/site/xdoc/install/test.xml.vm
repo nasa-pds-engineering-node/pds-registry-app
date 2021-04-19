@@ -86,8 +86,12 @@ Note that you have to use a valid value of "nodeName" attribute.
 </p>
 
 <p>
-Update the path with the location of your dataset. You can use a test dataset from <i>pds-registry-app</i> package
-which you just installed.
+Update the path with the location of your dataset. 
+
+A sample PDS4 archive is provided in the `test` folder of the <i>pds-registry-app</i> package which you just installed.
+
+IMPORTANT NOTE: don't keep this sample dataset in a production registry. 
+
 More information about Harvest configuration is available in <a href="../operate/harvest.html">Harvest operation documentation</a>.
 </p>
 	    

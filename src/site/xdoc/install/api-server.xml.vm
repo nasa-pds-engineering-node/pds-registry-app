@@ -23,6 +23,9 @@
 <p>
 API Server provides read-only REST APIs to search and access PDS data. The APIs are standardized between different PDS nodes. 
 API Server is a Java application based on SpringBoot and Swagger frameworks.
+
+IMPORTANT NOTE: The registry API is in alpha version, not ready for production level deployment.
+
 </p>
 </section>
 
