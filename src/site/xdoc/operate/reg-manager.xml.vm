@@ -148,9 +148,6 @@ Optional parameters:
   -replicas &lt;number&gt;   Number of replicas (extra copies) of registry index. Default is 0
 </source>
 
-<p>
-This command is described in <a href="../install/initialize.html">Registry Installation</a> section.
-</p>
 </subsection>
 
 <!-- ======================================================================= -->
@@ -171,9 +168,6 @@ Optional parameters:
   -index &lt;name&gt;   Elasticsearch index name. Default is 'registry'
 </source>
 
-<p>
-This command is described in <a href="../install/initialize.html">Registry Installation</a> section.
-</p>
 </subsection>
 
 <!-- ======================================================================= -->

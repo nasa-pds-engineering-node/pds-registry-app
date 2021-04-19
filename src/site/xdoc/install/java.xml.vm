@@ -10,10 +10,33 @@
 
 <section name="Java Runtime Environment">
 
+<ul>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#test">Test if Java is already installed</a></li>
+<li><a href="#install">Installation</a></li>
+<li><a href="#next">Next Steps</a></li>
+</ul>
+</section>
+
+<!-- ===================================================== -->
+
+<section id="overview" name="Overview">
+
 <p>
-Elasticsearch and PDS Registry tools require Java Runtime Environment to run. 
-Recommended version of Java is 11.
+Java is required to run many Registry components and tools such as Harvest, Registry Manager, 
+API Server and Elasticsearch. 
 </p>
+
+<p>
+Only <b>Java 11</b> is supported. 
+Some applications, like Harvest or Registry Manager will not run with <b>Java 1.8</b>.
+</p>
+
+</section>
+
+<!-- ===================================================== -->
+
+<section id="test" name="Test if Java is already installed">
 
 <p>
 To test if Java is already installed on your system, run the following command from a command prompt:
@@ -32,15 +55,23 @@ OpenJDK 64-Bit Server VM 18.9 (build 11.0.5+10, mixed mode)
 </source>
 
 <p>
-It is recommended to have JDK 11 installed. JDK/JRE 8 (1.8) might work, 
-but development and testing of PDS Registry and other tools is mostly done with JDK 11.
+<b>NOTE:</b> Your system might have multiple versions of Java installed, for example, JDK 1.8 and JDK 11.
+If JDK 11 is not the default, then set JAVA_HOME environment variable to point to JDK 11 before running 
+Harvest or Registry Manager.
 </p>
+
+</section>
+
+<!-- ===================================================== -->
+
+<section id="install" name="Installation">
 
 <p>There are several distributions of Java:
 <ul>
 <li>Open JDK (Free). Can be downloaded from different sites, for example, 
-<a href="https://adoptopenjdk.net/" target="_blank">adoptopenjdk.net</a>. 
-Most Linux distributions have Open JDK in their standard repositories.</li>
+<a href="https://adoptopenjdk.net/" target="_blank">adoptopenjdk.net</a> or 
+<a href="https://www.azul.com/downloads/zulu-community" target="_blank">azul.com</a>. 
+<br/>Most Linux distributions have Open JDK in their standard repositories.</li>
 <li>Oracle JDK (Commercial). Can be downloaded from 
 <a href="https://www.oracle.com/java/technologies/javase-jdk11-downloads.html" target="_blank">www.oracle.com</a>. 
 You must register and accept a license to download.</li>
@@ -48,14 +79,15 @@ You must register and accept a license to download.</li>
 </p>
 
 <p>
-If you want to keep several versions of JDK (e.g., 8 and 11), you can download .zip or .tar.gz archives instead of .msi or .pkg files 
-and manually unzip them. Then you can set JAVA_HOME environment variable to choose which version of JDK to run. 
+We recommend installing OpenJDK. Sites listed above have detailed installation instructions. 
 </p>
 
 </section>
 
-<section name="Next steps">
-<p>Java is now available in your environment, you should now deploy <a href="es-dev.html">Elasticsearch</a> server.</p>
+<!-- ===================================================== -->
+
+<section id="next" name="Next steps">
+<p>Install <a href="es-dev.html">Elasticsearch</a> server.</p>
 </section>
 
 </body>

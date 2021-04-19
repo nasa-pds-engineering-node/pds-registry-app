@@ -63,7 +63,7 @@
         <item name="Java" href="install/java.html"/>
         <item name="Elasticsearch - Quick Start" href="install/es-dev.html"/>
         <item name="Tools (Manager, Harvest)" href="install/tools.html"/>
-        <item name="Initialize the Registry" href="install/initialize.html"/>
+        <item name="API Server" href="install/api-server.html"/>
         <item name="Test your deployment" href="install/test.html"/>        
       </item>
       <item name="Operation" href="operate/index.html">
@@ -91,7 +91,7 @@
     </menu>
   
     <menu name="Change Log">
-      <item name="TBD" href="" />
+      <item name="on github" href="https://github.com/NASA-PDS/pds-registry-app/blob/master/CHANGELOG.md" />
     </menu>
   
     <menu ref="reports"/>

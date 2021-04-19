@@ -70,13 +70,6 @@ You can customize individual indices as described in <a href="../operate/reg-cus
 </p>
 
 <p>
-For example, to create index test1 from custom Elasticsearch schema, call this command
-</p>
-<source>
-registry-manager create-registry -schema /tmp/test-schema.json -index test1
-</source>
-
-<p>
 You can easily delete any of your test indices and start over. For example,
 </p>
 <source>
@@ -94,14 +87,14 @@ registry-manager delete-registry -index test1
 Extract all data from a test index into a JSON file, as shown below
 </p>
 <source>
-registry-manager export-data -file /tmp/mydata.json -all -index test1
+registry-manager export-data -file /tmp/test1/mydata.json -all -index test1
 </source>
 
 <p>
 Then load the JSON file into production environment. 
 </p>
 <source>
-registry-manager load-data -file /tmp/mydata.json -es https://es1.prod.local:9200
+registry-manager load-data -dir /tmp/test1 -es https://es1.prod.local:9200
 </source>
 
 <p>
@@ -119,14 +112,14 @@ NOTE: You may need to copy (FTP) your JSON file into production environment.
 Extract a subset of data by packageId from a test index into a JSON file, as shown below
 </p>
 <source>
-registry-manager export-data -file /tmp/mydata.json -packageId 8d8ae96d-044e-473d-a278-62635b1c5977 -index test1
+registry-manager export-data -file /tmp/test1/mydata.json -packageId 8d8ae96d-044e-473d-a278-62635b1c5977 -index test1
 </source>
 
 <p>
 Then load the JSON file into production environment. 
 </p>
 <source>
-registry-manager load-data -file /tmp/mydata.json -es https://es1.prod.local:9200
+registry-manager load-data -dir /tmp/test1 -es https://es1.prod.local:9200
 </source>
 
 </subsection>
