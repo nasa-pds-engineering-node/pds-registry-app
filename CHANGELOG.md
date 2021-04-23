@@ -1,8 +1,28 @@
 # Changelog
 
-## [v0.4.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v0.4.0-SNAPSHOT) (2021-04-19)
+## [v0.4.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v0.4.0-SNAPSHOT) (2021-04-23)
 
 [Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v0.3.0...v0.4.0-SNAPSHOT)
+
+**Requirements:**
+
+- The service shall provide a staging capability for artifacts staged for release [\#65](https://github.com/NASA-PDS/pds-registry-app/issues/65)
+- The service shall require user authorization for updating registry metadata [\#66](https://github.com/NASA-PDS/pds-registry-app/issues/66)
+- The service shall require checksums as metadata for registry artifact to enable system-wide integrity checking [\#68](https://github.com/NASA-PDS/pds-registry-app/issues/68)
+- The service shall allow for queries for registered artifacts [\#55](https://github.com/NASA-PDS/pds-registry-app/issues/55)
+- The service shall allow deletion of registered artifacts [\#70](https://github.com/NASA-PDS/pds-registry-app/issues/70)
+- The service shall allow updates to registered artifacts [\#71](https://github.com/NASA-PDS/pds-registry-app/issues/71)
+- The service shall store metadata for a registered artifact in an underlying metadata store [\#72](https://github.com/NASA-PDS/pds-registry-app/issues/72)
+- The service shall require a logical identifier and version be provided for all registered artifacts [\#73](https://github.com/NASA-PDS/pds-registry-app/issues/73)
+- The service shall assign a global unique identifier to a registered artifact [\#56](https://github.com/NASA-PDS/pds-registry-app/issues/56)
+- The service shall accept metadata for a registered artifact in a defined format [\#75](https://github.com/NASA-PDS/pds-registry-app/issues/75)
+- The service shall maintain configuration regarding the classes of artifacts to be registered [\#59](https://github.com/NASA-PDS/pds-registry-app/issues/59)
+- The service shall provide a means identifying relationships between artifact registrations [\#58](https://github.com/NASA-PDS/pds-registry-app/issues/58)
+- The service shall accept artifact registrations. [\#57](https://github.com/NASA-PDS/pds-registry-app/issues/57)
+
+**Other closed issues:**
+
+- Perform trade study and implement revised version of attribute search [\#60](https://github.com/NASA-PDS/pds-registry-app/issues/60)
 
 ## [v0.3.0](https://github.com/NASA-PDS/pds-registry-app/tree/v0.3.0) (2021-04-19)
 
@@ -33,10 +53,9 @@
 
 **Defects:**
 
-- docker build is version locked [\#135](https://github.com/NASA-PDS/pds-registry-app/issues/135)
-- Make example harvest configuration more explicit [\#112](https://github.com/NASA-PDS/pds-registry-app/issues/112)
-- Test data in pds-registry-app-0.2.2-bin.zip is missing data products. [\#110](https://github.com/NASA-PDS/pds-registry-app/issues/110)
-- internal reference management in registry: lost structure [\#100](https://github.com/NASA-PDS/pds-registry-app/issues/100) [[s.medium](https://github.com/NASA-PDS/pds-registry-app/labels/s.medium)]
+- docker build is version locked [\#135](https://github.com/NASA-PDS/pds-registry-app/issues/135) [[s.medium](https://github.com/NASA-PDS/pds-registry-app/labels/s.medium)]
+- Make example harvest configuration more explicit [\#112](https://github.com/NASA-PDS/pds-registry-app/issues/112) [[s.high](https://github.com/NASA-PDS/pds-registry-app/labels/s.high)]
+- Test data in pds-registry-app-0.2.2-bin.zip is missing data products. [\#110](https://github.com/NASA-PDS/pds-registry-app/issues/110) [[s.high](https://github.com/NASA-PDS/pds-registry-app/labels/s.high)]
 
 **Other closed issues:**
 
@@ -65,7 +84,7 @@
 
 **Defects:**
 
-- Test data in pds-registry-app-0.2.2-bin.zip contains invalid PDS4 labels [\#109](https://github.com/NASA-PDS/pds-registry-app/issues/109)
+- Test data in pds-registry-app-0.2.2-bin.zip contains invalid PDS4 labels [\#109](https://github.com/NASA-PDS/pds-registry-app/issues/109) [[s.high](https://github.com/NASA-PDS/pds-registry-app/labels/s.high)]
 
 **Other closed issues:**
 
@@ -86,7 +105,7 @@
 
 **Defects:**
 
-- harvest and registry manager in pds-registry-app-0.2.2-bin.zip are missing batch scripts for windows [\#108](https://github.com/NASA-PDS/pds-registry-app/issues/108)
+- harvest and registry manager in pds-registry-app-0.2.2-bin.zip are missing batch scripts for windows [\#108](https://github.com/NASA-PDS/pds-registry-app/issues/108) [[s.medium](https://github.com/NASA-PDS/pds-registry-app/labels/s.medium)]
 - Issues with Registry App Documentation [\#106](https://github.com/NASA-PDS/pds-registry-app/issues/106)
 
 **Other closed issues:**
