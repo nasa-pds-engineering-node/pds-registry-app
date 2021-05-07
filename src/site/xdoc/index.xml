@@ -39,6 +39,12 @@
 
 <body>
 
+<div style="background: #eee; padding: 10px;">
+<center>
+<b>For Data Users</b>, see PDS API Client User Guide and Documentation <a href="https://nasa-pds.github.io/pds-api-client/" target="_blank">here</a>.
+</center>
+</div>
+
 <section name="About PDS Registry">
 <p>
 PDS Registry provides functionality for tracking, searching, auditing, locating, and maintaining artifacts within the system. 
