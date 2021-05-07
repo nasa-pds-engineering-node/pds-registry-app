@@ -1,6 +1,6 @@
 # Changelog
 
-## [v0.4.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v0.4.0-SNAPSHOT) (2021-04-23)
+## [v0.4.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v0.4.0-SNAPSHOT) (2021-05-07)
 
 [Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v0.3.0...v0.4.0-SNAPSHOT)
 
@@ -20,8 +20,14 @@
 - The service shall provide a means identifying relationships between artifact registrations [\#58](https://github.com/NASA-PDS/pds-registry-app/issues/58)
 - The service shall accept artifact registrations. [\#57](https://github.com/NASA-PDS/pds-registry-app/issues/57)
 
+**Improvements:**
+
+- Update Registry App landing page to divert data users to separate landing page for using the PDS API [\#158](https://github.com/NASA-PDS/pds-registry-app/issues/158)
+
 **Other closed issues:**
 
+- Work w/ SAs to define production deployment strategy in AWS [\#159](https://github.com/NASA-PDS/pds-registry-app/issues/159)
+- Employ budget alerts and if possible, rate/egress limits on AWS services [\#151](https://github.com/NASA-PDS/pds-registry-app/issues/151)
 - Perform trade study and implement revised version of attribute search [\#60](https://github.com/NASA-PDS/pds-registry-app/issues/60)
 
 ## [v0.3.0](https://github.com/NASA-PDS/pds-registry-app/tree/v0.3.0) (2021-04-19)
