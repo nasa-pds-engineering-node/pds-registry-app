@@ -1,8 +1,8 @@
 # Changelog
 
-## [v0.4.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v0.4.0-SNAPSHOT) (2021-05-07)
+## [v0.3.1](https://github.com/NASA-PDS/pds-registry-app/tree/v0.3.1) (2021-05-07)
 
-[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v0.3.0...v0.4.0-SNAPSHOT)
+[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v0.3.0...v0.3.1)
 
 **Requirements:**
 
@@ -23,6 +23,10 @@
 **Improvements:**
 
 - Update Registry App landing page to divert data users to separate landing page for using the PDS API [\#158](https://github.com/NASA-PDS/pds-registry-app/issues/158)
+
+**Defects:**
+
+- Documentation \(zip\) file is empty [\#160](https://github.com/NASA-PDS/pds-registry-app/issues/160)
 
 **Other closed issues:**
 
@@ -59,9 +63,9 @@
 
 **Defects:**
 
-- docker build is version locked [\#135](https://github.com/NASA-PDS/pds-registry-app/issues/135) [[s.medium](https://github.com/NASA-PDS/pds-registry-app/labels/s.medium)]
-- Make example harvest configuration more explicit [\#112](https://github.com/NASA-PDS/pds-registry-app/issues/112) [[s.high](https://github.com/NASA-PDS/pds-registry-app/labels/s.high)]
-- Test data in pds-registry-app-0.2.2-bin.zip is missing data products. [\#110](https://github.com/NASA-PDS/pds-registry-app/issues/110) [[s.high](https://github.com/NASA-PDS/pds-registry-app/labels/s.high)]
+- docker build is version locked [\#135](https://github.com/NASA-PDS/pds-registry-app/issues/135)
+- Make example harvest configuration more explicit [\#112](https://github.com/NASA-PDS/pds-registry-app/issues/112)
+- Test data in pds-registry-app-0.2.2-bin.zip is missing data products. [\#110](https://github.com/NASA-PDS/pds-registry-app/issues/110)
 
 **Other closed issues:**
 
@@ -73,6 +77,7 @@
 - Deploy Registries in AWS [\#91](https://github.com/NASA-PDS/pds-registry-app/issues/91)
 - Deploy EN Registry in AWS [\#86](https://github.com/NASA-PDS/pds-registry-app/issues/86)
 - Registry Integration component [\#81](https://github.com/NASA-PDS/pds-registry-app/issues/81)
+- Table record metadata search capability [\#78](https://github.com/NASA-PDS/pds-registry-app/issues/78)
 - Update pds-registry-app to use new pds-registry-mgr-elastic [\#40](https://github.com/NASA-PDS/pds-registry-app/issues/40)
 
 ## [v0.2.4](https://github.com/NASA-PDS/pds-registry-app/tree/v0.2.4) (2021-01-05)
@@ -90,7 +95,7 @@
 
 **Defects:**
 
-- Test data in pds-registry-app-0.2.2-bin.zip contains invalid PDS4 labels [\#109](https://github.com/NASA-PDS/pds-registry-app/issues/109) [[s.high](https://github.com/NASA-PDS/pds-registry-app/labels/s.high)]
+- Test data in pds-registry-app-0.2.2-bin.zip contains invalid PDS4 labels [\#109](https://github.com/NASA-PDS/pds-registry-app/issues/109)
 
 **Other closed issues:**
 
@@ -105,13 +110,9 @@
 
 [Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v0.2.2...0.2.3)
 
-**Improvements:**
-
-- Add the API to the pds-registry-app package, with documentation [\#102](https://github.com/NASA-PDS/pds-registry-app/issues/102)
-
 **Defects:**
 
-- harvest and registry manager in pds-registry-app-0.2.2-bin.zip are missing batch scripts for windows [\#108](https://github.com/NASA-PDS/pds-registry-app/issues/108) [[s.medium](https://github.com/NASA-PDS/pds-registry-app/labels/s.medium)]
+- harvest and registry manager in pds-registry-app-0.2.2-bin.zip are missing batch scripts for windows [\#108](https://github.com/NASA-PDS/pds-registry-app/issues/108)
 - Issues with Registry App Documentation [\#106](https://github.com/NASA-PDS/pds-registry-app/issues/106)
 
 **Other closed issues:**
@@ -125,6 +126,7 @@
 **Improvements:**
 
 - update registry-manager load-data to handle additional use cases [\#103](https://github.com/NASA-PDS/pds-registry-app/issues/103)
+- Add the API to the pds-registry-app package, with documentation [\#102](https://github.com/NASA-PDS/pds-registry-app/issues/102)
 - Beta test operational deployment [\#13](https://github.com/NASA-PDS/pds-registry-app/issues/13)
 
 **Defects:**
