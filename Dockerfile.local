@@ -46,6 +46,7 @@ RUN mkdir -p /usr/local/dist \
     ln -s /var/local/registry/elastic /usr/local && \
     cp -r target/harvest-*/conf /var/local/harvest/ && \
     ( sed -e 's/\/path\/to\/bundle/\/var\/local\/harvest\/archive/' \
-          target/harvest-*/conf/examples/registry.xml > \
-          /var/local/harvest/conf/examples/registry.xml ) && \
+          target/harvest-*/conf/examples/bundles.xml | \
+          sed -e 's/CHANGE_ME/PSA/' > \
+          /var/local/harvest/conf/examples/bundles.xml ) && \
     cp -r target/*/dph_example_archive/* /var/local/harvest/archive
