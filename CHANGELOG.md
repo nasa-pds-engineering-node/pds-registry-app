@@ -1,6 +1,28 @@
 # Changelog
 
-## [v0.4.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v0.4.0-SNAPSHOT) (2021-05-07)
+## [«unknown»](https://github.com/NASA-PDS/pds-registry-app/tree/«unknown») (2021-06-11)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v0.4.0-SNAPSHOT...«unknown»)
+
+**Requirements:**
+
+- As a developer, I want to extend the registry-mgr and harvest using the Java API [\#153](https://github.com/NASA-PDS/pds-registry-app/issues/153)
+- As a node operator, I want the the registry schema to update autonomously when new data is ingested. [\#146](https://github.com/NASA-PDS/pds-registry-app/issues/146)
+- As a node operator, I want to ingest metadata regarding secondary products that belong to a collection. [\#143](https://github.com/NASA-PDS/pds-registry-app/issues/143)
+
+**Improvements:**
+
+- Initial deployment of API on AWS - ASG/ELB solution [\#122](https://github.com/NASA-PDS/pds-registry-app/issues/122)
+
+**Defects:**
+
+- Unable to ingest secondary products [\#168](https://github.com/NASA-PDS/pds-registry-app/issues/168) [[s.medium](https://github.com/NASA-PDS/pds-registry-app/labels/s.medium)]
+
+**Other closed issues:**
+
+- Deploy latest version of pds-registry-app to pds-gamma [\#167](https://github.com/NASA-PDS/pds-registry-app/issues/167)
+
+## [v0.4.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v0.4.0-SNAPSHOT) (2021-05-12)
 
 [Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v0.3.1...v0.4.0-SNAPSHOT)
 
@@ -43,10 +65,8 @@
 - As a node operator,  I want to be able to tag ingested data with the node it is ingested by. [\#147](https://github.com/NASA-PDS/pds-registry-app/issues/147)
 - As a developer, I want to include supplemental file data sizes in the registry [\#145](https://github.com/NASA-PDS/pds-registry-app/issues/145)
 - As a node operator, I want to ingest metadata regarding secondary collections that belong to a bundle. [\#144](https://github.com/NASA-PDS/pds-registry-app/issues/144)
-- As a node operator, I want to ingest metadata regarding secondary products that belong to a collection. [\#143](https://github.com/NASA-PDS/pds-registry-app/issues/143)
 - As a node operator, I want actionable, user-friendly error messages for registry schema failures [\#142](https://github.com/NASA-PDS/pds-registry-app/issues/142)
 - As a manager, I want a cost model for deploying a registry + API in AWS [\#141](https://github.com/NASA-PDS/pds-registry-app/issues/141)
-- As a node operator, I want to harvest and ingest a subset of a bundle based on existing registered data. [\#130](https://github.com/NASA-PDS/pds-registry-app/issues/130)
 
 **Improvements:**
 
