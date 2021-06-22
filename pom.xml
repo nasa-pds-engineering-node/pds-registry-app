@@ -170,7 +170,7 @@ POSSIBILITY OF SUCH DAMAGE.
               <server>github-oauth</server>
               <tagName>${project.version}</tagName>
               <name>${project.version}</name>
-              <targetCommitish>master</targetCommitish>
+              <targetCommitish>main</targetCommitish>
               <body>release description overwritten by release notes</body>
               <releaseNotes>src/main/resources/release-notes.md</releaseNotes>
               <assets>
