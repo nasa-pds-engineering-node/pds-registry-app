@@ -1,8 +1,8 @@
 # Changelog
 
-## [«unknown»](https://github.com/NASA-PDS/pds-registry-app/tree/«unknown») (2021-06-11)
+## [v0.4.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v0.4.0-SNAPSHOT) (2021-06-11)
 
-[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v0.4.0-SNAPSHOT...«unknown»)
+[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v0.3.1...v0.4.0-SNAPSHOT)
 
 **Requirements:**
 
@@ -21,10 +21,6 @@
 **Other closed issues:**
 
 - Deploy latest version of pds-registry-app to pds-gamma [\#167](https://github.com/NASA-PDS/pds-registry-app/issues/167)
-
-## [v0.4.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v0.4.0-SNAPSHOT) (2021-05-12)
-
-[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v0.3.1...v0.4.0-SNAPSHOT)
 
 ## [v0.3.1](https://github.com/NASA-PDS/pds-registry-app/tree/v0.3.1) (2021-05-07)
 
