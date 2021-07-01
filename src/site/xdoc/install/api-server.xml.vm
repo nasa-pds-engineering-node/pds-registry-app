@@ -46,7 +46,7 @@ See <a href="java.html" target="_blank">this section</a> for installation instru
 </p>
 
 <p>
-Download latest release from
+Download $context.get("api.version") release from
 <a href="https://github.com/NASA-PDS/registry-api-service/releases" target="_blank">GitHub</a>.
 There are ZIP files for Windows and TAR.GZ files for Linux and MacOS.
 </p>
