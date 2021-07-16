@@ -71,6 +71,7 @@
         <item name="Test vs Prod" href="operate/test-vs-prod.html"/>
         <item name="Harvest" href="operate/harvest.html"/>
         <item name="Registry Manager" href="operate/reg-manager.html"/>
+        <item name="Supplementer" href="operate/supplementer.html"/>
         <item name="Registry Customization" href="operate/reg-custom.html"/>
       </item>
       <item name="Production Deployment" href="prod/index.html">
