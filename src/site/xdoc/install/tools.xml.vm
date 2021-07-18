@@ -39,7 +39,7 @@
 
 <body>
 
-<section name="Harvest and Registry Manager Installation">
+<section name="Tools Installation">
 
 <ul>
 <li><a href="#overview">Overview</a></li>
@@ -54,15 +54,26 @@
     
 <section id="overview" name="Overview">
 <p>
-<b>Harvest</b> is a tool to crawl and extract metadata from PDS4 labels.
-Extracted metadata is stored in an "intermediate" JSON or XML data files. 
-JSON data files can be loaded into Elasticsearch by Registry Manager.
+This document describes how to install following PDS Registry tools:
 </p>
 
-<p>
-<b>Registry Manager</b> is a tool to create Registry indices in Elasticsearch and 
+<ul>
+
+<li><b>Harvest</b> is a command-line tool to crawl and extract metadata from PDS4 labels.
+Extracted metadata is stored in an "intermediate" JSON or XML data files. 
+JSON data files can be loaded into Elasticsearch by Registry Manager.
+</li>
+
+<li>
+<b>Registry Manager</b> is a command-line application to create Registry indices in Elasticsearch and 
 to load, delete and export registry data.
-</p>
+</li>
+
+<li>
+<b>Supplementer</b> is a command-line tool to load supplemental metadata into PDS Registry.
+</li>
+
+</ul>
 </section>
 
 <!-- ===================================================================== -->
@@ -90,19 +101,20 @@ It has the following structure:
 </p>
 
 <ul>
-<li><b>registry-$context.get("registry.version")/</b><br />
-<p>This directory contains Registry Manager command-line tool.</p>
-</li>
 <li><b>harvest-$context.get("harvest.version")/</b><br />
-<p>This directory contains Harvest command-line tool.</p>
+  <p>This directory contains Harvest command-line tool.</p>
+</li>
+<li><b>registry-$context.get("registry.version")/</b><br />
+  <p>This directory contains Registry Manager command-line tool.</p>
+</li>
+<li><b>supplementer-$context.get("supplementer.version")/</b><br />
+  <p>This directory contains Supplementer command-line tool.</p>
 </li>
 <li><b>test/</b><br />
-<p>This directory contains reference test datasets to validate the deployment.</p>
+  <p>This directory contains reference test datasets to validate the deployment.</p>
 </li>
 <li><b>LICENSE</b><br/>
-<p>
-The Apache License, Version 2.0
-</p>
+  <p>The Apache License, Version 2.0</p>
 </li>
 <li><b>README.txt</b><br/>
 <p>
@@ -116,7 +128,7 @@ A VERSION file contains the version of the project.
 </li>
 </ul>
 </section>
-    
+
 
 <!-- ===================================================================== -->
 

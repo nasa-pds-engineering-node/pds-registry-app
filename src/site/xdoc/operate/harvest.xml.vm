@@ -606,11 +606,28 @@ either include or exclude filters (but not both). The following example will ext
 
 <h4>Date Fields</h4>
 <p>
-Harvest will try to convert all fields containing "date" string in their names to 
+To store date fields in Elasticserch, the values have to be converted to 
 ISO-8601 "instant" format (e.g., "2013-10-24T00:49:37.457Z").
-If a field value could not be converted to ISO-8601 format, a warning message will be printed 
-and original value will be saved.
+Harvest will try to convert all fields containing "date" string in their names.
+If a field value could not be converted to ISO-8601 format, a warning message is printed 
+and original value is saved.
 </p>
+<p>
+To convert fields which don't have "date" string in their names you have to list
+field names in main Harvest configuration file as shown below.
+</p>
+
+<source>
+  &lt;autogenFields&gt;
+    &lt;dateFields&gt;
+      &lt;field&gt;cassini:VIMS_Specific_Attributes/cassini:earth_received_start_time&lt;/field&gt;
+      &lt;field&gt;cassini:VIMS_Specific_Attributes/cassini:earth_received_stop_time&lt;/field&gt;
+      &lt;field&gt;cassini:VIMS_Specific_Attributes/cassini:start_time_doy&lt;/field&gt;
+      &lt;field&gt;cassini:VIMS_Specific_Attributes/cassini:stop_time_doy&lt;/field&gt;
+      &lt;field&gt;cassini:VIMS_Specific_Attributes/cassini:pds3_product_creation_time&lt;/field&gt;
+    &lt;/dateFields&gt;
+  &lt;/autogenFields&gt;
+</source>
 
 </subsection>
 
