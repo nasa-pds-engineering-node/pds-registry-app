@@ -53,8 +53,9 @@ POSSIBILITY OF SUCH DAMAGE.
   </parent>
   
   <properties>
-     <registry.version>4.1.0</registry.version>
      <harvest.version>3.4.1</harvest.version>
+     <registry.version>4.1.0</registry.version>
+     <supplementer.version>1.0.0</supplementer.version>
      <api.version>0.3.0</api.version>
   </properties>
 

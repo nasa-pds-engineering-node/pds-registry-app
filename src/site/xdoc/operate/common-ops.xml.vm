@@ -69,6 +69,7 @@ After running Harvest, the output folder (default is /tmp/harvest/out/) will hav
 <li><i>registry-docs.json</i> - metadata extracted from PDS4 labels, stored in Newline-delimited JSON (NJSON) format.</li>
 <li><i>refs-docs.json</i> - product references extracted from collection inventory files.</li>
 <li><i>fields.txt</i> - a list of field names extracted from PDS4 labels.</li>
+<li><i>supplemental.txt</i> - a list of supplemental products (file paths).</li>
 </ul>
 </p>
 
