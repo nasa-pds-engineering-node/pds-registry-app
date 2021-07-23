@@ -1,5 +1,21 @@
 # Changelog
 
+## [«unknown»](https://github.com/NASA-PDS/pds-registry-app/tree/«unknown») (2021-07-23)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v0.3.2...«unknown»)
+
+**Requirements:**
+
+- As a node operator, I want to harvest and ingest a subset of a bundle based on existing registered data. [\#130](https://github.com/NASA-PDS/pds-registry-app/issues/130)
+
+**Improvements:**
+
+- Upgrade API on AWS with latest version 0.3.1 [\#173](https://github.com/NASA-PDS/pds-registry-app/issues/173)
+
+**Other closed issues:**
+
+- Change Harvest to store list of supplemental products in a file [\#171](https://github.com/NASA-PDS/pds-registry-app/issues/171)
+
 ## [v0.3.2](https://github.com/NASA-PDS/pds-registry-app/tree/v0.3.2) (2021-07-01)
 
 [Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v0.4.0-SNAPSHOT...v0.3.2)
