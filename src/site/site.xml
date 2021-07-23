@@ -92,7 +92,7 @@
     </menu>
   
     <menu name="Change Log">
-      <item name="on github" href="https://github.com/NASA-PDS/pds-registry-app/blob/main/CHANGELOG.md" />
+      <item name="On Github" href="https://github.com/NASA-PDS/pds-registry-app/blob/main/CHANGELOG.md" />
     </menu>
   
     <menu ref="reports"/>
