@@ -92,7 +92,7 @@ docker run --network pds \
            --user $UID \
            --volume /tmp/output:/var/local/harvest/output \
            pds_registry_app:$(git rev-parse HEAD) harvest \
-              -c /var/local/harvest/conf/examples/registry.xml \
+              -c /var/local/harvest/conf/examples/bundles.xml \
               -o /var/local/harvest/output
 ```
 
