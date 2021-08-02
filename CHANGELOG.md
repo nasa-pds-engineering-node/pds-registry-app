@@ -1,6 +1,14 @@
 # Changelog
 
-## [v1.0.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v1.0.0-SNAPSHOT) (2021-07-23)
+## [«unknown»](https://github.com/NASA-PDS/pds-registry-app/tree/«unknown») (2021-08-02)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.0.0-SNAPSHOT...«unknown»)
+
+**Other closed issues:**
+
+- Create new app to load supplemental metadata into registry [\#172](https://github.com/NASA-PDS/pds-registry-app/issues/172)
+
+## [v1.0.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v1.0.0-SNAPSHOT) (2021-07-24)
 
 [Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v0.3.2...v1.0.0-SNAPSHOT)
 
@@ -257,7 +265,6 @@
 - Unable to build application due to file size limit [\#21](https://github.com/NASA-PDS/pds-registry-app/issues/21)
 - registry installation's documentation may be insufficient [\#5](https://github.com/NASA-PDS/pds-registry-app/issues/5)
 - pds-app-registry doesn't build on Windows [\#3](https://github.com/NASA-PDS/pds-registry-app/issues/3)
-- Harvest does not work with registry manager [\#2](https://github.com/NASA-PDS/pds-registry-app/issues/2)
 
 ## [0.1.0](https://github.com/NASA-PDS/pds-registry-app/tree/0.1.0) (2020-03-31)
 
