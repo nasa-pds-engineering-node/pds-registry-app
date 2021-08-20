@@ -338,7 +338,7 @@ product filter in Harvest configuration file:
 &lt;harvest nodeName="PDS_SBN"&gt;
   ...
   &lt;productFilter&gt;
-    &lt;include&gt;Product_Document&lt;/include&gt;
+    &lt;includeClass&gt;Product_Document&lt;/includeClass&gt;
   &lt;/productFilter&gt;
   ...
 &lt;/harvest&gt;
