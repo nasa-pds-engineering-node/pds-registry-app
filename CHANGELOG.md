@@ -1,28 +1,21 @@
 # Changelog
 
-## [«unknown»](https://github.com/NASA-PDS/pds-registry-app/tree/«unknown») (2021-08-25)
-
-[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.0.0-SNAPSHOT...«unknown»)
-
-**Requirements:**
-
-- As a registry user, I want to ingest supplemental metadata from Product\_Metadata\_Supplemental. [\#12](https://github.com/NASA-PDS/pds-registry-app/issues/12)
-
-**Defects:**
-
-- docker instructions in README.md are not working [\#163](https://github.com/NASA-PDS/pds-registry-app/issues/163) [[s.medium](https://github.com/NASA-PDS/pds-registry-app/labels/s.medium)]
-
-## [v1.0.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v1.0.0-SNAPSHOT) (2021-08-02)
+## [v1.0.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v1.0.0-SNAPSHOT) (2021-08-25)
 
 [Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v0.3.2...v1.0.0-SNAPSHOT)
 
 **Requirements:**
 
 - As a node operator, I want to harvest and ingest a subset of a bundle based on existing registered data. [\#130](https://github.com/NASA-PDS/pds-registry-app/issues/130)
+- As a registry user, I want to ingest supplemental metadata from Product\_Metadata\_Supplemental. [\#12](https://github.com/NASA-PDS/pds-registry-app/issues/12)
 
 **Improvements:**
 
 - Upgrade API on AWS with latest version 0.3.1 [\#173](https://github.com/NASA-PDS/pds-registry-app/issues/173)
+
+**Defects:**
+
+- docker instructions in README.md are not working [\#163](https://github.com/NASA-PDS/pds-registry-app/issues/163) [[s.medium](https://github.com/NASA-PDS/pds-registry-app/labels/s.medium)]
 
 **Other closed issues:**
 
