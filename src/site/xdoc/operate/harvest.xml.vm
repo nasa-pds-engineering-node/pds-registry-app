@@ -338,11 +338,28 @@ product filter in Harvest configuration file:
 &lt;harvest nodeName="PDS_SBN"&gt;
   ...
   &lt;productFilter&gt;
-    &lt;include&gt;Product_Document&lt;/include&gt;
+    &lt;includeClass&gt;Product_Document&lt;/includeClass&gt;
   &lt;/productFilter&gt;
   ...
 &lt;/harvest&gt;
 </source>
+
+<p>
+To exclude documents, add following product filter:
+</p>
+<source>
+&lt;harvest nodeName="PDS_SBN"&gt;
+  ...
+  &lt;productFilter&gt;
+    &lt;excludeClass&gt;Product_Document&lt;/excludeClass&gt;
+  &lt;/productFilter&gt;
+  ...
+&lt;/harvest&gt;
+</source>
+
+<p>
+<b>NOTE:</b> You could not have both include and exclude filters at the same time.
+</p>
 
 </subsection>
 
