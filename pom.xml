@@ -56,7 +56,7 @@ POSSIBILITY OF SUCH DAMAGE.
      <harvest.version>3.5.0-SNAPSHOT</harvest.version>
      <registry.version>4.2.0-SNAPSHOT</registry.version>
      <supplementer.version>1.0.0-SNAPSHOT</supplementer.version>
-     <api.version>0.3.0</api.version>
+     <api.version>0.4.0-SNAPSHOT</api.version>
   </properties>
 
   <build>
