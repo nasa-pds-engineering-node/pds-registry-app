@@ -110,6 +110,7 @@ docker run --network pds \
            registry-manager load-data \
               -es http://es:9200 \
               -dir /var/local/harvest/output
+              -updateSchema n
 ```
 
 ### Verify it worked
