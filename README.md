@@ -12,7 +12,11 @@ The purpose of this repository is to integrate together these services and packa
 
 ## Install
 
-See pds-engineering doc produced by mvn site, to be published
+See pds-engineering doc produced by mvn site, 
+
+Latest stable version is published on:
+https://nasa-pds.github.io/pds-registry-app/install/index.html
+
 
 # Update, release
 
