@@ -71,18 +71,28 @@
   </fileSets>
   <files>
     <file>
-      <source>LICENSE.txt</source>
+      <source>LICENSE.md</source>
       <outputDirectory>/</outputDirectory>
       <fileMode>664</fileMode>
       <lineEnding>unix</lineEnding>
     </file>
     <file>
-      <source>README-PACKAGE.txt</source>
+      <source>README.md</source>
       <outputDirectory>/</outputDirectory>
-      <destName>README.txt</destName>
       <fileMode>664</fileMode>
       <lineEnding>unix</lineEnding>
-      <filtered>true</filtered>
+    </file>
+    <file>
+      <source>NOTICE.txt</source>
+      <outputDirectory>/</outputDirectory>
+      <fileMode>664</fileMode>
+      <lineEnding>unix</lineEnding>
+    </file>
+    <file>
+      <source>SECURITY.md</source>
+      <outputDirectory>/</outputDirectory>
+      <fileMode>664</fileMode>
+      <lineEnding>unix</lineEnding>
     </file>
     <file>
       <source>src/main/resources/build/VERSION.txt</source>
