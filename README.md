@@ -12,6 +12,10 @@ The purpose of this repository is to integrate together these services and packa
 
 
 ## 👥 Contributing
+See pds-engineering doc produced by mvn site, 
+
+Latest stable version is published on:
+https://nasa-pds.github.io/pds-registry-app/install/index.html
 
 Within the NASA Planetary Data System, we value the health of our community as much as the code. Towards that end, we ask that you read and practice what's described in these documents:
 
@@ -121,6 +125,7 @@ docker container run --network pds \
            registry-manager load-data \
               -es http://es:9200 \
               -dir /var/local/harvest/output
+              -updateSchema n
 ```
 
 
