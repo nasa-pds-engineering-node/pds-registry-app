@@ -1,6 +1,14 @@
 # Changelog
 
-## [v1.0.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v1.0.0-SNAPSHOT) (2021-08-26)
+## [«unknown»](https://github.com/NASA-PDS/pds-registry-app/tree/«unknown») (2021-09-21)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.0.0-SNAPSHOT...«unknown»)
+
+**Defects:**
+
+- Harvest does not work with registry manager [\#2](https://github.com/NASA-PDS/pds-registry-app/issues/2)
+
+## [v1.0.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v1.0.0-SNAPSHOT) (2021-08-27)
 
 [Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v0.3.2...v1.0.0-SNAPSHOT)
 
@@ -256,7 +264,6 @@
 - Update Schema Generator for handling special cases where ancestor classes are needed [\#20](https://github.com/NASA-PDS/pds-registry-app/issues/20)
 - Develop Customization capability for PDS4 Attribute Search [\#7](https://github.com/NASA-PDS/pds-registry-app/issues/7)
 - Develop PDS4 Attribute Search capability [\#6](https://github.com/NASA-PDS/pds-registry-app/issues/6)
-- update package and documentation after sub-packages updates \(harvest, registry\) [\#1](https://github.com/NASA-PDS/pds-registry-app/issues/1)
 
 **Defects:**
 
