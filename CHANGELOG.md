@@ -1,14 +1,6 @@
 # Changelog
 
-## [«unknown»](https://github.com/NASA-PDS/pds-registry-app/tree/«unknown») (2021-09-22)
-
-[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.0.0-SNAPSHOT...«unknown»)
-
-**Other closed issues:**
-
-- terraform Fargate deployment of registry api service [\#166](https://github.com/NASA-PDS/pds-registry-app/issues/166)
-
-## [v1.0.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v1.0.0-SNAPSHOT) (2021-09-21)
+## [v1.0.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v1.0.0-SNAPSHOT) (2021-09-22)
 
 [Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v0.3.2...v1.0.0-SNAPSHOT)
 
@@ -30,6 +22,7 @@
 
 - Create new app to load supplemental metadata into registry [\#172](https://github.com/NASA-PDS/pds-registry-app/issues/172)
 - Change Harvest to store list of supplemental products in a file [\#171](https://github.com/NASA-PDS/pds-registry-app/issues/171)
+- terraform Fargate deployment of registry api service [\#166](https://github.com/NASA-PDS/pds-registry-app/issues/166)
 
 ## [v0.3.2](https://github.com/NASA-PDS/pds-registry-app/tree/v0.3.2) (2021-07-01)
 
