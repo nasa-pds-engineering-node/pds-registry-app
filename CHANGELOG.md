@@ -1,14 +1,14 @@
 # Changelog
 
-## [«unknown»](https://github.com/NASA-PDS/pds-registry-app/tree/«unknown») (2021-09-21)
+## [«unknown»](https://github.com/NASA-PDS/pds-registry-app/tree/«unknown») (2021-09-22)
 
 [Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.0.0-SNAPSHOT...«unknown»)
 
-**Defects:**
+**Other closed issues:**
 
-- Harvest does not work with registry manager [\#2](https://github.com/NASA-PDS/pds-registry-app/issues/2)
+- terraform Fargate deployment of registry api service [\#166](https://github.com/NASA-PDS/pds-registry-app/issues/166)
 
-## [v1.0.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v1.0.0-SNAPSHOT) (2021-08-27)
+## [v1.0.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v1.0.0-SNAPSHOT) (2021-09-21)
 
 [Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v0.3.2...v1.0.0-SNAPSHOT)
 
@@ -24,6 +24,7 @@
 **Defects:**
 
 - docker instructions in README.md are not working [\#163](https://github.com/NASA-PDS/pds-registry-app/issues/163) [[s.medium](https://github.com/NASA-PDS/pds-registry-app/labels/s.medium)]
+- Harvest does not work with registry manager [\#2](https://github.com/NASA-PDS/pds-registry-app/issues/2)
 
 **Other closed issues:**
 
