@@ -1,5 +1,13 @@
 # Changelog
 
+## [«unknown»](https://github.com/NASA-PDS/pds-registry-app/tree/«unknown») (2021-09-28)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.0.0-SNAPSHOT...«unknown»)
+
+**Requirements:**
+
+- As a user, I want to know the version of all registry app components via the command-line [\#185](https://github.com/NASA-PDS/pds-registry-app/issues/185)
+
 ## [v1.0.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v1.0.0-SNAPSHOT) (2021-09-22)
 
 [Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v0.3.2...v1.0.0-SNAPSHOT)
@@ -39,7 +47,6 @@
 
 - Initial deployment of API on AWS - Fargate solution [\#165](https://github.com/NASA-PDS/pds-registry-app/issues/165)
 - Develop plan for instituting AWS ES Cross Cluster Search  [\#150](https://github.com/NASA-PDS/pds-registry-app/issues/150)
-- Initial deployment of API on AWS - ASG/ELB solution [\#122](https://github.com/NASA-PDS/pds-registry-app/issues/122)
 
 **Defects:**
 
