@@ -59,6 +59,14 @@ POSSIBILITY OF SUCH DAMAGE.
      <api.version>0.4.0</api.version>
   </properties>
 
+  <scm>
+        <url>https://github.com/NASA-PDS/pds-registry-app</url>
+        <connection>scm:git:ssh://git@github.com/NASA-PDS/pds-registry-app.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/NASA-PDS/pds-registry-app.git</developerConnection>
+        <tag>v3.4.1</tag>
+  </scm>
+
+
   <build>
     <resources>
       <resource>
