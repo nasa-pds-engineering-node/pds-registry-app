@@ -49,14 +49,14 @@ POSSIBILITY OF SUCH DAMAGE.
   <parent>
     <groupId>gov.nasa</groupId>
     <artifactId>pds</artifactId>
-    <version>1.10.0</version>
+    <version>1.13.0</version>
   </parent>
   
   <properties>
-     <harvest.version>3.5.0-SNAPSHOT</harvest.version>
-     <registry.version>4.2.0-SNAPSHOT</registry.version>
-     <supplementer.version>1.0.0-SNAPSHOT</supplementer.version>
-     <api.version>0.4.0-SNAPSHOT</api.version>
+     <harvest.version>3.5.0</harvest.version>
+     <registry.version>4.2.0</registry.version>
+     <supplementer.version>1.0.0</supplementer.version>
+     <api.version>0.4.0</api.version>
   </properties>
 
   <build>
