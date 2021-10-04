@@ -1,19 +1,12 @@
 # Changelog
 
-## [«unknown»](https://github.com/NASA-PDS/pds-registry-app/tree/«unknown») (2021-09-28)
-
-[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.0.0-SNAPSHOT...«unknown»)
-
-**Requirements:**
-
-- As a user, I want to know the version of all registry app components via the command-line [\#185](https://github.com/NASA-PDS/pds-registry-app/issues/185)
-
-## [v1.0.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v1.0.0-SNAPSHOT) (2021-09-22)
+## [v1.0.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v1.0.0-SNAPSHOT) (2021-09-28)
 
 [Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v0.3.2...v1.0.0-SNAPSHOT)
 
 **Requirements:**
 
+- As a user, I want to know the version of all registry app components via the command-line [\#185](https://github.com/NASA-PDS/pds-registry-app/issues/185)
 - As a node operator, I want to harvest and ingest a subset of a bundle based on existing registered data. [\#130](https://github.com/NASA-PDS/pds-registry-app/issues/130)
 - As a registry user, I want to ingest supplemental metadata from Product\_Metadata\_Supplemental. [\#12](https://github.com/NASA-PDS/pds-registry-app/issues/12)
 
