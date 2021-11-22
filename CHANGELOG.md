@@ -1,12 +1,24 @@
 # Changelog
 
+## [«unknown»](https://github.com/NASA-PDS/pds-registry-app/tree/«unknown») (2021-11-22)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.1.0-SNAPSHOT...«unknown»)
+
+**Defects:**
+
+- stable continuous integration don't generate the packages tar.gz and .zip properly. [\#177](https://github.com/NASA-PDS/pds-registry-app/issues/177) [[s.medium](https://github.com/NASA-PDS/pds-registry-app/labels/s.medium)]
+
+**Other closed issues:**
+
+- Big Data Harvest analysis / POC [\#195](https://github.com/NASA-PDS/pds-registry-app/issues/195)
+
+## [v1.1.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v1.1.0-SNAPSHOT) (2021-10-04)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.0.0...v1.1.0-SNAPSHOT)
+
 ## [v1.0.0](https://github.com/NASA-PDS/pds-registry-app/tree/v1.0.0) (2021-10-04)
 
-[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.0.0-SNAPSHOT...v1.0.0)
-
-## [v1.0.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v1.0.0-SNAPSHOT) (2021-10-04)
-
-[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v0.3.2...v1.0.0-SNAPSHOT)
+[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v0.3.2...v1.0.0)
 
 **Requirements:**
 
