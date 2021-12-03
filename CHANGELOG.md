@@ -1,8 +1,25 @@
 # Changelog
 
-## [«unknown»](https://github.com/NASA-PDS/pds-registry-app/tree/«unknown») (2021-11-22)
+## [«unknown»](https://github.com/NASA-PDS/pds-registry-app/tree/«unknown») (2021-12-03)
 
 [Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.1.0-SNAPSHOT...«unknown»)
+
+**Improvements:**
+
+- Develop cost model and reporting for Registry deployments [\#90](https://github.com/NASA-PDS/pds-registry-app/issues/90)
+
+**Defects:**
+
+- Harvest network I/O errors can cause corrupted JSON [\#205](https://github.com/NASA-PDS/pds-registry-app/issues/205) [[s.high](https://github.com/NASA-PDS/pds-registry-app/labels/s.high)]
+
+**Other closed issues:**
+
+- Deploy IMG Registry in AWS [\#88](https://github.com/NASA-PDS/pds-registry-app/issues/88)
+- Deploy GEO Registry in AWS [\#87](https://github.com/NASA-PDS/pds-registry-app/issues/87)
+
+## [v1.1.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v1.1.0-SNAPSHOT) (2021-11-22)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.0.0...v1.1.0-SNAPSHOT)
 
 **Defects:**
 
@@ -11,10 +28,6 @@
 **Other closed issues:**
 
 - Big Data Harvest analysis / POC [\#195](https://github.com/NASA-PDS/pds-registry-app/issues/195)
-
-## [v1.1.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v1.1.0-SNAPSHOT) (2021-10-04)
-
-[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.0.0...v1.1.0-SNAPSHOT)
 
 ## [v1.0.0](https://github.com/NASA-PDS/pds-registry-app/tree/v1.0.0) (2021-10-04)
 
