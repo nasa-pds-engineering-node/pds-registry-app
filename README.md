@@ -1,6 +1,6 @@
 # pds-registry-app
 
-![🤪 Unstable integration & delivery](https://github.com/NASA-PDS/pds-registry-app/workflows/%F0%9F%A4%AA%20Unstable%20integration%20&%20delivery/badge.svg) ![😌 Stable integration & delivery](https://github.com/NASA-PDS/pds-registry-app/workflows/%F0%9F%98%8C%20Stable%20integration%20&%20delivery/badge.svg)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5755800.svg)](https://doi.org/10.5281/zenodo.5755800) ![🤪 Unstable integration & delivery](https://github.com/NASA-PDS/pds-registry-app/workflows/%F0%9F%A4%AA%20Unstable%20integration%20&%20delivery/badge.svg) ![😌 Stable integration & delivery](https://github.com/NASA-PDS/pds-registry-app/workflows/%F0%9F%98%8C%20Stable%20integration%20&%20delivery/badge.svg)
 
 This application enables a Planetary Data System node to register all its data products for long term preservation and sharing with the rest of the PDS system.
 
