@@ -1,8 +1,17 @@
 # Changelog
 
-## [«unknown»](https://github.com/NASA-PDS/pds-registry-app/tree/«unknown») (2021-12-03)
+## [«unknown»](https://github.com/NASA-PDS/pds-registry-app/tree/«unknown») (2021-12-10)
 
 [Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.1.0-SNAPSHOT...«unknown»)
+
+**Other closed issues:**
+
+- Build Harvest Client [\#198](https://github.com/NASA-PDS/pds-registry-app/issues/198)
+- Build scalable file system crawler [\#197](https://github.com/NASA-PDS/pds-registry-app/issues/197)
+
+## [v1.1.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v1.1.0-SNAPSHOT) (2021-12-03)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.0.0...v1.1.0-SNAPSHOT)
 
 **Improvements:**
 
@@ -11,23 +20,13 @@
 **Defects:**
 
 - Harvest network I/O errors can cause corrupted JSON [\#205](https://github.com/NASA-PDS/pds-registry-app/issues/205) [[s.high](https://github.com/NASA-PDS/pds-registry-app/labels/s.high)]
-
-**Other closed issues:**
-
-- Deploy IMG Registry in AWS [\#88](https://github.com/NASA-PDS/pds-registry-app/issues/88)
-- Deploy GEO Registry in AWS [\#87](https://github.com/NASA-PDS/pds-registry-app/issues/87)
-
-## [v1.1.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v1.1.0-SNAPSHOT) (2021-11-22)
-
-[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.0.0...v1.1.0-SNAPSHOT)
-
-**Defects:**
-
 - stable continuous integration don't generate the packages tar.gz and .zip properly. [\#177](https://github.com/NASA-PDS/pds-registry-app/issues/177) [[s.medium](https://github.com/NASA-PDS/pds-registry-app/labels/s.medium)]
 
 **Other closed issues:**
 
 - Big Data Harvest analysis / POC [\#195](https://github.com/NASA-PDS/pds-registry-app/issues/195)
+- Deploy IMG Registry in AWS [\#88](https://github.com/NASA-PDS/pds-registry-app/issues/88)
+- Deploy GEO Registry in AWS [\#87](https://github.com/NASA-PDS/pds-registry-app/issues/87)
 
 ## [v1.0.0](https://github.com/NASA-PDS/pds-registry-app/tree/v1.0.0) (2021-10-04)
 
