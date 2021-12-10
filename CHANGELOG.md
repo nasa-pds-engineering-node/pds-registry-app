@@ -1,8 +1,16 @@
 # Changelog
 
-## [v1.1.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v1.1.0-SNAPSHOT) (2021-12-10)
+## [v1.0.2-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v1.0.2-SNAPSHOT) (2021-12-10)
 
-[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.0.0...v1.1.0-SNAPSHOT)
+[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.0.1...v1.0.2-SNAPSHOT)
+
+**Other closed issues:**
+
+- Clearly define best practices configuration for harvest/registry-mgr [\#217](https://github.com/NASA-PDS/pds-registry-app/issues/217)
+
+## [v1.0.1](https://github.com/NASA-PDS/pds-registry-app/tree/v1.0.1) (2021-12-10)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.0.0...v1.0.1)
 
 **Improvements:**
 
