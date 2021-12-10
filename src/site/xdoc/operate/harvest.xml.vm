@@ -105,9 +105,8 @@ harvest -c /tmp/ladee.cfg
 </p>
 
 <p> 
-all XML files in <i>/data/LADEE/ldex_20161118</i> folder and its subfolders will be processed.
-By default, Harvest extracts only few metadata fields, such as lid, vid, title, and product class.
-Extracted metadata is saved in <i>registry-docs.json</i> file. Default output directory is <i>/tmp/harvest/out/</i>.
+  all XML files in <i>/data/LADEE/ldex_20161118</i> folder and its subfolders will be processed.
+  Leaving the `autogenFields` flag enabled in the configuration will ingest all metadata from the PDS4 labels. Extracted metadata is saved in <i>registry-docs.json</i> file. Default output directory is <i>/tmp/harvest/out/</i>.
 </p>
 
 <p>
