@@ -28,7 +28,7 @@
           <ul class="breadcrumb">
         <li id="publishDate">Last Published: 2021-12-10<span class="divider">|</span>
 </li>
-          <li id="projectVersion">Version: 1.0.1</li>
+          <li id="projectVersion">Version: 1.0.2</li>
       <li class="pull-right"><a href="https://github.com/NASA-PDS/pds-registry-app" class="externalLink" title="Registry App Github Repo">Registry App Github Repo</a></li>
           </ul>
         </div>
@@ -68,8 +68,8 @@
      </ul></li>
     <li><a href="../index.html#Support" title="Support"><span class="none"></span>Support</a></li>
    <li class="nav-header">Downloads</li>
-    <li><a href="https://github.com/NASA-PDS/pds-registry-app/releases/download/v1.0.1/pds-registry-app-1.0.1-bin.tar.gz" class="externalLink" title="Current Release (tar.gz)"><span class="none"></span>Current Release (tar.gz)</a></li>
-    <li><a href="https://github.com/NASA-PDS/pds-registry-app/releases/download/v1.0.1/pds-registry-app-1.0.1-bin.zip" class="externalLink" title="Current Release (zip)"><span class="none"></span>Current Release (zip)</a></li>
+    <li><a href="https://github.com/NASA-PDS/pds-registry-app/releases/download/v1.0.2/pds-registry-app-1.0.2-bin.tar.gz" class="externalLink" title="Current Release (tar.gz)"><span class="none"></span>Current Release (tar.gz)</a></li>
+    <li><a href="https://github.com/NASA-PDS/pds-registry-app/releases/download/v1.0.2/pds-registry-app-1.0.2-bin.zip" class="externalLink" title="Current Release (zip)"><span class="none"></span>Current Release (zip)</a></li>
     <li><a href="https://pds-engineering.jpl.nasa.gov/content/pds4-software" class="externalLink" title="Past Releases"><span class="none"></span>Past Releases</a></li>
    <li class="nav-header">Change Log</li>
     <li><a href="https://github.com/NASA-PDS/pds-registry-app/blob/main/CHANGELOG.md" class="externalLink" title="On Github"><span class="none"></span>On Github</a></li>
@@ -189,16 +189,30 @@ Optional parameters:
 <p>
 To run Harvest you need an XML configuration file. 
 The configuration file has several sections which control which files the Harvest tool 
-will crawl and what data to extract. Very basic configuration is shown below.
+will crawl and what data to extract.
+  
+The ideal configurations for Harvest are either <i>conf/examples/bundles.xml</i> or 
+<i>conf/examples/directories.xml</i>. For each of those, you will want to update the nodeName:
 </p>
 <div class="source"><pre class="prettyprint">
-&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;harvest nodeName=&quot;PDS_ATM&quot;&gt;
+</pre></div>
 
-&lt;harvest nodeName=&quot;PDS_SBN&quot;&gt;
+The path to the data:
+
+<div class="source"><pre class="prettyprint">
   &lt;directories&gt;
     &lt;path&gt;/data/LADEE/ldex_20161118&quot;&lt;/path&gt;
   &lt;/directories&gt;
-&lt;/harvest&gt;
+</pre></div>
+  
+And the URL prefix for the data:
+
+<div class="source"><pre class="prettyprint">
+  &lt;fileInfo processDataFiles=&quot;true&quot; storeLabels=&quot;true&quot;&gt;
+    &lt;!-- UPDATE with your own local path and base url where pds4 archive are published --&gt;
+    &lt;fileRef replacePrefix=&quot;/data&quot; with=&quot;https://pds-atmospheres.nmsu.edu/&quot; /&gt;
+  &lt;/fileInfo&gt;
 </pre></div>
 
 
@@ -213,9 +227,8 @@ harvest -c /tmp/ladee.cfg
 
 
 <p> 
-all XML files in <i>/data/LADEE/ldex_20161118</i> folder and its subfolders will be processed.
-By default, Harvest extracts only few metadata fields, such as lid, vid, title, and product class.
-Extracted metadata is saved in <i>registry-docs.json</i> file. Default output directory is <i>/tmp/harvest/out/</i>.
+  all XML files in <i>/data/LADEE/ldex_20161118</i> folder and its subfolders will be processed.
+  Leaving the `autogenFields` flag enabled in the configuration will ingest all metadata from the PDS4 labels. Extracted metadata is saved in <i>registry-docs.json</i> file. Default output directory is <i>/tmp/harvest/out/</i>.
 </p>
 
 
