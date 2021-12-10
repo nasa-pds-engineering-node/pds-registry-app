@@ -73,15 +73,27 @@ Optional parameters:
 <p>
 To run Harvest you need an XML configuration file. 
 The configuration file has several sections which control which files the Harvest tool 
-will crawl and what data to extract. Very basic configuration is shown below.
+will crawl and what data to extract.
+  
+The ideal configurations for Harvest are either <i>conf/examples/bundles.xml</i> or 
+<i>conf/examples/directories.xml</i>. For each of those, you will want to update the nodeName:
 <source>
-&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;harvest nodeName="PDS_ATM"&gt;
+</source>
 
-&lt;harvest nodeName="PDS_SBN"&gt;
+The path to the data:
+<source>
   &lt;directories&gt;
     &lt;path&gt;/data/LADEE/ldex_20161118"&lt;/path&gt;
   &lt;/directories&gt;
-&lt;/harvest&gt;
+</source>
+  
+And the URL prefix for the data:
+<source>
+  &lt;fileInfo processDataFiles="true" storeLabels="true"&gt;
+    &lt;!-- UPDATE with your own local path and base url where pds4 archive are published --&gt;
+    &lt;fileRef replacePrefix="/data" with="https://pds-atmospheres.nmsu.edu/" /&gt;
+  &lt;/fileInfo&gt;
 </source>
 </p>
 

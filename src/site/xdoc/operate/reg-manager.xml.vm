@@ -221,6 +221,7 @@ Optional parameters:
   -es &lt;url&gt;             Elasticsearch URL. Default is http://localhost:9200
   -index &lt;name&gt;         Elasticsearch index name. Default is 'registry'
   -updateSchema &lt;y/n&gt;   Update registry schema. Default is 'yes'
+  -force                  Use 'keyword' ES datatype for missing field definitions
 </source>
 
 <p>
