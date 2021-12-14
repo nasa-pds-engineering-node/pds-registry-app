@@ -51,7 +51,7 @@
     <li><a href="#UpdateSchema">Update Registry schema</a></li>
   </ul>
   <li><a href="#DataCommands">Data Management Commands</a></li>
-    <ul>
+  <ul>
     <li><a href="#Load">Load Data</a></li>
     <li><a href="#Delete">Delete Data</a></li>
     <li><a href="#Export">Export Data</a></li>
@@ -59,10 +59,11 @@
     <li><a href="#ArchiveStatus">Update Archive Status</a></li>
   </ul>
   <li><a href="#DDCommands">Data Dictionary Commands</a></li>
-    <ul>
-    <li><a href="#LoadDD">Load Data</a></li>
-    <li><a href="#DeleteDD">Delete Data</a></li>
-    <li><a href="#ExportDD">Export Data</a></li>
+  <ul>
+    <li><a href="#ListDD">List Data Dictionaries</a></li>
+    <li><a href="#LoadDD">Load Data Dictionary</a></li>
+    <li><a href="#DeleteDD">Delete Data Dictionary</a></li>
+    <li><a href="#ExportDD">Export Data Dictionary</a></li>
   </ul>
 </ul>
 </p>
@@ -221,7 +222,7 @@ Optional parameters:
   -es &lt;url&gt;             Elasticsearch URL. Default is http://localhost:9200
   -index &lt;name&gt;         Elasticsearch index name. Default is 'registry'
   -updateSchema &lt;y/n&gt;   Update registry schema. Default is 'yes'
-  -force                  Use 'keyword' ES datatype for missing field definitions
+  -force                Use 'keyword' ES datatype for missing field definitions
 </source>
 
 <p>
@@ -391,6 +392,48 @@ registry-manager export-file -lidvid urn:nasa:pds:context:target:asteroid.4_vest
 
 <section name="Data Dictionary Commands" id="DDCommands">
 
+<subsection name="List Data Dictionaries" id="ListDD">
+<p>
+To list data dictionaries loaded into Registry, use <i>list-dd</i> command:
+</p>
+
+<source>
+Usage: registry-manager list-dd &lt;options&gt;
+
+List data dictionaries
+
+Optional parameters:
+  -auth &lt;file&gt;      Authentication config file
+  -es &lt;url&gt;         Elasticsearch URL. Default is http://localhost:9200
+  -index &lt;name&gt;     Elasticsearch index name. Default is 'registry'
+  -ns &lt;namespace&gt;   LDD namespace.
+</source>
+
+<p>Example:</p>
+<source>
+registry-manager list-dd
+</source>
+
+<source>
+Namespace            File                                        Version   Date
+-----------------------------------------------------------------------------------------------
+cart                 PDS4_CART_1F00_1950.JSON                   1.15.0.0   2020-12-21T21:48:19Z
+disp                 PDS4_DISP_1F00_1500.JSON                   1.15.0.0   2020-12-15T22:09:58Z
+geom                 PDS4_GEOM_1F00_1910.JSON                   1.15.0.0   2021-01-12T00:37:40Z
+img                  PDS4_IMG_1F00_1810.JSON                    1.15.0.0   2020-10-14T02:55:04Z
+img_surface          PDS4_IMG_SURFACE_1F00_1240.JSON            1.15.0.0   2021-01-12T00:56:39Z
+msn                  PDS4_MSN_1F00_1300.JSON                    1.15.0.0   2020-10-14T02:55:21Z
+msn_surface          PDS4_MSN_SURFACE_1F00_1200.JSON            1.15.0.0   2020-10-14T02:55:29Z
+particle             PDS4_PARTICLE_1G00_2010.JSON               1.16.0.0   2021-08-05T21:40:47Z
+pds                  PDS4_PDS_1F00.JSON                         1.15.0.0   2020-12-23T15:16:28Z
+proc                 PDS4_PROC_1F00_1210.JSON                   1.15.0.0   2020-12-09T03:22:22Z
+rings                PDS4_RINGS_1F00_1A00.JSON                  1.15.0.0   2020-12-02T19:08:01Z
+sp                   PDS4_SP_1F00_1300.JSON                     1.15.0.0   2020-11-03T19:47:46Z
+</source>
+
+
+</subsection>
+
 <subsection name="Load Data Dictionary" id="LoadDD">
 <p>
 To load data dictionary files, use <i>load-dd</i> command:
@@ -402,14 +445,14 @@ Usage: registry-manager load-dd &lt;options&gt;
 Load data dictionary
 
 Required parameters, one of:
-  -dd &lt;path&gt;         Standard PDS4 data dictionary file (JSON)
+  -dd &lt;path&gt;         PDS4 LDD data dictionary file (JSON)
   -dump &lt;path&gt;       Data dump created by 'export-dd' command (NJSON)
   -csv &lt;path&gt;        Custom data dictionary file in CSV format
 Optional parameters:
   -auth &lt;file&gt;       Authentication config file
   -es &lt;url&gt;          Elasticsearch URL. Default is http://localhost:9200
   -index &lt;name&gt;      Elasticsearch index name. Default is 'registry'
-  -ns &lt;namespaces&gt;   Comma separated list of namespaces. Can be used with -dd parameter.
+  -ns &lt;namespaces&gt;   LDD namespace. Can be used with -dd parameter.
 </source>
 
 <p>
@@ -420,7 +463,7 @@ This command is described in <a href="reg-custom.html">Registry Customization</a
 
 <!-- ======================================================================= -->
 
-<subsection name="Delete Data" id="DeleteDD">
+<subsection name="Delete Data Dictionary" id="DeleteDD">
 <p>
 You can delete documents from data dictionary by id or namespace. 
 You can also delete all documents.
@@ -454,7 +497,7 @@ registry-manager delete-dd -all
 
 <!-- ======================================================================= -->
 
-<subsection name="Export Data" id="ExportDD">
+<subsection name="Export Data Dictionary" id="ExportDD">
 <p>
 You can export all documents from data dictionary.
 </p>
