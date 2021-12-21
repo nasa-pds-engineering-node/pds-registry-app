@@ -85,7 +85,7 @@ POSSIBILITY OF SUCH DAMAGE.
 				<goal>wget</goal>
 			</goals>
 			<configuration>
-			    <url>https://github.com/nasa-pds/pds-registry-mgr-elastic/releases/download/v${registry.version}/registry-manager-${registry.version}-bin.tar.gz</url>
+			    <url>https://github.com/nasa-pds/registry-mgr/releases/download/v${registry.version}/registry-manager-${registry.version}-bin.tar.gz</url>
 				<unpack>true</unpack>
 				<outputDirectory>${project.build.directory}</outputDirectory>
 				<!-- md5>f3e2e164407a542888d8738487100118</md5 -->
