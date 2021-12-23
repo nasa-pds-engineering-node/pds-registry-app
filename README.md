@@ -5,7 +5,7 @@
 This application enables a Planetary Data System node to register all its data products for long term preservation and sharing with the rest of the PDS system.
 
 It is composed of 2 services:
-- registry manager (the database manager) : for details see https://github.com/NASA-PDS/pds-registry-mgr-elastic
+- registry manager (the database manager) : for details see https://github.com/NASA-PDS/registry-mgr
 - harvest (tools to get/prepare metadata for the registry) : for details see https://github.com/NASA-PDS/harvest
  
 The purpose of this repository is to integrate together these services and package them conveniently for the users.
