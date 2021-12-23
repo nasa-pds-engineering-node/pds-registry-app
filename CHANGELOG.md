@@ -1,12 +1,27 @@
 # Changelog
 
+## [«unknown»](https://github.com/NASA-PDS/pds-registry-app/tree/«unknown») (2021-12-23)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.0.3-SNAPSHOT...«unknown»)
+
+**Requirements:**
+
+- As a developer, I want to deploy the registry with a single docker-compose command [\#186](https://github.com/NASA-PDS/pds-registry-app/issues/186)
+- As a user, I want the registry app components to be able to ingest data sets containing 1+ million products [\#179](https://github.com/NASA-PDS/pds-registry-app/issues/179)
+
+**Other closed issues:**
+
+- Implement docker-compose for registry components [\#216](https://github.com/NASA-PDS/pds-registry-app/issues/216)
+- Dockerize Harvest and Registry Manager as a single image [\#214](https://github.com/NASA-PDS/pds-registry-app/issues/214)
+- Build Scalable Harvest [\#196](https://github.com/NASA-PDS/pds-registry-app/issues/196)
+
+## [v1.0.3-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v1.0.3-SNAPSHOT) (2021-12-21)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.0.2...v1.0.3-SNAPSHOT)
+
 ## [v1.0.2](https://github.com/NASA-PDS/pds-registry-app/tree/v1.0.2) (2021-12-10)
 
-[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.0.2-SNAPSHOT...v1.0.2)
-
-## [v1.0.2-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v1.0.2-SNAPSHOT) (2021-12-10)
-
-[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.0.1...v1.0.2-SNAPSHOT)
+[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.0.1...v1.0.2)
 
 **Other closed issues:**
 
