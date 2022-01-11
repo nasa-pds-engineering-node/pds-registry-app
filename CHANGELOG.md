@@ -1,8 +1,17 @@
 # Changelog
 
-## [«unknown»](https://github.com/NASA-PDS/pds-registry-app/tree/«unknown») (2021-12-23)
+## [1.0.3](https://github.com/NASA-PDS/pds-registry-app/tree/1.0.3) (2022-01-11)
 
-[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.0.3-SNAPSHOT...«unknown»)
+[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.0.3-SNAPSHOT...1.0.3)
+
+**Defects:**
+
+- the snapshot releases are not created for big-data-harvest-client [\#231](https://github.com/NASA-PDS/pds-registry-app/issues/231)
+- harvest flags as mandatory a config elements the docs describe as optional [\#220](https://github.com/NASA-PDS/pds-registry-app/issues/220) [[s.low](https://github.com/NASA-PDS/pds-registry-app/labels/s.low)]
+
+## [v1.0.3-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v1.0.3-SNAPSHOT) (2021-12-23)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.0.2...v1.0.3-SNAPSHOT)
 
 **Requirements:**
 
@@ -14,10 +23,6 @@
 - Implement docker-compose for registry components [\#216](https://github.com/NASA-PDS/pds-registry-app/issues/216)
 - Dockerize Harvest and Registry Manager as a single image [\#214](https://github.com/NASA-PDS/pds-registry-app/issues/214)
 - Build Scalable Harvest [\#196](https://github.com/NASA-PDS/pds-registry-app/issues/196)
-
-## [v1.0.3-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v1.0.3-SNAPSHOT) (2021-12-21)
-
-[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.0.2...v1.0.3-SNAPSHOT)
 
 ## [v1.0.2](https://github.com/NASA-PDS/pds-registry-app/tree/v1.0.2) (2021-12-10)
 
