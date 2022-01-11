@@ -152,6 +152,14 @@ This requirement is not impacted by the current version
 
 
 This requirement is not impacted by the current version
+## As a user, I want to switch a collection and it's associated products from a protected status to operational. ([#223](https://github.com/NASA-PDS/pds-registry-app/issues/223)) 
+
+
+This requirement is not impacted by the current version
+## As a user, I want to switch a bundle and it's associated collections and products from a protected status to operational. ([#224](https://github.com/NASA-PDS/pds-registry-app/issues/224)) 
+
+
+This requirement is not impacted by the current version
 # publish-artifacts
 
 ## The service shall accept metadata for a registered artifact in a defined format ([#75](https://github.com/NASA-PDS/pds-registry-app/issues/75)) 
