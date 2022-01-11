@@ -35,7 +35,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
   <groupId>gov.nasa.pds</groupId>
   <artifactId>pds-registry-app</artifactId>
-  <version>1.0.3-SNAPSHOT</version>
+  <version>1.0.3</version>
   <packaging>jar</packaging>
 
   <name>Registry Application</name>
@@ -51,9 +51,9 @@ POSSIBILITY OF SUCH DAMAGE.
   </parent>
   
   <properties>
-     <harvest.version>3.5.1</harvest.version>
-     <registry.version>4.3.0</registry.version>
-     <supplementer.version>1.0.0</supplementer.version>
+     <harvest.version>3.5.2</harvest.version>
+     <registry.version>4.3.1</registry.version>
+     <supplementer.version>1.0.1</supplementer.version>
      <api.version>0.4.0</api.version>
   </properties>
 
@@ -61,7 +61,6 @@ POSSIBILITY OF SUCH DAMAGE.
         <url>https://github.com/NASA-PDS/pds-registry-app</url>
         <connection>scm:git:ssh://git@github.com/NASA-PDS/pds-registry-app.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/NASA-PDS/pds-registry-app.git</developerConnection>
-        <tag>v3.4.1</tag>
   </scm>
 
 
