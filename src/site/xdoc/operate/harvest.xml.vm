@@ -19,6 +19,7 @@
   <li><a href="#InputDirs">Input Directories and Filters</a></li>
   <ul>
     <li><a href="#Dirs">Crawl Directories</a></li>
+    <li><a href="#FileList">File List</a></li>
     <li><a href="#Bundles">Crawl Bundles</a></li>
     <li><a href="#BundleVersions">Filtering Bundle Versions</a></li>
     <li><a href="#Collections">Filtering Bundle's Collections</a></li>
@@ -245,6 +246,34 @@ To process products from one or more directories, add the following section in H
 </p>
 </subsection>
 
+<!-- ============== -->
+
+<subsection name="File List" id="FileList">
+<p>
+If you know paths to PDS labels you want to process, you can list them in a manifest file as shown below:
+</p>
+<source>
+/data/d2/ftir_cube_wvlns.xml
+/data/d5/bundle_kaguya_derived.xml
+</source>
+
+<p>
+Then configure Harvest to process one or more manifest files
+</p>
+
+<source>
+&lt;harvest nodeName="PDS_SBN"&gt;
+  ...
+  &lt;files&gt;
+    &lt;manifest&gt;/home/user1/manifest1.xml&lt;/manifest&gt;
+  &lt;/files&gt;
+  ...
+&lt;/harvest&gt;
+</source>
+
+</subsection>
+
+<!-- ============== -->
 
 <subsection name="Crawl Bundles" id="Bundles">
 <p>
