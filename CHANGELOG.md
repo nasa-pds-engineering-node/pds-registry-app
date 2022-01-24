@@ -1,8 +1,27 @@
 # Changelog
 
-## [1.0.3](https://github.com/NASA-PDS/pds-registry-app/tree/1.0.3) (2022-01-11)
+## [«unknown»](https://github.com/NASA-PDS/pds-registry-app/tree/«unknown») (2022-01-24)
 
-[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.0.3-SNAPSHOT...1.0.3)
+[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.0.3...«unknown»)
+
+**Requirements:**
+
+- As a user, I want to be able to ingest a set of files specified in a file listing [\#201](https://github.com/NASA-PDS/pds-registry-app/issues/201)
+- As a user, I want big data ingestion tools packaged and dockerized together [\#200](https://github.com/NASA-PDS/pds-registry-app/issues/200)
+
+**Defects:**
+
+- pom.xml on main is broken [\#238](https://github.com/NASA-PDS/pds-registry-app/issues/238) [[s.high](https://github.com/NASA-PDS/pds-registry-app/labels/s.high)]
+
+**Other closed issues:**
+
+- Tag new version of registry-common, registry-mgr, supplementer, harvest, and parent registry-app to resolve log4j vulnerability [\#232](https://github.com/NASA-PDS/pds-registry-app/issues/232)
+- Develop design documentation for staging vs production data for review with SWG [\#228](https://github.com/NASA-PDS/pds-registry-app/issues/228)
+- Document big data harvest / registry manager / crawler installation and operation [\#218](https://github.com/NASA-PDS/pds-registry-app/issues/218)
+
+## [v1.0.3](https://github.com/NASA-PDS/pds-registry-app/tree/v1.0.3) (2022-01-11)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.0.3-SNAPSHOT...v1.0.3)
 
 **Defects:**
 
