@@ -1,14 +1,6 @@
 # Changelog
 
-## [«unknown»](https://github.com/NASA-PDS/pds-registry-app/tree/«unknown») (2022-02-04)
-
-[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.1.0-SNAPSHOT...«unknown»)
-
-**Improvements:**
-
-- Rename bigdata repositories [\#237](https://github.com/NASA-PDS/pds-registry-app/issues/237)
-
-## [v1.1.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v1.1.0-SNAPSHOT) (2022-01-24)
+## [v1.1.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v1.1.0-SNAPSHOT) (2022-02-04)
 
 [Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.0.3...v1.1.0-SNAPSHOT)
 
@@ -16,6 +8,10 @@
 
 - As a user, I want to be able to ingest a set of files specified in a file listing [\#201](https://github.com/NASA-PDS/pds-registry-app/issues/201)
 - As a user, I want big data ingestion tools packaged and dockerized together [\#200](https://github.com/NASA-PDS/pds-registry-app/issues/200)
+
+**Improvements:**
+
+- Rename bigdata repositories [\#237](https://github.com/NASA-PDS/pds-registry-app/issues/237)
 
 **Defects:**
 
