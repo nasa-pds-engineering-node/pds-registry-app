@@ -58,6 +58,8 @@ Usage: harvest &lt;options&gt;
 
 Required parameters:
   -c &lt;file&gt;     Harvest configuration file
+  -V, --version      Print Harvest version
+
 Optional parameters:
   -f &lt;format&gt;   Output format ('json' or 'xml'). Default is 'json'
   -o &lt;dir&gt;      Output directory. Default is /tmp/harvest/out
