@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Copyright 2019, California Institute of Technology ("Caltech").
+  U.S. Government sponsorship acknowledged.
+  
+  All rights reserved.
+  
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions are met:
+  
+  * Redistributions of source code must retain the above copyright notice,
+  this list of conditions and the following disclaimer.
+  * Redistributions must reproduce the above copyright notice, this list of
+  conditions and the following disclaimer in the documentation and/or other
+  materials provided with the distribution.
+  * Neither the name of Caltech nor its operating division, the Jet Propulsion
+  Laboratory, nor the names of its contributors may be used to endorse or
+  promote products derived from this software without specific prior written
+  permission.
+  
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<document>
+<properties>
+  <title>The PDS Registry API Service in the Cloud Quickstart</title>
+</properties>
+
+<body>
+<section name="Registry API Service in the Cloud Quickstart">
+<p>
+This page provides the steps necessary to get going with data ingestion and
+querying of the Registry API Service - from the perspective of a Discipline 
+Node (DN).
+</p>
+
+<!-- ============================================================== -->
+
+<subsection name="Initial set-up">
+<p>
+To get things going, you should have provided the EN contact with the following:
+<ol>
+  <li>A list of user email addresses which will be authorized to perform data ingestion.
+  <li>A list of IP addresses or blocks of addresses from which data ingestion will occur.
+</ol>
+Elasticsearch (ES) accounts will be set up for each user and their username and (temporary) 
+password will be sent to them via JPL Large File Transfer (LFT) which provides a secure 
+transit of the credentials. The IP addresses are added to the Elasticsearch access whitelist.
+</p>
+
+<p>
+Along with your ES user credentials you will receive the URL which points to your ES 
+instance - we will refer to this as the ES URL.
+</p>
+</subsection>
+
+<subsection name="Changing Your ES password">
+<p>
+Note: One limitation of AWS Elasticsearch/Opensearch is the inability to change user 
+passwords through any means other than the Kibana console. 
+</p>
+
+<p>
+Kibana is a data visualization dashboard for Elasticsearch and, given its mention in this
+section, provides some additional administrative functions such as changing your user
+password. The password provided by the EN contact is considered only temporary (since it 
+is known by more than yourself). It should be changed immediately upon receipt and routinely
+every few months through the following steps:
+
+<ol>
+  <li>From one of the whitelisted IP addresses you provided to the EN contact, open a browser
+and open the Kibana URL which is your ES URL appended with "/_plugin/kibana/"
+  <li>Enter your username and current password, click "Log In".
+  <li>If prompted to "Start by adding yoour data", click on "Explore on my own".
+  <li>If prompted to "Select your tenant", select "Global" the click "Confirm".
+  <li>The Kibana Home page will open. In the upper right corner there will be a circle icon
+containing the first letter of your username. Click that circle.
+  <li>In the pulldown menu which opens, select "Reset password". See figure below.
+  <li>In the pop-up window which opens, enter your current password, new password and confirmation
+of the new password. Click "Reset". (If the Reset button does not activate, it means the 
+password and its confirmation do not match.)
+</ol>
+</p>
+
+<img src="../images/kibana_password_reset.png" style="width:50em;" />
+
+</subsection>
+
+<subsection name="Registry Tools"
+<p>
+The use of the Registry Tools (i.e. Harvest, Registry Manager) for a cloud deployment of the
+Registry API Service is no different from that of on-premise. The only caveat is that 
+Registry Manager is run from a system that has been included in the ES whitelist. More details
+on the Registry Tools are found <a href="../install/tools.html">here</a>.
+</p>
+</subsection>
+</section>
+
+<subsection name="Registry API Documentation"
+<p>
+(TBD - once the investigation of using lambda@edge to convert DN mention in URLs to http headers is completed.)
+</p>
+</subsection>
+</section>
+
+</body>
+
+</document>

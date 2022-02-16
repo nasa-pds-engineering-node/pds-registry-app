@@ -59,6 +59,9 @@
   
     <menu name="Software Documentation">
       <item name="About PDS Registry Application" href="index.html"/>
+      <item name="The PDS Registry API Service in the Cloud" href="registry_service_cloud/index.html"/>
+        <item name="Registry API Service Cloud Architecture" href="registry_service_cloud/architecture.html"/>
+        <item name="Registry API Service Cloud Quickstart" href="registry_service_cloud/quickstart.html"/>
       <item name="Installation" href="install/index.html">
         <item name="Java" href="install/java.html"/>
         <item name="Elasticsearch - Quick Start" href="install/es-dev.html"/>
