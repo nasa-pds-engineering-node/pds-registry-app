@@ -58,7 +58,11 @@
     </links>
   
     <menu name="Software Documentation">
-      <item name="About PDS Registry Application" href="index.html"/>
+      <item name="About PDS Registry" href="index.html"/>
+      <item name="User Tasks" href="user/tasks.html" />
+      <item name="Admin Tasks" href="admin/tasks.html" />
+
+<item name="OLD" href="">
       <item name="Installation" href="install/index.html">
         <item name="Java" href="install/java.html"/>
         <item name="Elasticsearch - Quick Start" href="install/es-dev.html"/>
@@ -83,6 +87,8 @@
         <item name="Registry Manager" href="security/reg-mgr.html"/>
       </item>
       <item name="Support" href="index.html#Support" />
+</item>
+
     </menu>
     
     <menu name="Downloads">

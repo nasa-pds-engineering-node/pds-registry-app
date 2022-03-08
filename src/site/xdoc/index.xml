@@ -46,6 +46,22 @@
 </div>
 
 <section name="About PDS Registry">
+
+<ul>
+  <li><a href="#Overview">Overview</a></li>
+  <li><a href="#Main_Components">Main Components</a>
+    <ul>
+      <li><a href="#Elasticsearch">Elasticsearch</a></li>
+      <li><a href="#Harvest">Harvest</a></li>
+      <li><a href="#Registry_Manager">Registry Manager</a></li>
+      <li><a href="#API">API</a></li>
+    </ul></li>
+  <li><a href="#Support">Support</a></li>
+</ul>
+
+</section>
+
+<section name="Overview">
 <p>
 PDS Registry provides functionality for tracking, searching, auditing, locating, and maintaining artifacts within the system. 
 These artifacts can range from data files and label files, schemas, dictionary definitions for objects and elements, services, etc. 
@@ -53,36 +69,81 @@ The core functionality for this component is satisfied by <a href="https://www.e
 </p>
 
 <p>
-For Build 9b (June 2019), the Registry and Search components of the PDS4 system received a major upgrade 
-and significant re-design to greater leverage the power of Elasticsearch. 
-We are continuing to improve our documentation, but please do not hesitate to send questions, comments, 
-change requests and bug reports to the <a href="mailto:pds_operator@jpl.nasa.gov">PDS Operator</a> 
-at pds_operator@jpl.nasa.gov and we would be happy to help work through any issues you are having.
+The high level architecture of PDS Registry and its main components is shown below.
 </p>
+<img src="images/registry-harvest.png" style="width:55em;" />
+
 </section>
 
 <!-- =========================================================================== -->
 
-<section name="PDS Registry and Related Software">
+<section name="Main Components">
 
+<!-- ======= -->
+
+<subsection name="Elasticsearch">
 <p>
-The high level architecture of PDS Registry and its main components is shown below.
+<a href="https://www.elastic.co/" target="_blank">Elasticsearch</a>
+is a NoSQL database based on Apache Lucene project, optimized for text search.
+All metadata extracted from PDS4 labels is storted in Elasticsearch database.
 </p>
-<img src="images/registry-harvest.png" style="width:50em;" />
 
+</subsection>
+
+<!-- ======= -->
+
+<subsection name="Harvest">
 <p>
+Harvest is a software to crawl and extract metadata from PDS4 labels and to load 
+extracted information into Elasticsearch. There are two versions of Harvest:
+</p>
 <ul>
-  <li><b>Java</b> is required to run many Registry components and tools such as Harvest, Registry Manager, API Server and Elasticsearch.</li>
-  <li><b>Elasticsearch</b> is used to store and search product metadata extracted from PDS4 labels.</li>
-  <li><b>Harvest</b> is a tool to crawl and extract metadata from PDS4 labels.
-Extracted metadata is stored in an "intermediate" JSON or XML data files. 
-JSON data files can be loaded into Elasticsearch by Registry Manager.</li>
-  <li><b>Registry Manager</b> command-line tool is designed to create Registry indices in Elasticsearch and 
-to load, delete and export registry data.</li>
-<li><b>API Server</b> provides read-only REST APIs to search and access PDS data.
-The APIs are standardized between different PDS nodes.</li>
+<li>Standalone command-line tool.</li>
+<li>Scalable Harvest.</li>
 </ul>
+
+<h4>Standalone Harvest</h4>
+
+<p>
+A command-line tool which doesn't require complex installation and configuration. 
+The standalone Harvest can run on a laptop.
+This tool is recommended for small data sets of up to 5,000-10,000 of PDS4 labels.
 </p>
+
+<h4>Scalable Harvest</h4>
+<p>
+This product consists of several server components: RabbitMQ message broker, Crawler server, and Harvest server, 
+which can be deployed in the cloud or on-prem. Also there is a Harvest Client command-line tool to submit jobs
+to server components asynchronously.
+This setup is recommended if you want to process big data sets in parallel.
+</p>
+
+</subsection>
+
+<!-- ======= -->
+
+<subsection name="Registry Manager">
+<p>
+A command-line tool to perform admin tasks on a Registry, such as:
+</p>
+<ul>
+<li>Create or delete registry indices in Elasticsearch.</li>
+<li>Manage registry data dictionary.</li>
+<li>Update product archive status.</li>
+</ul>
+
+</subsection>
+
+<!-- ======= -->
+
+<subsection name="API">
+<p>
+Provides read-only REST APIs to search and access PDS data. You can call REST APIs directly or
+use Python or Java clients.  More information about PDS API clients is available
+<a href="https://nasa-pds.github.io/pds-api-client/" target="_blank">here</a>.
+</p>
+
+</subsection>
 
 </section>
 
