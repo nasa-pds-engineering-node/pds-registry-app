@@ -1,0 +1,612 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document>
+<properties>
+  <title>Load Data (Standalone Harvest)</title>
+</properties>
+
+<body>
+
+<section name="Load Data into Registry (Standalone Harvest)">
+
+<p>
+<ul>
+  <li><a href="#Overview">Overview</a></li>
+  <li><a href="#Prerequisites">Prerequisites</a></li>
+  <li><a href="#quick">Quick Start</a></li>
+  <li><a href="#NodeName">Node Name</a></li>
+  <li><a href="#Registry">Registry Integration</a></li>
+  <li><a href="#InputDirs">Input Directories and Filters</a></li>
+  <ul>
+    <li><a href="#Dirs">Crawl Directories</a></li>
+    <li><a href="#Bundles">Crawl Bundles</a></li>
+    <li><a href="#BundleVersions">Filtering Bundle Versions</a></li>
+    <li><a href="#Collections">Filtering Bundle's Collections</a></li>
+    <li><a href="#ProdDirs">Filtering Bundle's Product Directories</a></li>
+    <li><a href="#ProdClass">Filtering Products by Class</a></li>
+  </ul>
+  <li><a href="#Extract">Extract More Metadata</a></li>
+  <ul>
+    <li><a href="#FileInfo">Basic File Information</a></li>
+    <li><a href="#BLOB">BLOB Storage</a></li>
+    <li><a href="#FileRef">File Reference / Access URL</a></li>
+    <li><a href="#XPath">Extract Metadata by XPath</a></li>
+  </ul>
+</ul>
+</p>
+
+</section>
+
+<section name="Overview">
+
+<p>
+To load PDS4 data into Registry you have to use Harvest software. There are two versions of Harvest:
+a simple standalone command-line tool and a scalable Harvest consisting of several server and and
+client components. Scalable Harvest can process big data sets in parallel. 
+Both versions extract metadata from PDS4 products (labels) and load extracted
+metadata into Elasticsearch database. 
+</p>
+<p>
+This document describes how to load data with Standalone Harvest command-line tool.
+</p>
+
+</section>
+
+
+<section name="Prerequisites">
+
+<ul>
+  <li>Elasticsearch server is running.</li>
+  <li>Registry indices are created in Elasticsearch.</li>
+  <li>Standalone Harvest command-line tool is installed.</li>
+</ul>
+
+</section>
+
+
+<!-- ========================================================== -->
+
+<section name="Standalone Harvest Quick Start" id="quick">
+<p>
+To run Harvest you need an XML configuration file. 
+The configuration file has several sections such as Registry (Elasticsearch) configuration
+and the path to the data. Example configuration files are located in <i>&lt;INSTALL_DIR&gt;/conf/examples</i>.
+  
+The ideal configurations for Harvest is <i>conf/examples/directories.xml</i>. You will want to update the nodeName:
+<source>
+&lt;harvest nodeName="PDS_ATM"&gt;
+</source>
+
+Registry (Elasticsearch) configuration:
+<source>
+&lt;registry url="http://localhost:9200" index="registry" auth="/path/to/auth.cfg" /&gt;
+</source>
+
+The path to the data:
+<source>
+  &lt;directories&gt;
+    &lt;path&gt;/data/orex/orex_spice"&lt;/path&gt;
+  &lt;/directories&gt;
+</source>
+  
+And the URL prefix for the data:
+<source>
+  &lt;fileInfo processDataFiles="true" storeLabels="true"&gt;
+    &lt;!-- UPDATE with your own local path and base url where pds4 archive is published --&gt;
+    &lt;fileRef replacePrefix="/data" with="https://naif.jpl.nasa.gov/pub/naif/pds/pds4/" /&gt;
+  &lt;/fileInfo&gt;
+</source>
+</p>
+
+<p>
+If you save this file as <i>/tmp/orex.cfg</i> and run Harvest
+<source>
+harvest -c /tmp/orex.cfg
+</source>
+</p>
+
+<p> 
+all XML files in <i>/data/orex/orex_spice</i> folder and its subfolders will be processed.
+All metadata from PDS4 labels will be extracted and loaded into Registry (Elasticsearch).
+</p>
+
+<p>
+You will see multiple log messages similar to these:
+<source>
+...
+[INFO] Processing C:\ws3\Geo\lunar\urn-nasa-pds-kaguya_grs_spectra\data_ephemerides\kgrs_ephemerides.xml
+[INFO] Processing C:\ws3\Geo\lunar\urn-nasa-pds-kaguya_grs_spectra\data_spectra\kgrs_calibrated_spectra_per1.xml
+[INFO] Processing C:\ws3\Geo\lunar\urn-nasa-pds-kaguya_grs_spectra\data_spectra\kgrs_calibrated_spectra_per2.xml
+[INFO] Processing C:\ws3\Geo\lunar\urn-nasa-pds-kaguya_grs_spectra\data_spectra\kgrs_calibrated_spectra_per3.xml
+[INFO] Processing C:\ws3\Geo\lunar\urn-nasa-pds-kaguya_grs_spectra\data_spectra\spectra_data_collection_inventory.xml
+...
+[SUMMARY] Summary:
+[SUMMARY] Skipped files: 0
+[SUMMARY] Processed files: 14
+[SUMMARY] File counts by type:
+[SUMMARY]   Product_Bundle: 1
+[SUMMARY]   Product_Collection: 4
+[SUMMARY]   Product_Context: 3
+[SUMMARY]   Product_Document: 2
+[SUMMARY]   Product_Observational: 4
+[SUMMARY] Package ID: e46f6ba9-6151-48ee-b822-b0536e3e4bd9
+</source>
+</p>
+
+<p>
+To quickly check that data was loaded you can query Registry indices in Elasticsearch by calling
+<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/search-search.html" target="_blank">Elasticsearch Search API</a>
+or in a web browser. For example,
+
+<source>
+# Select all products
+curl "http://localhost:9200/registry/_search?q=*&amp;pretty"
+
+# Select only collections
+curl "http://localhost:9200/registry/_search?q=product_class:Product_Collection&amp;pretty"
+</source>
+</p>
+
+<p>
+The following sections describe Harvest configuration file in more detail.
+</p>
+
+</section>
+
+
+<!-- ====================================================================== -->
+
+<section name="Node Name" id="NodeName">
+<p>
+Node name is a required parameter which is used to tag ingested data with the node it is ingested by.
+</p>
+
+<source>
+&lt;harvest nodeName="PDS_SBN"&gt;
+...
+</source>
+
+<p>
+One of the following values can be used:
+<ul>
+  <li><b>PDS_ATM</b>  - Planetary Data System: Atmospheres Node</li>
+  <li><b>PDS_ENG</b>  - Planetary Data System: Engineering Node</li>
+  <li><b>PDS_GEO</b>  - Planetary Data System: Geosciences Node</li>
+  <li><b>PDS_IMG</b>  - Planetary Data System: Imaging Node</li>
+  <li><b>PDS_NAIF</b> - Planetary Data System: NAIF Node</li>
+  <li><b>PDS_RMS</b>  - Planetary Data System: Rings Node</li>
+  <li><b>PDS_SBN</b>  - Planetary Data System: Small Bodies Node at University of Maryland</li>
+  <li><b>PSA</b>      - Planetary Science Archive</li>
+  <li><b>JAXA</b>     - Japan Aerospace Exploration Agency</li>
+  <li><b>ROSCOSMOS</b> - Russian State Corporation for Space Activities</li>
+</ul>
+</p>
+
+<p>
+This value is saved in "ops:Harvest_Info/ops:node_name" field in Elasticsearch document:
+</p>
+<source>
+{
+...
+  "ops:Harvest_Info/ops:node_name": "PDS_SBN",
+...
+}
+</source>
+
+</section>
+
+<!-- ====================================================================== -->
+
+<section name="Registry Integration" id="Registry">
+<p>
+Standalone Harvest tool loads extracted PDS4 metadata into Elasticsearch database.
+You have to configure following parameters:
+<ul>
+<li><b>url</b> - Registry (Elasticsearch) URL</li>
+<li><b>index</b> - Elasticsearch index name. This is an optional parameter. Default value is 'registry'.</li>
+<li><b>auth</b> - Registry (Elasticsearch) authentication configuration file. This is an optional parameter.
+The Registry security configuration is described in the <a href="../security/reg-mgr.html">following section</a>.
+</li>
+</ul>
+Below are few examples:
+</p>
+
+<h4>Local Elasticsearch instance (localhost)</h4>
+<source>
+&lt;harvest nodeName="PDS_SBN"&gt;
+  ...
+  &lt;registry url="http://localhost:9200" index="registry" /&gt;
+  ...
+&lt;/harvest&gt;
+</source>
+
+<h4>Remote Elasticsearch instance (on-prem or cloud)</h4>
+<source>
+&lt;harvest nodeName="PDS_SBN"&gt;
+  ...
+  &lt;registry url="https://es-server.mydomain.com:9999" index="registry" auth="/path/to/auth.cfg" /&gt;
+  ...
+&lt;/harvest&gt;
+</source>
+<p>
+Where authentication configuration file would have following parameters:
+</p>
+<source>
+trust.self-signed = true
+user = pds-user1
+password = mypassword
+</source>
+
+</section>
+
+
+<!-- ====================================================================== -->
+
+<section name="Input Directories and Filters" id="InputDirs">
+
+<subsection name="Crawl Directories" id="Dirs">
+<p>
+To process products from one or more directories, add the following section in Harvest configuration file:
+</p>
+<source>
+&lt;harvest nodeName="PDS_SBN"&gt;
+  ...
+  &lt;directories&gt;
+    &lt;path&gt;/some-directory/sub-dir-1/&lt;/path&gt;
+    &lt;path&gt;/some-directory/sub-dir-2/&lt;/path&gt;
+  &lt;/directories&gt;
+  ...
+&lt;/harvest&gt;
+</source>
+<p>
+<b>NOTE:</b> You could not have both &lt;directories&gt; and &lt;bundles&gt; sections at the same time.
+</p>
+</subsection>
+
+
+<subsection name="Crawl Bundles" id="Bundles">
+<p>
+To process products from one or more bundles, add the following section in Harvest configuration file:
+</p>
+<source>
+&lt;harvest nodeName="PDS_SBN"&gt;
+  ...
+  &lt;bundles&gt;
+    &lt;bundle dir="/data/geo/urn-nasa-pds-kaguya_grs_spectra" /&gt;
+    &lt;bundle dir="/data/geo/urn-nasa-pds-trang2020_moon_space_weathering" /&gt;
+  &lt;/bundles&gt;
+  ...
+&lt;/harvest&gt;
+</source>
+<p>
+<b>NOTE:</b> You could not have both &lt;directories&gt; and &lt;bundles&gt; sections at the same time.
+</p>
+</subsection>
+
+<!-- ====================================================== -->
+
+<subsection name="Filtering Bundle Versions" id="BundleVersions">
+<p>
+Use "versions" attribute of the &lt;bundle&gt; tag to list versions of bundles to process.
+You can separate versions by comma, semicolon or space.
+</p>
+
+<source>
+&lt;harvest nodeName="PDS_SBN"&gt;
+  ...
+  &lt;bundles&gt;
+    &lt;bundle dir="/data/OREX/orex_spice" versions="7.0;8.0" /&gt;
+  &lt;/bundles&gt;
+  ...
+&lt;/harvest&gt;
+</source>
+
+<p>
+To process all versions you can use either versions="all" or no versions attribute at all.
+</p>
+
+<source>
+&lt;harvest nodeName="PDS_SBN"&gt;
+  ...
+  &lt;bundles&gt;
+    &lt;bundle dir="/data/OREX/orex_spice" versions="all" /&gt;
+  &lt;/bundles&gt;
+  ...
+&lt;/harvest&gt;
+</source>
+
+</subsection>
+
+<!-- ====================================================== -->
+
+<subsection name="Filtering Bundle's Collections" id="Collections">
+<p>
+By default Harvest will process all collections listed in &lt;Bundle_Member_Entry&gt;
+section of a bundle. To process a subset of collections you can provide a list of
+lids or lidvids as shown below.
+</p>
+
+<source>
+&lt;!-- Filter by collection LID --&gt;
+&lt;bundle dir="/data/OREX/orex_spice" versions="8.0" &gt;
+   &lt;collection lid="urn:nasa:pds:orex.spice:spice_kernels" /&gt;
+&lt;/bundle&gt;
+
+&lt;!-- Filter by collection LIDVID --&gt;
+&lt;bundle dir="/data/OREX/orex_spice" versions="8.0;7.0" &gt;
+   &lt;collection lidvid="urn:nasa:pds:orex.spice:spice_kernels::8.0" /&gt;
+   &lt;collection lidvid="urn:nasa:pds:orex.spice:spice_kernels::7.0" /&gt;
+&lt;/bundle&gt;
+</source>
+
+</subsection>
+
+<!-- ====================================================== -->
+
+<subsection name="Filtering Bundle's Product Directories" id="ProdDirs">
+<p>
+By default Harvest will process all products listed in the collection inventory file.
+To process a subset of products you can provide a list of directories.
+</p>
+
+<source>
+&lt;bundle dir="/data/OREX/orex_spice" versions="8.0" &gt;
+    &lt;!-- Specify a substring in a relative (to the bundle root) directory name.  --&gt;
+    &lt;product dir="/fk/" /&gt;
+&lt;/bundle&gt;
+</source>
+
+</subsection>
+
+<!-- ====================================================== -->
+
+<subsection name="Filtering Products by Class" id="ProdClass">
+<p>
+You can include or exclude products of a particular class. For example, to only process documents, add following 
+product filter in Harvest configuration file:
+</p>
+<source>
+&lt;harvest nodeName="PDS_SBN"&gt;
+  ...
+  &lt;productFilter&gt;
+    &lt;includeClass&gt;Product_Document&lt;/includeClass&gt;
+  &lt;/productFilter&gt;
+  ...
+&lt;/harvest&gt;
+</source>
+
+<p>
+To exclude documents, add following product filter:
+</p>
+<source>
+&lt;harvest nodeName="PDS_SBN"&gt;
+  ...
+  &lt;productFilter&gt;
+    &lt;excludeClass&gt;Product_Document&lt;/excludeClass&gt;
+  &lt;/productFilter&gt;
+  ...
+&lt;/harvest&gt;
+</source>
+
+<p>
+<b>NOTE:</b> You could not have both include and exclude filters at the same time.
+</p>
+
+</subsection>
+
+</section>
+
+
+<!-- ===================================================== -->
+
+<section name="Extracting More Metadata" id="Extract">
+
+<subsection name="Label and Data File Information" id="FileInfo">
+
+<p>
+By default, Harvest extracts label and data file information, such as file name, mime type, size, and MD5 hash. 
+</p>
+
+<p>Label:</p>
+<source>
+"ops:Label_File_Info/ops:creation_date_time":"2020-11-18T22:25:05Z",
+"ops:Label_File_Info/ops:file_name":"naif0012.xml",
+"ops:Label_File_Info/ops:file_ref":"/C:/tmp/d5/naif0012.xml",
+"ops:Label_File_Info/ops:file_size":"3398",
+"ops:Label_File_Info/ops:md5_checksum":"69ea2974a93854d90399b8b8fc3d1334"
+</source>
+
+<p>Data file:</p>
+<source>
+"ops:Data_File_Info/ops:creation_date_time":"2020-11-18T22:25:17Z",
+"ops:Data_File_Info/ops:file_name":"naif0012.tls",
+"ops:Data_File_Info/ops:file_ref":"/C:/tmp/d5/naif0012.tls",
+"ops:Data_File_Info/ops:file_size":"5257",
+"ops:Data_File_Info/ops:md5_checksum":"25a2fff30b0dedb4d76c06727b1895b1",
+"ops:Data_File_Info/ops:mime_type":"text/plain",
+</source>
+
+<p>
+If you don't want to process data files, add the following flag in Harvest configuration file.
+</p>
+
+<source>
+&lt;fileInfo processDataFiles="false" /&gt;
+</source>
+
+</subsection>
+
+<!-- =========== -->
+
+<subsection name="BLOB Storage" id="BLOB">
+
+<p>
+By default, Harvest stores PDS product labels as BLOBs (Binary Large OBjects).
+Both original PDS product labels in XML format as well as product labels converted to JSON are stored.
+The data is compressed and stored in following fields: <i>"ops/Label_File_Info/ops/blob"</i> and <i>"ops/Label_File_Info/ops/json_blob"</i>.
+</p>
+
+<p>
+You can expect up to 900% compression rate for some files. 
+For example, many LADEE housekeeping labels are about 45KB. Compressed BLOB size is about 5KB.
+For smaller files, such as collection labels, compression rate is about 350% (5.5KB file is compressed to 1.6KB).
+</p>
+
+<p>
+After loading data into Elasticsearch, you can extract original labels by running Registry Manager tool:
+</p>
+<source>
+registry-manager export-file -lidvid urn:nasa:pds:ladee_ldex:data_calibrated::1.2 -file /tmp/data_calibrated.xml
+</source>
+
+<p>
+To disable BLOB storage, modify <i>fileInfo</i> section in Harvest configuration file.
+</p>
+<source>
+&lt;fileInfo storeLabels="false" storeJsonLabels="false" /&gt;
+</source>
+
+</subsection>
+
+
+<!-- ====================================== -->
+
+<subsection name="File Reference / Access URL" id="FileRef">
+<p>
+Harvest extracts absolute paths of product and label files, such as
+</p>
+
+<source>
+"ops:Label_File_Info/ops:file_ref":"/tmp/d5/naif0012.xml",
+"ops:Data_File_Info/ops:file_ref":"/tmp/d5/naif0012.tls",
+</source>
+
+<p>
+Note that on Windows, backslashes are replaced with forward slashes and disk letter is included.
+</p>
+
+<source>
+"ops:Label_File_Info/ops:file_ref":"C:/tmp/d4/bundle_orex_spice_v009.xml",
+</source>
+
+
+<p>
+To replace a file path prefix with another value, such as a URL, add &lt;fileRef/&gt; tag in Harvest configuration file:
+<source>
+&lt;fileInfo&gt;
+  &lt;fileRef replacePrefix="/C:/tmp/d4/" with="https://naif.jpl.nasa.gov/pub/naif/pds/pds4/orex/orex_spice/" /&gt;
+&lt;/fileInfo&gt;
+</source>
+</p>
+
+<p>
+After running Harvest, you should get different <i>file_ref</i> value:
+<source>
+"ops:Label_File_Info/ops:file_ref":
+    "https://naif.jpl.nasa.gov/pub/naif/pds/pds4/orex/orex_spice/bundle_orex_spice_v009.xml"
+</source>
+</p>
+
+</subsection>
+
+
+<!-- ====================================== -->
+
+<subsection name="Extract Metadata by XPath" id="XPath">
+
+<p>
+To extract metadata by XPath, you have to create one or more mapping files and list them 
+in Harvest configuration file as shown below.
+<source>
+&lt;harvest nodeName="PDS_SBN"&gt;
+...
+  &lt;xpathMaps baseDir="/home/pds/harvest/conf"&gt;
+    &lt;xpathMap filePath="common.xml" /&gt;
+    &lt;xpathMap rootElement="Product_Observational" filePath="observational.xml" /&gt;
+  &lt;/xpathMaps&gt;
+&lt;/harvest&gt;
+</source>
+</p>
+
+<p>
+In the example above there are two <i>xpathMap</i> entries. Each entry must have <i>filePath</i> attribute 
+pointing to a mapping file. A path can be either absolute or relative to the <i>baseDir</i> attribute 
+of the <i>xpathMaps</i> tag. The <i>baseDir</i> attribute is optional. The same example with absolute paths
+is shown below.
+<source>
+  &lt;xpathMaps&gt;
+    &lt;xpathMap filePath="/home/pds/harvest/conf/common.xml" /&gt;
+    &lt;xpathMap rootElement="Product_Observational" filePath="/home/pds/harvest/conf/observational.xml" /&gt;
+  &lt;/xpathMaps&gt;
+</source>
+</p>
+
+<p>
+An <i>xpathMap</i> entry can have optional <i>rootElement</i> attribute. 
+Without this attribute, XPaths queries defined in a mapping file (<i>common.xml</i>),
+will run against every XML document processed by Harvest.
+With <i>rootElement</i> attribute, only XMLs with that root element will be processed.
+</p>
+
+<h4>Mapping Files</h4>
+
+<p>
+A mapping file has one or more entries which map an output field name to an XPath query.
+For example, to extract <i>start_date_time</i> and <i>stop_date_time</i> from observational products,
+you can use the following file.
+</p>
+
+<source>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;xpaths&gt;
+  &lt;xpath fieldName="start_date_time"&gt;/Product_Observational/Observation_Area/Time_Coordinates/start_date_time&lt;/xpath&gt;
+  &lt;xpath fieldName="stop_date_time"&gt;/Product_Observational/Observation_Area/Time_Coordinates/stop_date_time&lt;/xpath&gt;
+&lt;/xpaths&gt;
+</source>
+
+<p>
+You can use optional <i>dataType="date"</i> attribute to convert valid PDS dates to 
+ISO-8601 "instant" format (e.g., "2013-10-24T00:49:37.457Z").
+</p>
+
+<source>
+&lt;xpaths&gt;
+  &lt;xpath fieldName="start_date_time" dataType="date"&gt;/Product_Observational/Observation_Area/Time_Coordinates/start_date_time&lt;/xpath&gt;
+  &lt;xpath fieldName="stop_date_time" dataType="date"&gt;/Product_Observational/Observation_Area/Time_Coordinates/stop_date_time&lt;/xpath&gt;
+&lt;/xpaths&gt;
+</source>
+
+<h4>XML Name Spaces</h4>
+<p>
+Harvest ignores namespaces when extracting metadata by XPath.
+Below is a fragment of LADEE UVS product label which uses "ladee" namespace for mission area fields.
+</p>
+
+<source>
+  &lt;Observation_Area&gt;
+    &lt;Mission_Area&gt;
+      &lt;ladee:latitude&gt;17.2367925372247&lt;/ladee:latitude&gt;
+      &lt;ladee:longitude&gt;194.054477731391&lt;/ladee:longitude&gt; 
+      ...
+</source>
+
+<p>
+To extract latitude and longitude you can use the following XPaths without namespaces.
+</p>
+
+<source>
+&lt;xpaths&gt;
+  &lt;xpath fieldName="latitude"&gt;//Mission_Area/latitude&lt;/xpath&gt;
+  &lt;xpath fieldName="longitude"&gt;//Mission_Area/longitude&lt;/xpath&gt;
+&lt;/xpaths&gt;
+</source>
+
+
+</subsection>
+
+
+</section>
+
+
+</body>
+</document>

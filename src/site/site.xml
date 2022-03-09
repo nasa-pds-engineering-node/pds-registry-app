@@ -59,7 +59,10 @@
   
     <menu name="Software Documentation">
       <item name="About PDS Registry" href="index.html"/>
-      <item name="User Tasks" href="user/tasks.html" />
+      <item name="User Tasks" href="user/tasks.html">
+        <item name="Load Data (Standalone Harvest)" href="user/load1.html" />
+        <item name="Load Data (Scalable Harvest)" href="user/load2.html" />
+      </item>
       <item name="Admin Tasks" href="admin/tasks.html" />
 
 <item name="OLD" href="">
