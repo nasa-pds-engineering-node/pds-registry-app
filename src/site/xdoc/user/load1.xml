@@ -18,14 +18,15 @@
   <li><a href="#Registry">Registry Integration</a></li>
   <li><a href="#InputDirs">Input Directories and Filters</a></li>
   <ul>
-    <li><a href="#Dirs">Crawl Directories</a></li>
-    <li><a href="#Bundles">Crawl Bundles</a></li>
+    <li><a href="#Dirs">Process Directories</a></li>
+    <li><a href="#Files">Process Files</a></li>
+    <li><a href="#Bundles">Process Bundles</a></li>
     <li><a href="#BundleVersions">Filtering Bundle Versions</a></li>
     <li><a href="#Collections">Filtering Bundle's Collections</a></li>
     <li><a href="#ProdDirs">Filtering Bundle's Product Directories</a></li>
     <li><a href="#ProdClass">Filtering Products by Class</a></li>
   </ul>
-  <li><a href="#Extract">Extract More Metadata</a></li>
+  <li><a href="#Extract">Other Metadata</a></li>
   <ul>
     <li><a href="#FileInfo">Basic File Information</a></li>
     <li><a href="#BLOB">BLOB Storage</a></li>
@@ -74,7 +75,7 @@ and the path to the data. Example configuration files are located in <i>&lt;INST
   
 The ideal configurations for Harvest is <i>conf/examples/directories.xml</i>. You will want to update the nodeName:
 <source>
-&lt;harvest nodeName="PDS_ATM"&gt;
+&lt;harvest nodeName="PDS_GEO"&gt;
 </source>
 
 Registry (Elasticsearch) configuration:
@@ -85,23 +86,23 @@ Registry (Elasticsearch) configuration:
 The path to the data:
 <source>
   &lt;directories&gt;
-    &lt;path&gt;/data/orex/orex_spice"&lt;/path&gt;
+    &lt;path&gt;/data/geo/urn-nasa-pds-kaguya_grs_spectra&lt;/path&gt;
   &lt;/directories&gt;
 </source>
   
 And the URL prefix for the data:
 <source>
-  &lt;fileInfo processDataFiles="true" storeLabels="true"&gt;
+  &lt;fileInfo&gt;
     &lt;!-- UPDATE with your own local path and base url where pds4 archive is published --&gt;
-    &lt;fileRef replacePrefix="/data" with="https://naif.jpl.nasa.gov/pub/naif/pds/pds4/" /&gt;
+    &lt;fileRef replacePrefix="/data/geo/" with="https://pds-geosciences.wustl.edu/lunar/" /&gt;
   &lt;/fileInfo&gt;
 </source>
 </p>
 
 <p>
-If you save this file as <i>/tmp/orex.cfg</i> and run Harvest
+If you save this file as <i>/tmp/kaguya.cfg</i> and run Harvest
 <source>
-harvest -c /tmp/orex.cfg
+harvest -c /tmp/kaguya.cfg
 </source>
 </p>
 
@@ -244,7 +245,7 @@ password = mypassword
 
 <section name="Input Directories and Filters" id="InputDirs">
 
-<subsection name="Crawl Directories" id="Dirs">
+<subsection name="Process Directories" id="Dirs">
 <p>
 To process products from one or more directories, add the following section in Harvest configuration file:
 </p>
@@ -264,7 +265,31 @@ To process products from one or more directories, add the following section in H
 </subsection>
 
 
-<subsection name="Crawl Bundles" id="Bundles">
+<subsection name="Process a List of Files" id="Files">
+<p>
+First, create a manifest file and list all files you want to process. One file path per line.
+</p>
+<source>
+/data/d1/CCF_0088_0674757853_190FDR_N0040048CACH00100_0A10LLJ05.xml
+/data/d1/CCF_0088_0674757853_190FDR_N0040048CACH00100_0A10LLJ07.xml
+/data/d1/CCF_0088_0674757853_190FDR_N0040048CACH00100_0A10LLJ09.xml
+</source>
+
+<p>
+Next, add the following section in Harvest configuration file:
+</p>
+<source>
+&lt;harvest nodeName="PDS_SBN"&gt;
+  ...
+  &lt;files&gt;
+    &lt;manifest&gt;/some-directory/manifest.txt/&lt;/manifest&gt;
+  &lt;/files&gt;
+  ...
+&lt;/harvest&gt;
+</source>
+</subsection>
+
+<subsection name="Process Bundles" id="Bundles">
 <p>
 To process products from one or more bundles, add the following section in Harvest configuration file:
 </p>
