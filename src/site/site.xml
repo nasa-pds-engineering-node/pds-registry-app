@@ -62,8 +62,11 @@
       <item name="User Tasks" href="user/tasks.html">
         <item name="Load Data (Standalone Harvest)" href="user/load1.html" />
         <item name="Load Data (Scalable Harvest)" href="user/load2.html" />
+        <item name="Delete Data" href="user/delete_data.html" />
       </item>
-      <item name="Admin Tasks" href="admin/tasks.html" />
+      <item name="Admin Tasks" href="admin/tasks.html" >
+        <item name="Create / Delete Registry" href="admin/create_registry.html" />
+      </item>
 
 <item name="OLD" href="">
       <item name="Installation" href="install/index.html">

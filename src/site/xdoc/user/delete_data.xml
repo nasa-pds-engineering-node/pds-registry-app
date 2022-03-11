@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Copyright 2019, California Institute of Technology ("Caltech").
+  U.S. Government sponsorship acknowledged.
+  
+  All rights reserved.
+  
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions are met:
+  
+  * Redistributions of source code must retain the above copyright notice,
+  this list of conditions and the following disclaimer.
+  * Redistributions must reproduce the above copyright notice, this list of
+  conditions and the following disclaimer in the documentation and/or other
+  materials provided with the distribution.
+  * Neither the name of Caltech nor its operating division, the Jet Propulsion
+  Laboratory, nor the names of its contributors may be used to endorse or
+  promote products derived from this software without specific prior written
+  permission.
+  
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<document>
+<properties>
+  <title>Delete Data</title>
+</properties>
+
+<body>
+
+<section name="Delete Data">
+
+<p>
+<ul>
+  <li><a href="#Overview">Overview</a></li>
+  <li><a href="#Prereq">Prerequisites</a></li>
+  <li><a href="#Delete">Delete Data</a></li>
+  <li><a href="#es_api">Elasticsearch API</a></li>
+</ul>
+</p>
+
+<!-- ======================================================== -->
+
+<subsection name="Overview" id="Overview">
+<p>
+You can delete data from PDS Registry (Elasticsearch) with Registry Manager command-line tool.
+</p>
+
+</subsection>
+
+<!-- ======================================================== -->
+
+<subsection name="Prerequisites">
+
+<ul>
+  <li>Elasticsearch server is running.</li>
+  <li>Registry Manager command-line tool is installed.</li>
+</ul>
+
+</subsection>
+
+<!-- ======================================================== -->
+
+<subsection name="Delete Data" id="Delete">
+
+<p>
+You can delete metadata by lidvid, lid, package id (Harvest job id), or delete all data. 
+Few examples are shown below.
+
+<h4>Delete by LIDVID</h4>
+<source>
+registry-manager delete-data \
+    -lidvid urn:nasa:pds:context:target:asteroid.4_vesta::1.1 \
+    -es https://my-server.my-domain.com:9999 \
+    -index registry \
+    -auth path/to/auth.cfg
+</source>
+
+<p>
+NOTE: "-es" (Elasticsearch URL), "-index" (Elasticsearch index name), and "-auth" (authentication file) 
+parameters are optional. Default Elasticsearch URL is "http://localhost:9200".
+</p>
+
+<p>
+If your Elasticsearch server requires authentication, you have to create an authentication configuration file
+and provide following parameters:
+</p>
+
+<source>
+# true - trust self-signed certificates; false - don't trust.
+trust.self-signed = true
+user = pds-user1
+password = mypassword
+</source>
+
+<h4>Delete by LID</h4>
+<source>
+registry-manager delete-data \
+    -lid urn:nasa:pds:context:target:asteroid.4_vesta
+    -es http://localhost:9200
+</source>
+
+<h4>Delete by Package / Job ID</h4>
+<source>
+registry-manager delete-data \
+    -packageId 8d8ae96d-044e-473d-a278-62635b1c5977
+</source>
+
+<h4>Delete all Data</h4>
+<source>
+registry-manager delete-data -all -index test1
+</source>
+
+</p>
+
+</subsection>
+
+<!-- ======================================================== -->
+
+<subsection name="Elasticsearch API" id="es_api">
+<p>
+You can also use Elasticsearch 
+<a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.8/docs-delete-by-query.html" target="_blank">delete by query API</a>.
+</p>
+</subsection>
+
+</section>
+
+</body>
+</document>
