@@ -1,5 +1,30 @@
 # Changelog
 
+## [«unknown»](https://github.com/NASA-PDS/pds-registry-app/tree/«unknown») (2022-04-12)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.1.0-SNAPSHOT...«unknown»)
+
+**Requirements:**
+
+- As a user, I want the registry loader tools to continue after the ingestion of a product fails [\#253](https://github.com/NASA-PDS/pds-registry-app/issues/253)
+- Simplify the readme and procedure to start the registry with docker-compose [\#241](https://github.com/NASA-PDS/pds-registry-app/issues/241)
+- As a user, I want to switch a bundle and it's associated collections and products from a protected status to operational. [\#224](https://github.com/NASA-PDS/pds-registry-app/issues/224)
+- As a user, I want to change the archive status for a collection and it's associated products [\#223](https://github.com/NASA-PDS/pds-registry-app/issues/223)
+- As a developer, I want to be able to access the registry related docker images from https://hub.docker.com/ [\#187](https://github.com/NASA-PDS/pds-registry-app/issues/187)
+
+**Improvements:**
+
+- Make CICD work on registry-api repository [\#260](https://github.com/NASA-PDS/pds-registry-app/issues/260)
+- Simple wrappers to call the pds-batch-loader and pds-service-loader docker compose services [\#257](https://github.com/NASA-PDS/pds-registry-app/issues/257)
+- Update the README of the harvest service repositories [\#245](https://github.com/NASA-PDS/pds-registry-app/issues/245) [[s.high](https://github.com/NASA-PDS/pds-registry-app/labels/s.high)]
+- As a developer, I want to update and run the integration tests from the 'registry' repository [\#230](https://github.com/NASA-PDS/pds-registry-app/issues/230)
+
+**Other closed issues:**
+
+- test registry docker compose with opensearch instead of elasticsearch [\#250](https://github.com/NASA-PDS/pds-registry-app/issues/250)
+- Update docker-compose profiles to match developer use case [\#225](https://github.com/NASA-PDS/pds-registry-app/issues/225)
+- As a developer I want to start the registry with a single command [\#208](https://github.com/NASA-PDS/pds-registry-app/issues/208)
+
 ## [v1.1.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v1.1.0-SNAPSHOT) (2022-02-07)
 
 [Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.0.3...v1.1.0-SNAPSHOT)
@@ -34,7 +59,7 @@
 
 **Defects:**
 
-- the snapshot releases are not created for big-data-harvest-client [\#231](https://github.com/NASA-PDS/pds-registry-app/issues/231)
+- the snapshot releases are not created for big-data-harvest-client [\#231](https://github.com/NASA-PDS/pds-registry-app/issues/231) [[s.critical](https://github.com/NASA-PDS/pds-registry-app/labels/s.critical)]
 - harvest flags as mandatory a config elements the docs describe as optional [\#220](https://github.com/NASA-PDS/pds-registry-app/issues/220) [[s.low](https://github.com/NASA-PDS/pds-registry-app/labels/s.low)]
 
 **Other closed issues:**
