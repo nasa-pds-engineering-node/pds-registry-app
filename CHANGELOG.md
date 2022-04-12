@@ -1,22 +1,41 @@
 # Changelog
 
-## [1.0.3](https://github.com/NASA-PDS/pds-registry-app/tree/1.0.3) (2022-01-11)
+## [v1.1.0-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v1.1.0-SNAPSHOT) (2022-02-07)
 
-[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.0.3-SNAPSHOT...1.0.3)
+[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.0.3...v1.1.0-SNAPSHOT)
+
+**Requirements:**
+
+- As a user, I want to be able to ingest a set of files specified in a file listing [\#201](https://github.com/NASA-PDS/pds-registry-app/issues/201)
+- As a user, I want big data ingestion tools packaged and dockerized together [\#200](https://github.com/NASA-PDS/pds-registry-app/issues/200)
+
+**Improvements:**
+
+- Rename bigdata repositories [\#237](https://github.com/NASA-PDS/pds-registry-app/issues/237)
 
 **Defects:**
 
-- the snapshot releases are not created for big-data-harvest-client [\#231](https://github.com/NASA-PDS/pds-registry-app/issues/231)
-- harvest flags as mandatory a config elements the docs describe as optional [\#220](https://github.com/NASA-PDS/pds-registry-app/issues/220) [[s.low](https://github.com/NASA-PDS/pds-registry-app/labels/s.low)]
+- pom.xml on main is broken [\#238](https://github.com/NASA-PDS/pds-registry-app/issues/238) [[s.high](https://github.com/NASA-PDS/pds-registry-app/labels/s.high)]
 
-## [v1.0.3-SNAPSHOT](https://github.com/NASA-PDS/pds-registry-app/tree/v1.0.3-SNAPSHOT) (2021-12-23)
+**Other closed issues:**
 
-[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.0.2...v1.0.3-SNAPSHOT)
+- Tag new version of registry-common, registry-mgr, supplementer, harvest, and parent registry-app to resolve log4j vulnerability [\#232](https://github.com/NASA-PDS/pds-registry-app/issues/232)
+- Develop design documentation for staging vs production data for review with SWG [\#228](https://github.com/NASA-PDS/pds-registry-app/issues/228)
+- Document big data harvest / registry manager / crawler installation and operation [\#218](https://github.com/NASA-PDS/pds-registry-app/issues/218)
+
+## [v1.0.3](https://github.com/NASA-PDS/pds-registry-app/tree/v1.0.3) (2022-01-11)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-registry-app/compare/v1.0.2...v1.0.3)
 
 **Requirements:**
 
 - As a developer, I want to deploy the registry with a single docker-compose command [\#186](https://github.com/NASA-PDS/pds-registry-app/issues/186)
 - As a user, I want the registry app components to be able to ingest data sets containing 1+ million products [\#179](https://github.com/NASA-PDS/pds-registry-app/issues/179)
+
+**Defects:**
+
+- the snapshot releases are not created for big-data-harvest-client [\#231](https://github.com/NASA-PDS/pds-registry-app/issues/231)
+- harvest flags as mandatory a config elements the docs describe as optional [\#220](https://github.com/NASA-PDS/pds-registry-app/issues/220) [[s.low](https://github.com/NASA-PDS/pds-registry-app/labels/s.low)]
 
 **Other closed issues:**
 
